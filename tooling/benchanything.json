@@ -1,32 +1,32 @@
 {
-  "id": "my-env",
+  "id": "kaggle-prediction-bench",
   "adapter": "adapter.py",
-  "name": "My Environment",
-  "description": "One-sentence description of what this benchmark evaluates.",
+  "name": "Kaggle Prediction Benchmark",
+  "description": "Benchmark an AI agent's ability to write predictive programs from Kaggle datasets. The agent receives training data, writes a Python program with a predict() function, and iteratively improves it across multiple steps.",
 
   "binding_vow": {
     "version": "1.0.0",
     "tier": "tier1",
-    "description": "Longer description of the task and what makes a good agent.",
+    "description": "Agent must write a Python program that defines predict(). The program reads train.csv and test.csv, learns patterns from train.csv, and predict() returns predictions for test.csv. Score = accuracy (classification) or R\u00b2 clamped to [0,1] (regression).",
 
     "observation_space": {
       "type": "json",
-      "description": "{ \"question\": string }"
+      "description": "{ \"task\": str, \"data_dir\": str, \"work_dir\": str, \"train_file\": str, \"test_file\": str, \"target_column\": str, \"feature_columns\": [str], \"data_preview\": [dict], \"is_classification\": bool, \"step\": int, \"max_steps\": int, \"best_score\": float }"
     },
 
     "action_space": {
       "type": "text",
-      "description": "Free-text answer from the agent"
+      "description": "Python program code as raw text. Must define predict() returning a list/array of predictions."
     },
 
     "reward": {
-      "type": "binary",
+      "type": "scalar",
       "range": { "low": 0.0, "high": 1.0 },
-      "description": "1.0 if correct, 0.0 otherwise"
+      "description": "Accuracy (classification) or R\u00b2 clamped to [0,1] (regression) of predict() output vs test targets."
     },
 
     "episode": {
-      "max_steps": 10,
+      "max_steps": 5,
       "deterministic_reset": true,
       "supports_seed": true,
       "parallel_episodes": 1,
@@ -43,7 +43,7 @@
       {
         "name": "accuracy",
         "type": "episode_reward",
-        "aggregation": "pass_rate"
+        "aggregation": "mean"
       }
     ]
   }

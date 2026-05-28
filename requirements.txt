@@ -1,9 +1,8 @@
-# Optional: packages YOUR env imports (numpy, pandas, …).
-#
-# - Local dev: only needed if env.py (or helpers) import them. Default scaffold
-#   uses the stdlib only — skip `pip install -r requirements.txt`.
-# - Platform: sandbox/worker runs `pip install -r requirements.txt` on submit.
-#
-# Do not list bench_common / mesocosm here — the CLI wheel (local) and the
-# sandbox image (cloud) already provide bench_common, fastapi, uvicorn, httpx,
-# and pydantic for adapter.py.
+pandas          # Data handling in the benchmark environment
+scikit-learn    # train_test_split, accuracy_score, r2_score
+kagglehub       # Download Kaggle datasets
+numpy           # Toy data generation and AI test programs
+
+# bench_common / swecc-mesocosm is NOT listed here.
+# It provides the adapter framework (serve, BaseEnv, StepResult).
+# Install separately: pip install swecc-mesocosm

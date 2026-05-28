@@ -7,9 +7,14 @@ Local dev:
 """
 
 import argparse
+import os
+import sys
 
-from bench_common.env_sdk import serve
-from env import MyEnv
+# Import MyEnv from tooling/env.py
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), "tooling"))
+from env import MyEnv  # noqa: E402
+
+from bench_common.env_sdk import serve  # noqa: E402
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
