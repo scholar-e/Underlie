@@ -10,8 +10,8 @@ import argparse
 import os
 import sys
 
-# Import MyEnv from tooling/env.py
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), "tooling"))
+# Import MyEnv from auxiliary/env.py
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), "auxiliary"))
 from env import MyEnv  # noqa: E402
 
 from bench_common.env_sdk import serve  # noqa: E402

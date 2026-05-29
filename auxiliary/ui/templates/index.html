@@ -159,12 +159,16 @@
     </div>
     <div id="platformFields" class="hidden config-grid">
       <div class="form-row">
-        <label>Domain ID</label>
-        <input type="text" id="cfgDomainId" placeholder="your-domain-uuid">
+        <label>Env Name</label>
+        <input type="text" id="cfgEnvName" value="Kaggle Prediction Benchmark">
       </div>
       <div class="form-row">
-        <label>Vow Version</label>
-        <input type="text" id="cfgVowVersion" value="1.0.0">
+        <label>GitHub URL</label>
+        <input type="text" id="cfgGithubUrl" placeholder="https://github.com/your-org/your-env">
+      </div>
+      <div class="form-row" style="grid-column:1/-1">
+        <label>Description</label>
+        <input type="text" id="cfgEnvDescription" value="Benchmark for AI agents writing predictive programs against Kaggle datasets">
       </div>
     </div>
   </div>
@@ -494,15 +498,16 @@ async function refreshConfig() {
 
   // Mode
   document.querySelector(`input[name="mode"][value="${cfg.mode || 'local'}"]`).checked = true;
-  setVal('cfgDomainId', cfg.domain_id || '');
-  setVal('cfgVowVersion', cfg.vow_version || '1.0.0');
+  setVal('cfgEnvName', cfg.env_name || '');
+  setVal('cfgGithubUrl', cfg.github_url || '');
+  setVal('cfgEnvDescription', cfg.env_description || '');
   togglePlatformFields();
 }
 
 function togglePlatformFields() {
   const mode = document.querySelector('input[name="mode"]:checked').value;
   document.getElementById('platformFields').classList.toggle('hidden', mode !== 'platform');
-  document.getElementById('cfgModel').placeholder = mode === 'platform' ? 'gemini/gemini-2.0-flash-lite' : 'ollama/llama3.2';
+  document.getElementById('cfgModel').placeholder = mode === 'platform' ? 'ollama/llama3.2' : 'ollama/llama3.2';
 }
 
 document.querySelectorAll('input[name="mode"]').forEach(el => {
@@ -551,8 +556,9 @@ function readConfigForm() {
     episodes: parseInt(getVal('cfgEpisodes')) || 1,
     toy_data: document.getElementById('cfgToyData').checked,
     mode: document.querySelector('input[name="mode"]:checked').value,
-    domain_id: getVal('cfgDomainId').trim(),
-    vow_version: getVal('cfgVowVersion').trim(),
+    env_name: getVal('cfgEnvName').trim(),
+    github_url: getVal('cfgGithubUrl').trim(),
+    env_description: getVal('cfgEnvDescription').trim(),
   };
 }
 
@@ -598,8 +604,14 @@ document.getElementById('startMesocosmBtn').addEventListener('click', async () =
   try {
     await syncConfigBeforeRun();
     const cfg = await api('GET', '/api/config');
-    if (cfg.mode === 'platform' && !cfg.domain_id) {
-      alert('Domain ID is required for platform runs. Set it in the Config tab.');
+    if (cfg.mode === 'platform') {
+      const res = await api('POST', '/api/runs/mesocosm/start');
+      if (res.command) {
+        setText('cmdText', res.command);
+        show('cmdOutput');
+        document.getElementById('mesocosmLog').textContent =
+          'Commands generated. Copy and run them in your terminal.';
+      }
       btn.disabled = false;
       return;
     }
@@ -637,10 +649,11 @@ async function pollLogs() {
   if (!status.mesocosm) {
     const cfg = await api('GET', '/api/config');
     const isPlatform = cfg.mode === 'platform';
-    modeEl.textContent = isPlatform ? '[platform]' : '[local]';
-    startBtn.textContent = isPlatform ? 'Run on Platform' : 'Run Locally';
+    modeEl.textContent = isPlatform ? '[platform — submit env]' : '[local]';
+    startBtn.textContent = isPlatform ? 'Generate Platform Commands' : 'Run Locally';
     if (isPlatform) {
-      document.getElementById('adapterLog').textContent = 'Not needed for platform runs.';
+      document.getElementById('mesocosmLog').textContent =
+        'Click "Generate Platform Commands" to get the setup and submit commands for your terminal.';
     }
   }
 
@@ -802,6 +815,12 @@ async function showTrialDetail(testId, trialId) {
           ${s.crashed ? '<span class="badge" style="background:#fff5f5;color:#c62828">CRASHED</span>' : ''}
         </div>
       </div>
+      ${s.reasoning ? `
+        <details class="mb-8" style="font-size:13px;color:#555">
+          <summary style="cursor:pointer;font-weight:600">💭 Reasoning</summary>
+          <pre style="background:#f5f6f8;color:#333;padding:8px;margin-top:6px;border-radius:4px;font-size:12px;white-space:pre-wrap">${esc(s.reasoning)}</pre>
+        </details>
+      ` : ''}
       ${s.stderr ? `<div class="text-muted mb-8">stderr: ${esc(s.stderr)}</div>` : ''}
       ${s.program ? `
         <div class="code-block">

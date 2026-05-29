@@ -2,8 +2,8 @@
 """Download, inspect, and configure a Kaggle dataset for the benchmark.
 
 Usage:
-    python3 tooling/setup_dataset.py
-    python3 tooling/setup_dataset.py uciml/iris
+    python3 auxiliary/setup_dataset.py
+    python3 auxiliary/setup_dataset.py uciml/iris
 """
 
 import argparse
@@ -162,7 +162,7 @@ def suggest_command(name: str, target_col: str, analysis: dict):
     print()
     print(f"Or with mesocosm:\n")
     print(f"  KAGGLE_DATASET={name} TARGET_COLUMN={target_col} \\")
-    print(f"    mesocosm run local --manifest tooling/benchanything.json")
+    print(f"    mesocosm run local --manifest auxiliary/benchanything.json")
 
     show_all_flag = ""
     if not analysis["is_classification"]:
@@ -186,35 +186,68 @@ def get_columns_info(df: pd.DataFrame, target_col: str) -> list[dict]:
 
 
 def build_command_str(config: dict) -> str:
-    env_vars = []
-    if config.get("dataset") and not config.get("toy_data"):
-        env_vars.append(f"KAGGLE_DATASET={config['dataset']}")
-    if config.get("target_column"):
-        env_vars.append(f"TARGET_COLUMN={config['target_column']}")
-    if config.get("test_size"):
-        env_vars.append(f"TEST_SIZE={config['test_size']}")
-    if config.get("max_steps"):
-        env_vars.append(f"MAX_STEPS={config['max_steps']}")
-    if config.get("max_fails"):
-        env_vars.append(f"MAX_FAILS={config['max_fails']}")
-    if config.get("toy_data"):
-        env_vars.append("KAGGLE_TOY_DATA=1")
-
     mode = config.get("mode", "local")
-    prefix = (" \\\n  ".join(env_vars) + " \\\n  ") if env_vars else ""
     model = config.get("model", "ollama/llama3.2")
     episodes = config.get("episodes", 1)
 
     if mode == "platform":
-        domain = config.get("domain_id", "YOUR_DOMAIN_ID")
-        vow = config.get("vow_version", "1.0.0")
-        cmd = f"mesocosm run create --domain {domain} --vow-version {vow} --model {model} --episodes {episodes}"
-    else:
-        cmd = f"mesocosm run local --model {model} --manifest tooling/benchanything.json --episodes {episodes}"
+        name = config.get("env_name", "My env")
+        github = config.get("github_url", "https://github.com/your-org/your-env")
+        desc = config.get("env_description", "Kaggle prediction benchmark environment")
 
-    if prefix:
-        return f"{prefix}{cmd}"
-    return cmd
+        env_vars = []
+        if config.get("dataset") and not config.get("toy_data"):
+            env_vars.append(f"KAGGLE_DATASET={config['dataset']}")
+        if config.get("target_column"):
+            env_vars.append(f"TARGET_COLUMN={config['target_column']}")
+        if config.get("test_size"):
+            env_vars.append(f"TEST_SIZE={config['test_size']}")
+        if config.get("max_steps"):
+            env_vars.append(f"MAX_STEPS={config['max_steps']}")
+        if config.get("max_fails"):
+            env_vars.append(f"MAX_FAILS={config['max_fails']}")
+        if config.get("toy_data"):
+            env_vars.append("KAGGLE_TOY_DATA=1")
+
+        env_block = " \\\n  ".join(env_vars) if env_vars else "# (uses defaults)"
+
+        return f"""\
+# ── One-time setup ──
+pip install swecc-mesocosm
+
+# ── Scaffold env repo ──
+mesocosm init
+
+# ── Authenticate (defaults: api.swecc.org + /bench) ──
+# Override URLs: export SWECC_SERVER_URL=... SWECC_BENCH_URL=...
+mesocosm auth login
+
+# ── Submit env ──
+{env_block} \\\n  mesocosm env submit \\
+  --name "{name}" \\
+  --github-url "{github}" \\
+  --description "{desc}" """
+    else:
+        env_vars = []
+        if config.get("dataset") and not config.get("toy_data"):
+            env_vars.append(f"KAGGLE_DATASET={config['dataset']}")
+        if config.get("target_column"):
+            env_vars.append(f"TARGET_COLUMN={config['target_column']}")
+        if config.get("test_size"):
+            env_vars.append(f"TEST_SIZE={config['test_size']}")
+        if config.get("max_steps"):
+            env_vars.append(f"MAX_STEPS={config['max_steps']}")
+        if config.get("max_fails"):
+            env_vars.append(f"MAX_FAILS={config['max_fails']}")
+        if config.get("toy_data"):
+            env_vars.append("KAGGLE_TOY_DATA=1")
+
+        prefix = (" \\\n  ".join(env_vars) + " \\\n  ") if env_vars else ""
+        cmd = f"mesocosm run local --model {model} --manifest auxiliary/benchanything.json --episodes {episodes}"
+
+        if prefix:
+            return f"{prefix}{cmd}"
+        return cmd
 
 
 def main():
@@ -223,9 +256,9 @@ def main():
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog=textwrap.dedent("""\
             Examples:
-              python3 tooling/setup_dataset.py
-              python3 tooling/setup_dataset.py uciml/iris
-              python3 tooling/setup_dataset.py --target Species uciml/iris
+              python3 auxiliary/setup_dataset.py
+              python3 auxiliary/setup_dataset.py uciml/iris
+              python3 auxiliary/setup_dataset.py --target Species uciml/iris
         """),
     )
     parser.add_argument("dataset", nargs="?", help="Kaggle dataset name (owner/name)")

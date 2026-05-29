@@ -28,7 +28,7 @@ TEST_RESULTS_DIR = os.path.join(TOOLING_DIR, "test_results")
 ADAPTER_PATH = os.path.join(REPO_ROOT, "adapter.py")
 MANIFEST_PATH = os.path.join(TOOLING_DIR, "benchanything.json")
 
-# Ensure tooling is importable
+# Ensure auxiliary is importable
 sys.path.insert(0, TOOLING_DIR)
 
 # --- FastAPI ---
@@ -54,8 +54,9 @@ class RunConfig:
     model: str = "ollama/llama3.2"
     episodes: int = 1
     mode: str = "local"
-    domain_id: str = ""
-    vow_version: str = "1.0.0"
+    env_name: str = "Kaggle Prediction Benchmark"
+    github_url: str = ""
+    env_description: str = "Benchmark for AI agents writing predictive programs against Kaggle datasets"
 
     def to_env(self) -> dict[str, str]:
         env = {}
@@ -148,27 +149,14 @@ class ProcessManager:
         with self._lock:
             return self._adapter_log[-n:]
 
-    # --- platform run (mesocosm run create) ---
+    # --- platform env submit (experimental — prefer running commands in terminal) ---
 
-    def start_platform_run(self, config: RunConfig):
-        env = os.environ.copy()
-        env.update(config.to_env())
-        self._mesocosm_log = []
-        self._mesocosm = subprocess.Popen(
-            [
-                "mesocosm", "run", "create",
-                "--domain", config.domain_id,
-                "--vow-version", config.vow_version,
-                "--model", config.model,
-                "--episodes", str(config.episodes),
-            ],
-            env=env,
-            cwd=REPO_ROOT,
-            stdout=subprocess.PIPE,
-            stderr=subprocess.STDOUT,
-            text=True,
-        )
-        threading.Thread(target=self._pipe_mesocosm, daemon=True).start()
+    def start_platform_submit(self, config: RunConfig):
+        from setup_dataset import build_command_str
+        cmd_str = build_command_str(asdict(config))
+        # Log the command so the user can copy it
+        self._mesocosm_log = cmd_str.splitlines()
+        self._mesocosm = None  # not spawning, just showing the command
 
     # --- local run (mesocosm run local) ---
 
@@ -379,8 +367,10 @@ async def start_mesocosm():
     if _procman.mesocosm_alive:
         return {"status": "already_running", "mode": _current_config.mode}
     if _current_config.mode == "platform":
-        _procman.start_platform_run(_current_config)
-        return {"status": "started", "mode": "platform"}
+        from setup_dataset import build_command_str
+        cmd = build_command_str(asdict(_current_config))
+        _procman.start_platform_submit(_current_config)
+        return {"status": "command_generated", "mode": "platform", "command": cmd}
     else:
         if not _procman.adapter_alive:
             raise HTTPException(400, "Adapter must be running first")
@@ -493,6 +483,10 @@ async def get_trial(test_id: str, trial_id: str):
             if os.path.exists(pp):
                 with open(pp) as f:
                     sd["program"] = f.read()
+            rp = os.path.join(step_dir, "reasoning.txt")
+            if os.path.exists(rp):
+                with open(rp) as f:
+                    sd["reasoning"] = f.read()
             predp = os.path.join(step_dir, "predictions.json")
             if os.path.exists(predp):
                 with open(predp) as f:

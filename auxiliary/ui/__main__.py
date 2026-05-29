@@ -1,12 +1,12 @@
 #!/usr/bin/env python3
-"""Local Testing UI — python -m tooling.ui"""
+"""Local Testing UI — python -m auxiliary.ui"""
 
 import argparse
 import os
 import socket
 import sys
 
-# Ensure both tooling/ and tooling/ui/ are importable
+# Ensure both auxiliary/ and auxiliary/ui/ are importable
 _ui_dir = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, os.path.join(_ui_dir, ".."))
 sys.path.insert(0, _ui_dir)

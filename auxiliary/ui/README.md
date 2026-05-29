@@ -5,22 +5,22 @@ A lightweight FastAPI-based web UI for configuring datasets and running the Kagg
 ## Overview
 
 ```
-tooling/ui/
+auxiliary/ui/
   README.md         ← this file
   __init__.py
-  __main__.py       ← python -m tooling.ui
+  __main__.py       ← python -m auxiliary.ui
   server.py         ← FastAPI app (auto-selects free port)
   static/style.css
   templates/index.html
 ```
 
-The UI runs on its own port (independent of the adapter), provides a 4-tab control panel, and persists the active run configuration to `tooling/run_config.json` so it can be reproduced from the CLI or showcase.
+The UI runs on its own port (independent of the adapter), provides a 4-tab control panel, and persists the active run configuration to `auxiliary/run_config.json` so it can be reproduced from the CLI or showcase.
 
 ## Architecture
 
 ```
 ┌──────────────────────────────────────────────┐
-│  tooling/ui/server.py  (auto port, e.g. 8766) │
+│  auxiliary/ui/server.py  (auto port, e.g. 8766) │
 │                                                │
 │  Tab 1: Dataset Explorer                      │
 │  Tab 2: Run Configuration                     │
@@ -51,7 +51,7 @@ The UI runs on its own port (independent of the adapter), provides a 4-tab contr
   KAGGLE_DATASET=uciml/iris TARGET_COLUMN=species TEST_SIZE=0.3 \
     MAX_STEPS=5 MAX_FAILS=3 python adapter.py --port 8765
   ```
-- **Run Now** — saves config to `tooling/run_config.json`, starts the adapter, then runs mesocosm.
+- **Run Now** — saves config to `auxiliary/run_config.json`, starts the adapter, then runs mesocosm.
 
 ### 3. Monitor Tab
 - Start/Stop adapter button with green/red status dot.
@@ -60,13 +60,13 @@ The UI runs on its own port (independent of the adapter), provides a 4-tab contr
 - Port information displayed (which port the adapter was assigned).
 
 ### 4. Results Tab
-- Lists completed trials from `tooling/trials/` sorted by recency.
+- Lists completed trials from `auxiliary/trials/` sorted by recency.
 - Shows dataset, target column, best score, step count, and timestamp per trial.
 - Expandable per-step details: program code, score breakdown, predictions vs expected.
 
 ## Shared Config File
 
-`tooling/run_config.json` is the bridge between the UI, CLI tooling, and showcase:
+`auxiliary/run_config.json` is the bridge between the UI, CLI tools, and showcase:
 
 ```json
 {
@@ -84,7 +84,7 @@ The UI runs on its own port (independent of the adapter), provides a 4-tab contr
 **Config priority in env.py** (highest to lowest):
 1. `reset(**params)` — direct API call
 2. Environment variables (`KAGGLE_DATASET`, etc.)
-3. `tooling/run_config.json` — persistent shared config
+3. `auxiliary/run_config.json` — persistent shared config
 4. Hardcoded defaults
 
 This means running `python adapter.py` without any env vars will pick up the last settings configured in the UI.
@@ -93,7 +93,7 @@ This means running `python adapter.py` without any env vars will pick up the las
 
 ```bash
 # From the repo root:
-python -m tooling.ui
+python -m auxiliary.ui
 
 # The UI prints the URL it's on (auto-selected free port).
 # The adapter is spawned on a separate free port.
@@ -103,6 +103,6 @@ python -m tooling.ui
 
 | File | Change |
 |------|--------|
-| `tooling/setup_dataset.py` | Add `silent=True` param to `download_dataset()`; raise instead of `sys.exit()` in `find_csv()`; add `get_columns_info()` and `build_command_str()` for programmatic callers |
-| `tooling/env.py` | Add `_read_run_config()` helper; check `run_config.json` as fallback in `_load_dataset()` |
-| `tooling/adapter.py` | No changes needed (config flows through env vars) |
+| `auxiliary/setup_dataset.py` | Add `silent=True` param to `download_dataset()`; raise instead of `sys.exit()` in `find_csv()`; add `get_columns_info()` and `build_command_str()` for programmatic callers |
+| `auxiliary/env.py` | Add `_read_run_config()` helper; check `run_config.json` as fallback in `_load_dataset()` |
+| `auxiliary/adapter.py` | No changes needed (config flows through env vars) |

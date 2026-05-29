@@ -297,7 +297,8 @@ class MyEnv(BaseEnv):
 
     def _save_step(
         self, step: int, program: str, predictions: list | None,
-        score: float, best_score: float, crashed: bool, stderr: str
+        score: float, best_score: float, crashed: bool, stderr: str,
+        reasoning: str = "",
     ) -> None:
         step_dir = os.path.join(self._trial_dir, f"step_{step}")
         os.makedirs(step_dir, exist_ok=True)
@@ -324,6 +325,10 @@ class MyEnv(BaseEnv):
         if stderr:
             with open(os.path.join(step_dir, "stderr.txt"), "w") as f:
                 f.write(stderr[:2000])
+
+        if reasoning:
+            with open(os.path.join(step_dir, "reasoning.txt"), "w") as f:
+                f.write(reasoning)
 
     def _write_results(self) -> None:
         steps = []
@@ -462,6 +467,26 @@ class MyEnv(BaseEnv):
         code = "\n".join(code_lines_out)
         return code.strip()
 
+    @staticmethod
+    def _extract_reasoning(raw: str) -> str:
+        """Extract the model's thinking/reasoning text (everything outside ``` code blocks)."""
+        lines = raw.split("\n")
+        in_block = False
+        reasoning_parts = []
+        for line in lines:
+            stripped = line.strip()
+            if stripped.startswith("```"):
+                in_block = not in_block
+                continue
+            if not in_block:
+                reasoning_parts.append(line)
+        # Strip empty lines from start/end
+        while reasoning_parts and not reasoning_parts[0].strip():
+            reasoning_parts.pop(0)
+        while reasoning_parts and not reasoning_parts[-1].strip():
+            reasoning_parts.pop()
+        return "\n".join(reasoning_parts).strip()
+
     def _import_and_run(self, clean: str) -> tuple[list[float], str, str]:
         """Lower level: write + import + predict(). No length check."""
         module_name = f"_kaggle_prog_{uuid.uuid4().hex}"
@@ -546,20 +571,30 @@ class MyEnv(BaseEnv):
         if old_trial and os.path.isdir(old_trial):
             self._clean_modules_from_trial()
 
-        preview = self._train_df.head(5).to_dict(orient="records")
-        preview = _make_json_safe(preview)
+        # Build preview with column names matching the CSV files
+        # (_save_trial_data renames the target column to "target")
+        preview = _make_json_safe(
+            self._train_df.head(5).rename(columns={self._target_column: "target"}).to_dict(orient="records")
+        )
 
         skeleton = self._make_skeleton(self._is_classification)
+        task_type = "classification" if self._is_classification else "regression"
         return {
             "task": (
                 f"Write a Python program that defines predict(). "
-                f"Use this exact skeleton:\n{skeleton}"
+                f"This is a {task_type} task ({len(self._test_targets)} test rows, "
+                f"{len(self._feature_columns)} features). "
+                f"Use this exact skeleton:\n{skeleton}\n\n"
+                f"CRITICAL: Do NOT re-split train.csv with train_test_split. "
+                f"Do NOT inverse-transform predictions. "
+                f"Do NOT return accuracy or score. "
+                f"Return one prediction per test row."
             ),
             "data_dir": self._trial_dir,
             "work_dir": os.path.join(self._trial_dir, "work_dir"),
             "train_file": "train.csv",
             "test_file": "test.csv",
-            "target_column": self._target_column,
+            "target_column": "target",
             "feature_columns": self._feature_columns,
             "data_preview": preview,
             "is_classification": self._is_classification,
@@ -573,20 +608,34 @@ class MyEnv(BaseEnv):
         algo = "RandomForestClassifier" if is_classification else "RandomForestRegressor"
         return f"""\
 import pandas as pd
-import numpy as np
 from sklearn.ensemble import {algo}
+
+# Variables available in your environment:
+#   data_dir, work_dir, train_file, test_file
+#   target_column (= "target"), feature_columns, is_classification
 
 train = pd.read_csv("train.csv")
 test = pd.read_csv("test.csv")
+
+# train.csv has BOTH features and the target (column "target").
+# test.csv has ONLY features (no target column).
+# All string features are pre-encoded to integers.
 
 feat = [c for c in train.columns if c != "target"]
 model = {algo}()
 model.fit(train[feat], train["target"])
 
-# ⚠ predict() must return ONLY the predictions (one per test row).
-# Do NOT return accuracy, score, or probabilities.
-# Do NOT wrap in an extra list.
 def predict():
+    # ═══════════════════════════════════════════════════════════
+    # CRITICAL RULES — violations cause crashes:
+    # 1. Return ONE prediction per row in test.csv (same order)
+    # 2. Return a list/array of predictions, NOT a single value
+    # 3. Do NOT return accuracy, score, or probabilities
+    # 4. Do NOT re-split train.csv with train_test_split
+    # 5. Do NOT use scaler.inverse_transform() on predictions
+    # 6. For classification: use model.predict(), NOT predict_proba()
+    # 7. Check is_classification to choose classifier vs regressor
+    # ═══════════════════════════════════════════════════════════
     return model.predict(test[feat])"""
 
     @staticmethod
@@ -597,11 +646,63 @@ def predict():
         except SyntaxError as e:
             return f"SyntaxError: {e.msg} (line {e.lineno})"
 
+    @staticmethod
+    def _classify_error(exc: Exception, is_classification: bool) -> str:
+        msg = str(exc)
+        # ── Wrong algorithm type ──
+        if "Unknown label type: continuous" in msg:
+            return (
+                "You used a classifier on a regression task "
+                "(the target has continuous values). "
+                "Use a regressor like RandomForestRegressor or LinearRegression instead. "
+                f"Error: {msg[:200]}"
+            )
+        if "Unknown label type" in msg:
+            return (
+                f"You used a classifier on the wrong task type. "
+                f"Use a regressor for continuous targets or a classifier for discrete targets. "
+                f"Check is_classification to decide which to use. "
+                f"Error: {msg[:200]}"
+            )
+        # ── Classification metric on regression predictions ──
+        if "Classification metrics can't handle a mix" in msg:
+            return (
+                "You used accuracy_score (a classification metric) on regression predictions. "
+                "Remove accuracy_score entirely — just return the raw predictions from model.predict()."
+            )
+        # ── inverse_transform on 1D predictions ──
+        if "Expected 2D array, got 1D array instead" in msg and "inverse_transform" in msg:
+            return (
+                "scaler.inverse_transform() requires 2D input, but predictions are 1D. "
+                "Do NOT inverse-transform model predictions — they are already in the correct space. "
+                "Remove scaler.inverse_transform() and return model.predict() directly."
+            )
+        # ── Wrong prediction count ──
+        if "predict() returned" in msg and "values, expected" in msg:
+            return (
+                f"{msg} — you're predicting on the wrong data. "
+                f"Make sure predict() returns one prediction per row in test.csv. "
+                f"Check that you're using test.csv, not train.csv."
+            )
+        # ── NameError (undefined variable) ──
+        if "name '" in msg and "is not defined" in msg:
+            return (
+                f"{msg} — your program references a variable that doesn't exist. "
+                f"Check that all variable names are spelled correctly and defined before use."
+            )
+        # ── Fallback: include the raw error plus context ──
+        task_type = "regression" if not is_classification else "classification"
+        return (
+            f"Error: {msg[:400]}\n"
+            f"(Task type: {task_type})"
+        )
+
     def step(self, action: Any) -> StepResult:
         if self._trial_dir is None:
             raise RuntimeError("Call reset() before step()")
 
         program = str(action)
+        reasoning = self._extract_reasoning(program)
         clean_program = self._extract_code(program)
 
         # Syntax check — free retries, no fail_count consumed.
@@ -633,7 +734,7 @@ def predict():
             exec_error = "Program timed out (30s limit)"
             crashed = True
         except Exception as exc:
-            exec_error = str(exc)
+            exec_error = self._classify_error(exc, self._is_classification)
             crashed = True
 
         if not crashed:
@@ -654,15 +755,17 @@ def predict():
         if crashed:
             self._fail_count += 1
             _cleanup_temp_pgm(self._trial_dir)
+            step_num = self._current_step + self._fail_count
             if self._fail_count >= self._max_fails:
                 self._save_step(
-                    self._current_step + self._fail_count, clean_program, None,
-                    0.0, self._best_score, True, exec_error,
+                    step_num, clean_program, None,
+                    0.0, self._best_score, True, exec_error, reasoning,
                 )
                 self._write_results()
                 return StepResult(
                     observation={
                         "error": exec_error,
+                        "reasoning": reasoning,
                         "step": self._current_step,
                         "max_steps": self._max_steps,
                         "fail_count": self._fail_count,
@@ -676,13 +779,14 @@ def predict():
                 )
 
             self._save_step(
-                self._current_step + self._fail_count, clean_program, None,
-                0.0, self._best_score, True, exec_error,
+                step_num, clean_program, None,
+                0.0, self._best_score, True, exec_error, reasoning,
             )
             _cleanup_temp_pgm(self._trial_dir)
             return StepResult(
                 observation={
                     "error": exec_error,
+                    "reasoning": reasoning,
                     "step": self._current_step,
                     "max_steps": self._max_steps,
                     "fail_count": self._fail_count,
@@ -701,15 +805,16 @@ def predict():
         self._current_step += 1
         self._best_score = max(self._best_score, score)
         terminated = (score >= 1.0) or (self._current_step >= self._max_steps)
+        step_num = self._current_step + self._fail_count
 
         self._save_step(
-            self._current_step + self._fail_count, clean_program, predictions,
-            score, self._best_score, False, stderr,
+            step_num, clean_program, predictions,
+            score, self._best_score, False, stderr, reasoning,
         )
         _cleanup_temp_pgm(self._trial_dir)
 
         if score >= self._best_score:
-            best_src = os.path.join(self._trial_dir, f"step_{self._current_step + self._fail_count}", "program.py")
+            best_src = os.path.join(self._trial_dir, f"step_{step_num}", "program.py")
             best_dst = os.path.join(self._trial_dir, "best_program.py")
             if os.path.isfile(best_src):
                 shutil.copy2(best_src, best_dst)
@@ -724,6 +829,7 @@ def predict():
                 "step": self._current_step,
                 "max_steps": self._max_steps,
                 "is_classification": self._is_classification,
+                "reasoning": reasoning,
                 "feedback": (
                     f"Score: {score:.4f}. Best so far: {self._best_score:.4f}."
                     + (f" Stderr: {stderr[:200]}" if stderr else "")

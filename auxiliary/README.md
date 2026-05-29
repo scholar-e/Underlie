@@ -71,26 +71,26 @@ Settings are passed as params to `reset()` or set as environment variables:
 
 ```bash
 # Evaluate a specific trial
-python tooling/eval_trial.py tooling/trials/trial_20260528_120000_a1b2c3d4/
+python auxiliary/eval_trial.py auxiliary/trials/trial_20260528_120000_a1b2c3d4/
 
 # Evaluate all trials
-python tooling/eval_trial.py
+python auxiliary/eval_trial.py
 
 # Show the best program and detailed prediction comparison
-python tooling/eval_trial.py --programs --detailed
+python auxiliary/eval_trial.py --programs --detailed
 ```
 
 ### `cleanup_trial.py` — clean up trial artifacts
 
 ```bash
 # Delete a specific trial and its imported modules
-python tooling/cleanup_trial.py tooling/trials/trial_20260528_120000_a1b2c3d4/
+python auxiliary/cleanup_trial.py auxiliary/trials/trial_20260528_120000_a1b2c3d4/
 
 # Delete all trials
-python tooling/cleanup_trial.py tooling/trials/trial_*
+python auxiliary/cleanup_trial.py auxiliary/trials/trial_*
 
 # Dry run — see what would be deleted
-python tooling/cleanup_trial.py --dry-run tooling/trials/trial_*
+python auxiliary/cleanup_trial.py --dry-run auxiliary/trials/trial_*
 ```
 
 ## See Also

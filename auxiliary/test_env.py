@@ -2,8 +2,8 @@
 """Test the Kaggle Prediction Benchmark env via the running adapter.
 
 Usage:
-    python3 tooling/test_env.py
-    python3 tooling/test_env.py --url http://localhost:8765
+    python3 auxiliary/test_env.py
+    python3 auxiliary/test_env.py --url http://localhost:8765
 """
 
 import argparse

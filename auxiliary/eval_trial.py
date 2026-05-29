@@ -132,7 +132,7 @@ def main() -> None:
         "trials",
         nargs="*",
         default=None,
-        help="Trial directories to evaluate (default: all trials in tooling/trials/)",
+        help="Trial directories to evaluate (default: all trials in auxiliary/trials/)",
     )
     parser.add_argument(
         "--programs",

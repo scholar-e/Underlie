@@ -48,7 +48,7 @@ def main() -> None:
     parser.add_argument(
         "trials",
         nargs="+",
-        help="Trial directories to clean (accepts glob patterns like tooling/trials/trial_*)",
+        help="Trial directories to clean (accepts glob patterns like auxiliary/trials/trial_*)",
     )
     parser.add_argument(
         "--no-modules",

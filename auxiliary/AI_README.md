@@ -151,7 +151,7 @@ You can iterate within an episode (up to `max_steps` successful attempts) and ac
 
 ## Trial Directory
 
-Each episode creates a self-contained trial directory under `tooling/trials/trial_<timestamp>_<id>/`:
+Each episode creates a self-contained trial directory under `auxiliary/trials/trial_<timestamp>_<id>/`:
 
 ```
 trial_20260528_120000_a1b2c3d4/
@@ -174,19 +174,19 @@ trial_20260528_120000_a1b2c3d4/
 You can examine trial directories after a run:
 ```bash
 # Evaluate a specific trial
-python tooling/eval_trial.py tooling/trials/trial_20260528_120000_a1b2c3d4/
+python auxiliary/eval_trial.py auxiliary/trials/trial_20260528_120000_a1b2c3d4/
 
 # Evaluate all trials
-python tooling/eval_trial.py
+python auxiliary/eval_trial.py
 
 # Show best programs and detailed comparison
-python tooling/eval_trial.py --programs --detailed
+python auxiliary/eval_trial.py --programs --detailed
 
 # Clean up a trial (removes dir and imported modules)
-python tooling/cleanup_trial.py tooling/trials/trial_20260528_120000_a1b2c3d4/
+python auxiliary/cleanup_trial.py auxiliary/trials/trial_20260528_120000_a1b2c3d4/
 
 # Clean up all trials
-python tooling/cleanup_trial.py tooling/trials/trial_*
+python auxiliary/cleanup_trial.py auxiliary/trials/trial_*
 ```
 
 ## Configuration
