@@ -1,0 +1,934 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Kaggle Prediction Benchmark — Local UI</title>
+<link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+
+<header>
+  <h1>Kaggle Prediction Benchmark</h1>
+  <span class="subtitle">Local Testing UI</span>
+</header>
+
+<nav class="tab-nav" id="tabNav">
+  <button class="tab-btn active" data-tab="dataset">1. Dataset</button>
+  <button class="tab-btn" data-tab="config">2. Config</button>
+  <button class="tab-btn" data-tab="monitor">3. Monitor</button>
+  <button class="tab-btn" data-tab="results">4. Results</button>
+  <button class="tab-btn" data-tab="tests">5. Tests</button>
+</nav>
+
+<!-- ════════════ Tab 1: Dataset ════════════ -->
+<section id="tab-dataset" class="tab-content active">
+
+  <h2>Dataset Setup</h2>
+
+  <div class="card">
+    <h3>Recommended Datasets</h3>
+    <div id="recList"></div>
+  </div>
+
+  <div class="card">
+    <h3>Custom Dataset</h3>
+    <div class="form-row-inline">
+      <input type="text" id="customDataset" placeholder="owner/dataset-name" style="max-width:320px">
+      <button id="exploreBtn" class="primary">Explore</button>
+    </div>
+  </div>
+
+  <div id="exploreSpinner" class="hidden" style="text-align:center;padding:20px">
+    <span class="spinner"></span> Downloading and analyzing dataset…
+  </div>
+
+  <div id="exploreResults" class="hidden">
+
+    <div class="card" id="datasetSummary">
+      <h3>Dataset Summary</h3>
+      <div class="flex-row">
+        <span><strong id="dsName"></strong></span>
+        <span class="text-muted" id="dsFile"></span>
+        <span class="text-muted" id="dsShape"></span>
+        <span class="badge" id="dsTaskBadge"></span>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>Columns</h3>
+      <div style="overflow-x:auto">
+        <table>
+          <thead>
+            <tr>
+              <th>Column</th>
+              <th>Type</th>
+              <th>Nulls</th>
+              <th>Unique</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody id="columnsBody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>Target Column</h3>
+      <div class="form-row-inline">
+        <select id="targetSelect" style="max-width:300px"></select>
+        <button id="applyTargetBtn" class="primary">Apply</button>
+      </div>
+      <div id="targetCandidates" class="mt-8 text-muted"></div>
+    </div>
+
+    <div class="card">
+      <h3>Data Preview (first 5 rows)</h3>
+      <div style="overflow-x:auto">
+        <table>
+          <thead id="previewHead"></thead>
+          <tbody id="previewBody"></tbody>
+        </table>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ════════════ Tab 2: Config ════════════ -->
+<section id="tab-config" class="tab-content">
+
+  <h2>Run Configuration</h2>
+
+  <div class="card">
+    <h3>Dataset</h3>
+    <div class="config-grid">
+      <div class="form-row">
+        <label>Dataset Name</label>
+        <input type="text" id="cfgDataset" placeholder="owner/dataset-name">
+      </div>
+      <div class="form-row">
+        <label>Target Column</label>
+        <input type="text" id="cfgTarget" placeholder="(auto-detect if empty)">
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>Parameters</h3>
+    <div class="config-grid">
+      <div class="form-row">
+        <label>Test Size</label>
+        <input type="range" id="cfgTestSize" min="0.05" max="0.9" step="0.05" value="0.3">
+        <div class="range-label"><span id="cfgTestSizeVal">0.30</span><span>proportion held out</span></div>
+      </div>
+      <div class="form-row">
+        <label>Max Steps</label>
+        <input type="range" id="cfgMaxSteps" min="1" max="20" step="1" value="5">
+        <div class="range-label"><span id="cfgMaxStepsVal">5</span><span>successful steps per episode</span></div>
+      </div>
+      <div class="form-row">
+        <label>Max Fails</label>
+        <input type="range" id="cfgMaxFails" min="1" max="10" step="1" value="3">
+        <div class="range-label"><span id="cfgMaxFailsVal">3</span><span>crashes before termination</span></div>
+      </div>
+      <div class="form-row">
+        <label>Model</label>
+        <input type="text" id="cfgModel" value="ollama/llama3.2">
+      </div>
+      <div class="form-row">
+        <label>Episodes</label>
+        <input type="number" id="cfgEpisodes" min="1" max="20" value="1">
+      </div>
+      <div class="form-row-inline">
+        <input type="checkbox" id="cfgToyData">
+        <label for="cfgToyData">Use synthetic toy data (ignore dataset)</label>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>Run Mode</h3>
+    <div class="form-row-inline mb-8">
+      <label style="font-weight:normal;display:flex;align-items:center;gap:4px">
+        <input type="radio" name="mode" value="local" checked> Local (Ollama)
+      </label>
+      <label style="font-weight:normal;display:flex;align-items:center;gap:4px">
+        <input type="radio" name="mode" value="platform"> Platform (Gemini, Claude, etc.)
+      </label>
+    </div>
+    <div id="platformFields" class="hidden config-grid">
+      <div class="form-row">
+        <label>Domain ID</label>
+        <input type="text" id="cfgDomainId" placeholder="your-domain-uuid">
+      </div>
+      <div class="form-row">
+        <label>Vow Version</label>
+        <input type="text" id="cfgVowVersion" value="1.0.0">
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>Generate Bash Command</h3>
+    <button id="genCmdBtn" class="primary">Generate Command</button>
+    <div id="cmdOutput" class="mt-8 hidden">
+      <div class="code-block">
+        <button class="copy-btn" id="copyCmdBtn">Copy</button>
+        <pre id="cmdText"></pre>
+      </div>
+    </div>
+
+</section>
+
+<!-- ════════════ Tab 5: Tests ════════════ -->
+<section id="tab-tests" class="tab-content">
+
+  <h2>Integration Tests</h2>
+
+  <div class="card">
+    <div class="flex-row">
+      <button id="runTestsBtn" class="primary">Run Tests</button>
+      <span id="testsRunning" class="hidden"><span class="spinner"></span> Running…</span>
+      <span id="testsRefresh" class="text-muted" style="cursor:pointer">↻ refresh</span>
+    </div>
+  </div>
+
+  <div id="testsEmpty" class="alert info">No test results yet. Click "Run Tests" to run the integration test suite against the running adapter.</div>
+
+  <div id="testsTableWrap" class="hidden">
+    <div style="overflow-x:auto">
+      <table>
+        <thead>
+          <tr>
+            <th>Run</th>
+            <th>Timestamp</th>
+            <th>Passed</th>
+            <th>Failed</th>
+            <th>Total</th>
+            <th>Rate</th>
+          </tr>
+        </thead>
+        <tbody id="testsBody"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <div id="testDetail" class="hidden">
+    <div class="flex-row mt-16 mb-8">
+      <button id="closeTestDetailBtn">← Back to list</button>
+      <h3 id="testDetailTitle" style="margin:0"></h3>
+    </div>
+    <div id="testDetailBody"></div>
+  </div>
+
+</section>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="flex-row">
+      <button id="saveConfigBtn" class="success">Save Configuration</button>
+      <span id="saveStatus" class="text-muted"></span>
+    </div>
+  </div>
+
+</section>
+
+<!-- ════════════ Tab 3: Monitor ════════════ -->
+<section id="tab-monitor" class="tab-content">
+
+  <h2>Run Monitor</h2>
+
+  <div class="card">
+    <h3>Adapter (env server)</h3>
+    <div class="process-panel">
+      <span class="status-dot dead" id="adapterDot"></span>
+      <span id="adapterStatus">Stopped</span>
+      <span id="adapterPortInfo" class="text-muted"></span>
+      <button id="startAdapterBtn" class="success">Start</button>
+      <button id="stopAdapterBtn" class="danger">Stop</button>
+    </div>
+    <div class="log-area" id="adapterLog">Adapter not running.</div>
+  </div>
+
+  <div class="card">
+    <h3>Mesocosm (benchmark runner)</h3>
+    <div class="process-panel">
+      <span class="status-dot dead" id="mesocosmDot"></span>
+      <span id="mesocosmStatus">Stopped</span>
+      <span id="mesocosmMode" class="text-muted"></span>
+      <button id="startMesocosmBtn" class="primary">Run</button>
+      <button id="stopMesocosmBtn" class="danger">Stop</button>
+    </div>
+    <div class="log-area" id="mesocosmLog">Not started.</div>
+  </div>
+
+  <div id="monitorComplete" class="hidden">
+    <div class="alert success">
+      Run completed! <a href="#" id="gotoResults">View full Results →</a>
+    </div>
+    <div class="card" id="monitorSummary">
+      <h3>Trial Scores</h3>
+      <div id="monitorSummaryBody"></div>
+    </div>
+  </div>
+
+</section>
+
+<!-- ════════════ Tab 4: Results ════════════ -->
+<section id="tab-results" class="tab-content">
+
+  <h2>Results</h2>
+
+  <div id="resultsEmpty" class="alert info">No trials yet. Configure and run the benchmark first.</div>
+
+  <div id="resultsTableWrap" class="hidden">
+    <div style="overflow-x:auto">
+      <table>
+        <thead>
+          <tr>
+            <th>Trial</th>
+            <th>Dataset</th>
+            <th>Target</th>
+            <th>Best Score</th>
+            <th>Steps</th>
+            <th>Type</th>
+          </tr>
+        </thead>
+        <tbody id="resultsBody"></tbody>
+        <tfoot id="resultsFooter"></tfoot>
+      </table>
+    </div>
+  </div>
+
+  <!-- Trial detail (hidden, shown on click) -->
+  <div id="trialDetail" class="hidden">
+    <div class="flex-row mt-16 mb-8">
+      <button id="closeDetailBtn">← Back to list</button>
+      <h3 id="trialDetailTitle" style="margin:0"></h3>
+    </div>
+
+    <div id="trialSteps"></div>
+
+    <div class="card" id="bestProgWrap">
+      <h3>Best Program</h3>
+      <div class="code-block">
+        <pre id="bestProg"></pre>
+      </div>
+    </div>
+  </div>
+
+</section>
+
+<script>
+// ══════════════════════════════════════════════════
+// Tab navigation
+// ══════════════════════════════════════════════════
+const tabs = document.querySelectorAll('.tab-btn');
+tabs.forEach(btn => {
+  btn.addEventListener('click', () => {
+    tabs.forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    document.querySelectorAll('.tab-content').forEach(tc => tc.classList.remove('active'));
+    document.getElementById('tab-' + btn.dataset.tab).classList.add('active');
+    if (btn.dataset.tab === 'monitor') pollLogs();
+    if (btn.dataset.tab === 'results') loadTrials();
+    if (btn.dataset.tab === 'tests') loadTests();
+  });
+});
+
+// ══════════════════════════════════════════════════
+// API helper
+// ══════════════════════════════════════════════════
+async function api(method, path, body) {
+  let url = path;
+  const opts = { method, headers: { 'Content-Type': 'application/json' } };
+  if (body !== undefined) {
+    if (method === 'GET') {
+      url += '?' + new URLSearchParams(body).toString();
+    } else {
+      opts.body = JSON.stringify(body);
+    }
+  }
+  const res = await fetch(url, opts);
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({ detail: res.statusText }));
+    throw new Error(err.detail || res.statusText);
+  }
+  return res.json();
+}
+
+function getVal(id) { return document.getElementById(id).value; }
+function setVal(id, v) { document.getElementById(id).value = v; }
+function setText(id, t) { document.getElementById(id).textContent = t; }
+function show(id) { document.getElementById(id).classList.remove('hidden'); }
+function hide(id) { document.getElementById(id).classList.add('hidden'); }
+
+// ══════════════════════════════════════════════════
+// Tab 1: Dataset
+// ══════════════════════════════════════════════════
+let lastExploreResult = null;
+
+async function loadRecommended() {
+  const recs = await api('GET', '/api/datasets/recommended');
+  const container = document.getElementById('recList');
+  container.innerHTML = recs.map((r, i) => `
+    <div class="rec-item" data-name="${r.name}" data-hint="${r.target_hint || ''}">
+      <input type="radio" name="rec" value="${r.name}" id="rec_${i}" ${i === 0 ? 'checked' : ''}>
+      <div>
+        <div class="rec-name">${r.name}</div>
+        <div class="rec-desc">${r.desc}</div>
+      </div>
+    </div>
+  `).join('');
+}
+
+document.getElementById('exploreBtn').addEventListener('click', exploreDataset);
+document.getElementById('customDataset').addEventListener('keydown', e => {
+  if (e.key === 'Enter') exploreDataset();
+});
+
+async function exploreDataset() {
+  const selected = document.querySelector('input[name="rec"]:checked');
+  const name = getVal('customDataset').trim() || (selected ? selected.value : '');
+  if (!name) return;
+
+  const recItem = document.querySelector(`.rec-item[data-name="${name}"]`);
+  const targetHint = recItem ? recItem.dataset.hint : '';
+
+  show('exploreSpinner');
+  hide('exploreResults');
+
+  try {
+    const result = await api('POST', '/api/datasets/explore', { name, target_hint: targetHint });
+    lastExploreResult = result;
+    showExploreResults(result);
+  } catch (e) {
+    alert('Explore failed: ' + e.message);
+  } finally {
+    hide('exploreSpinner');
+  }
+}
+
+async function showExploreResults(r) {
+  setText('dsName', r.dataset);
+  setText('dsFile', r.csv_file);
+  setText('dsShape', `${r.rows} rows, ${r.cols} cols`);
+  const badge = document.getElementById('dsTaskBadge');
+  badge.textContent = r.is_classification ? 'classification' : 'regression';
+  badge.className = 'badge ' + (r.is_classification ? 'classification' : 'regression');
+
+  // Columns table
+  const tbody = document.getElementById('columnsBody');
+  tbody.innerHTML = r.columns.map(c => {
+    const markers = [];
+    if (c.is_target) markers.push('★ target');
+    if (c.is_id) markers.push('ID?');
+    if (!c.is_target && c.unique <= 10) markers.push('low-card');
+    return `<tr>
+      <td><strong>${esc(c.name)}</strong></td>
+      <td>${esc(c.dtype)}</td>
+      <td>${c.nulls}</td>
+      <td>${c.unique}</td>
+      <td class="text-muted">${markers.join(', ')}</td>
+    </tr>`;
+  }).join('');
+
+  // Target selector
+  const sel = document.getElementById('targetSelect');
+  sel.innerHTML = r.columns.map(c =>
+    `<option value="${esc(c.name)}" ${c.is_target ? 'selected' : ''}>${esc(c.name)}</option>`
+  ).join('');
+  setText('targetCandidates',
+    r.target_candidates.length
+      ? 'Other target candidates: ' + r.target_candidates.map(c => `${c.name} (${c.unique} uniq)`).join(', ')
+      : 'No other low-cardinality columns found.'
+  );
+
+  // Preview
+  const keys = Object.keys(r.preview[0] || {});
+  document.getElementById('previewHead').innerHTML =
+    '<tr>' + keys.map(k => `<th>${esc(k)}</th>`).join('') + '</tr>';
+  document.getElementById('previewBody').innerHTML = r.preview.map(row =>
+    '<tr>' + keys.map(k => `<td>${esc(String(row[k] ?? ''))}</td>`).join('') + '</tr>'
+  ).join('');
+
+  // Auto-update config with dataset and target (await to avoid race)
+  await api('PUT', '/api/config', { dataset: r.dataset, target_column: r.target_column });
+  await refreshConfig();
+
+  show('exploreResults');
+}
+
+document.getElementById('applyTargetBtn').addEventListener('click', async () => {
+  if (!lastExploreResult) return;
+  const target = getVal('targetSelect');
+  await api('PUT', '/api/config', { target_column: target });
+  await refreshConfig();
+  // Re-render columns with new target
+  lastExploreResult.target_column = target;
+  lastExploreResult.columns = lastExploreResult.columns.map(c => ({
+    ...c, is_target: c.name === target
+  }));
+  showExploreResults(lastExploreResult);
+});
+
+// ══════════════════════════════════════════════════
+// Tab 2: Config
+// ══════════════════════════════════════════════════
+async function refreshConfig() {
+  const cfg = await api('GET', '/api/config');
+  setVal('cfgDataset', cfg.toy_data ? '' : cfg.dataset);
+  setVal('cfgTarget', cfg.target_column || '');
+
+  setVal('cfgTestSize', cfg.test_size);
+  setText('cfgTestSizeVal', cfg.test_size.toFixed(2));
+  setVal('cfgMaxSteps', cfg.max_steps);
+  setText('cfgMaxStepsVal', cfg.max_steps);
+  setVal('cfgMaxFails', cfg.max_fails);
+  setText('cfgMaxFailsVal', cfg.max_fails);
+  setVal('cfgModel', cfg.model);
+  setVal('cfgEpisodes', cfg.episodes);
+  document.getElementById('cfgToyData').checked = cfg.toy_data;
+
+  // Mode
+  document.querySelector(`input[name="mode"][value="${cfg.mode || 'local'}"]`).checked = true;
+  setVal('cfgDomainId', cfg.domain_id || '');
+  setVal('cfgVowVersion', cfg.vow_version || '1.0.0');
+  togglePlatformFields();
+}
+
+function togglePlatformFields() {
+  const mode = document.querySelector('input[name="mode"]:checked').value;
+  document.getElementById('platformFields').classList.toggle('hidden', mode !== 'platform');
+  document.getElementById('cfgModel').placeholder = mode === 'platform' ? 'gemini/gemini-2.0-flash-lite' : 'ollama/llama3.2';
+}
+
+document.querySelectorAll('input[name="mode"]').forEach(el => {
+  el.addEventListener('change', togglePlatformFields);
+});
+
+// Range sliders update labels
+['cfgTestSize', 'cfgMaxSteps', 'cfgMaxFails'].forEach(id => {
+  document.getElementById(id).addEventListener('input', () => {
+    setText(id + 'Val', document.getElementById(id).value);
+  });
+});
+
+document.getElementById('genCmdBtn').addEventListener('click', async () => {
+  const data = readConfigForm();
+  const res = await api('POST', '/api/runs/generate-command', data);
+  setText('cmdText', res.command);
+  show('cmdOutput');
+});
+
+document.getElementById('copyCmdBtn').addEventListener('click', () => {
+  const text = document.getElementById('cmdText').textContent;
+  navigator.clipboard.writeText(text).then(() => {
+    document.getElementById('copyCmdBtn').textContent = 'Copied!';
+    setTimeout(() => { document.getElementById('copyCmdBtn').textContent = 'Copy'; }, 2000);
+  });
+});
+
+document.getElementById('saveConfigBtn').addEventListener('click', async () => {
+  const data = readConfigForm();
+  await api('PUT', '/api/config', data);
+  const status = document.getElementById('saveStatus');
+  status.textContent = 'Saved to run_config.json ✓';
+  setTimeout(() => { status.textContent = ''; }, 3000);
+  refreshConfig();
+});
+
+function readConfigForm() {
+  return {
+    dataset: getVal('cfgDataset').trim() || undefined,
+    target_column: getVal('cfgTarget').trim() || undefined,
+    test_size: parseFloat(getVal('cfgTestSize')),
+    max_steps: parseInt(getVal('cfgMaxSteps')),
+    max_fails: parseInt(getVal('cfgMaxFails')),
+    model: getVal('cfgModel'),
+    episodes: parseInt(getVal('cfgEpisodes')) || 1,
+    toy_data: document.getElementById('cfgToyData').checked,
+    mode: document.querySelector('input[name="mode"]:checked').value,
+    domain_id: getVal('cfgDomainId').trim(),
+    vow_version: getVal('cfgVowVersion').trim(),
+  };
+}
+
+// ══════════════════════════════════════════════════
+// Tab 3: Monitor
+// ══════════════════════════════════════════════════
+let logPollTimer = null;
+let lastAdapterLogLen = 0;
+let lastMesocosmLogLen = 0;
+
+// Update config form before starting
+async function syncConfigBeforeRun() {
+  const data = readConfigForm();
+  await api('PUT', '/api/config', data);
+}
+
+document.getElementById('startAdapterBtn').addEventListener('click', async () => {
+  const btn = document.getElementById('startAdapterBtn');
+  btn.disabled = true;
+  try {
+    await syncConfigBeforeRun();
+    const res = await api('POST', '/api/runs/adapter/start');
+    setText('adapterPortInfo', 'Port: ' + res.port);
+    pollLogs();
+  } catch (e) {
+    alert('Failed to start adapter: ' + e.message);
+  }
+  btn.disabled = false;
+});
+
+document.getElementById('stopAdapterBtn').addEventListener('click', async () => {
+  try {
+    await api('POST', '/api/runs/adapter/stop');
+    pollLogs();
+  } catch (e) {
+    alert('Failed to stop adapter: ' + e.message);
+  }
+});
+
+document.getElementById('startMesocosmBtn').addEventListener('click', async () => {
+  const btn = document.getElementById('startMesocosmBtn');
+  btn.disabled = true;
+  try {
+    await syncConfigBeforeRun();
+    const cfg = await api('GET', '/api/config');
+    if (cfg.mode === 'platform' && !cfg.domain_id) {
+      alert('Domain ID is required for platform runs. Set it in the Config tab.');
+      btn.disabled = false;
+      return;
+    }
+    await api('POST', '/api/runs/mesocosm/start');
+    pollLogs();
+  } catch (e) {
+    alert('Failed to start: ' + e.message);
+  }
+  btn.disabled = false;
+});
+
+document.getElementById('stopMesocosmBtn').addEventListener('click', async () => {
+  await api('POST', '/api/runs/mesocosm/stop');
+  pollLogs();
+});
+
+document.getElementById('gotoResults').addEventListener('click', e => {
+  e.preventDefault();
+  document.querySelector('[data-tab="results"]').click();
+});
+
+async function pollLogs() {
+  if (logPollTimer) clearTimeout(logPollTimer);
+  const status = await api('GET', '/api/runs/status');
+  const logs = await api('GET', '/api/runs/logs', { n: 200 });
+
+  // Adapter status
+  updateProcessUI('adapter', status.adapter, logs.adapter, status.adapter_port);
+  // Mesocosm status
+  updateProcessUI('mesocosm', status.mesocosm, logs.mesocosm);
+
+  // Show mode info
+  const modeEl = document.getElementById('mesocosmMode');
+  const startBtn = document.getElementById('startMesocosmBtn');
+  if (!status.mesocosm) {
+    const cfg = await api('GET', '/api/config');
+    const isPlatform = cfg.mode === 'platform';
+    modeEl.textContent = isPlatform ? '[platform]' : '[local]';
+    startBtn.textContent = isPlatform ? 'Run on Platform' : 'Run Locally';
+    if (isPlatform) {
+      document.getElementById('adapterLog').textContent = 'Not needed for platform runs.';
+    }
+  }
+
+  // Check for completion (mesocosm just stopped)
+  if (!status.mesocosm && status.adapter && lastMesocosmLogLen > 0 && logs.mesocosm.length > 0) {
+    show('monitorComplete');
+    showTrialSummary();
+  } else {
+    hide('monitorComplete');
+  }
+
+  lastAdapterLogLen = logs.adapter.length;
+  lastMesocosmLogLen = logs.mesocosm.length;
+
+  if (status.adapter || status.mesocosm) {
+    logPollTimer = setTimeout(pollLogs, 1500);
+  }
+}
+
+async function showTrialSummary() {
+  const trials = await api('GET', '/api/trials');
+  const body = document.getElementById('monitorSummaryBody');
+  if (!trials.length) {
+    body.innerHTML = '<div class="text-muted">No trial data found.</div>';
+    return;
+  }
+  const scored = trials.filter(t => t.best_score != null);
+  const lines = trials.map((t, i) => {
+    const s = t.best_score != null ? t.best_score.toFixed(4) : '—';
+    return `<div class="flex-row mb-8">
+      <span style="min-width:80px;font-weight:600">Trial ${i + 1}</span>
+      <span class="text-muted" style="flex:1">${esc(t.dataset)} / ${esc(t.target_column)}</span>
+      <span style="font-weight:600">${s}</span>
+      <span class="badge ${t.is_classification ? 'classification' : 'regression'}">${t.is_classification ? 'classif' : 'regress'}</span>
+    </div>`;
+  }).join('');
+  let avgLine = '';
+  if (scored.length) {
+    const avg = scored.reduce((s, t) => s + t.best_score, 0) / scored.length;
+    avgLine = `<div class="flex-row" style="border-top:2px solid #4361ee;padding-top:8px;margin-top:8px;font-weight:600">
+      <span style="min-width:80px">Average</span>
+      <span class="text-muted" style="flex:1">${scored.length} trials</span>
+      <span>${avg.toFixed(4)}</span>
+      <span></span>
+    </div>`;
+  }
+  body.innerHTML = lines + avgLine;
+}
+
+function updateProcessUI(name, alive, logLines, port) {
+  const dot = document.getElementById(name + 'Dot');
+  const statusEl = document.getElementById(name + 'Status');
+  const logEl = document.getElementById(name + 'Log');
+
+  dot.className = 'status-dot ' + (alive ? 'alive' : 'dead');
+  statusEl.textContent = alive ? 'Running' : 'Stopped';
+  statusEl.style.color = alive ? '#2ec4b6' : '#888';
+
+  if (alive) {
+    logEl.textContent = logLines.length ? logLines.join('\n') : 'Starting…';
+    logEl.scrollTop = logEl.scrollHeight;
+  } else if (logLines.length) {
+    logEl.textContent = logLines.join('\n') + '\n\n[Process stopped]';
+    logEl.scrollTop = logEl.scrollHeight;
+  }
+
+  if (name === 'adapter' && port) {
+    setText('adapterPortInfo', 'Port: ' + port);
+  }
+}
+
+// ══════════════════════════════════════════════════
+// Tab 4: Results
+// ══════════════════════════════════════════════════
+async function loadTrials() {
+  const trials = await api('GET', '/api/trials');
+  const empty = document.getElementById('resultsEmpty');
+  const wrap = document.getElementById('resultsTableWrap');
+  const body = document.getElementById('resultsBody');
+  const footer = document.getElementById('resultsFooter');
+
+  if (!trials.length) {
+    empty.classList.remove('hidden');
+    wrap.classList.add('hidden');
+    return;
+  }
+
+  empty.classList.add('hidden');
+  wrap.classList.remove('hidden');
+  hide('trialDetail');
+
+  body.innerHTML = trials.map(t => `
+    <tr class="clickable" data-test="${t.id.split('/')[0]}" data-trial="${t.id.split('/')[1]}">
+      <td>${esc(t.id)}</td>
+      <td>${esc(t.dataset)}</td>
+      <td>${esc(t.target_column)}</td>
+      <td>${t.best_score != null ? t.best_score.toFixed(4) : '—'}</td>
+      <td>${t.total_steps ?? '—'}</td>
+      <td>${t.is_classification ? 'classif' : 'regress'}</td>
+    </tr>
+  `).join('');
+
+  // Compute averages
+  const scored = trials.filter(t => t.best_score != null);
+  const cls = scored.filter(t => t.is_classification);
+  const reg = scored.filter(t => !t.is_classification);
+
+  let avgRow = '<tr><td colspan="6" style="padding:4px"></td></tr>';
+
+  if (scored.length) {
+    const allAvg = scored.reduce((s, t) => s + t.best_score, 0) / scored.length;
+    const clsAvg = cls.length ? cls.reduce((s, t) => s + t.best_score, 0) / cls.length : null;
+    const regAvg = reg.length ? reg.reduce((s, t) => s + t.best_score, 0) / reg.length : null;
+
+    avgRow += `<tr style="font-weight:600;border-top:2px solid #4361ee">
+      <td colspan="3">Average (${scored.length} trials)</td>
+      <td>${allAvg.toFixed(4)}</td>
+      <td colspan="2">overall</td>
+    </tr>`;
+    if (clsAvg != null) {
+      avgRow += `<tr class="text-muted" style="font-size:12px">
+        <td colspan="3">Classification average (${cls.length} trials)</td>
+        <td>${clsAvg.toFixed(4)}</td>
+        <td colspan="2">accuracy</td>
+      </tr>`;
+    }
+    if (regAvg != null) {
+      avgRow += `<tr class="text-muted" style="font-size:12px">
+        <td colspan="3">Regression average (${reg.length} trials)</td>
+        <td>${regAvg.toFixed(4)}</td>
+        <td colspan="2">R²</td>
+      </tr>`;
+    }
+  }
+  footer.innerHTML = avgRow;
+
+  // Click handler for rows
+  body.querySelectorAll('tr').forEach(tr => {
+    tr.addEventListener('click', () => {
+      showTrialDetail(tr.dataset.test, tr.dataset.trial);
+    });
+  });
+}
+
+async function showTrialDetail(testId, trialId) {
+  hide('resultsTableWrap');
+  show('trialDetail');
+  const data = await api('GET', `/api/trials/${testId}/${trialId}`);
+  setText('trialDetailTitle', `${testId}/${trialId}`);
+
+  const stepsContainer = document.getElementById('trialSteps');
+  stepsContainer.innerHTML = data.steps.map(s => `
+    <div class="step-card">
+      <div class="step-header">
+        <strong>Step ${s.step}</strong>
+        <div class="flex-row">
+          <span>Score: <strong>${s.score != null ? s.score.toFixed(4) : '—'}</strong></span>
+          <span>Best: <strong>${s.best_score != null ? s.best_score.toFixed(4) : '—'}</strong></span>
+          ${s.crashed ? '<span class="badge" style="background:#fff5f5;color:#c62828">CRASHED</span>' : ''}
+        </div>
+      </div>
+      ${s.stderr ? `<div class="text-muted mb-8">stderr: ${esc(s.stderr)}</div>` : ''}
+      ${s.program ? `
+        <div class="code-block">
+          <pre>${esc(s.program)}</pre>
+        </div>
+      ` : ''}
+    </div>
+  `).join('') || '<div class="alert info">No step data available.</div>';
+
+  const bestProg = document.getElementById('bestProg');
+  if (data.best_program) {
+    bestProg.textContent = data.best_program;
+    show('bestProgWrap');
+  } else {
+    hide('bestProgWrap');
+  }
+}
+
+document.getElementById('closeDetailBtn').addEventListener('click', () => {
+  hide('trialDetail');
+  show('resultsTableWrap');
+});
+
+// ══════════════════════════════════════════════════
+// Utility
+// ══════════════════════════════════════════════════
+function esc(s) {
+  const div = document.createElement('div');
+  div.textContent = s;
+  return div.innerHTML;
+}
+
+// ══════════════════════════════════════════════════
+// Tab 5: Tests
+// ══════════════════════════════════════════════════
+async function loadTests() {
+  const r = await api('GET', '/api/tests');
+  const empty = document.getElementById('testsEmpty');
+  const wrap = document.getElementById('testsTableWrap');
+  const body = document.getElementById('testsBody');
+  hide('testDetail');
+
+  if (!r.length) {
+    empty.classList.remove('hidden');
+    wrap.classList.add('hidden');
+    return;
+  }
+  empty.classList.add('hidden');
+  wrap.classList.remove('hidden');
+
+  body.innerHTML = r.map(t => {
+    const rate = t.total > 0 ? (t.passed / t.total * 100).toFixed(0) : '—';
+    const cls = t.failed > 0 ? 'style="color:#c62828"' : '';
+    return `<tr class="clickable" data-id="${esc(t.id)}">
+      <td>${esc(t.id)}</td>
+      <td>${esc(t.timestamp)}</td>
+      <td style="color:#166534">${t.passed}</td>
+      <td ${cls}>${t.failed}</td>
+      <td>${t.total}</td>
+      <td>${rate}%</td>
+    </tr>`;
+  }).join('');
+
+  body.querySelectorAll('tr').forEach(tr => {
+    tr.addEventListener('click', () => showTestDetail(tr.dataset.id));
+  });
+}
+
+async function showTestDetail(id) {
+  hide('testsTableWrap');
+  show('testDetail');
+  setText('testDetailTitle', id);
+  const data = await api('GET', `/api/tests/${id}`);
+  const body = document.getElementById('testDetailBody');
+
+  let html = `<div class="card">
+    <div class="flex-row mb-8">
+      <span>Passed: <strong style="color:#166534">${data.passed}</strong></span>
+      <span>Failed: <strong style="color:#c62828">${data.failed}</strong></span>
+      <span>Total: <strong>${data.total}</strong></span>
+    </div>`;
+
+  if (data.tests && data.tests.length) {
+    html += '<table><thead><tr><th>Section</th><th>Test</th><th>Result</th></tr></thead><tbody>';
+    data.tests.forEach(t => {
+      const cls = t.passed ? 'style="color:#166534"' : 'style="color:#c62828"';
+      html += `<tr><td>${esc(t.section)}</td><td>${esc(t.name)}</td><td ${cls}>${t.passed ? 'PASS' : 'FAIL'}</td></tr>`;
+    });
+    html += '</tbody></table>';
+  }
+  html += '</div>';
+
+  html += `<div class="card"><h3>Full Output</h3>
+    <div class="code-block"><pre>${esc(data.output || '(no output)')}</pre></div>
+  </div>`;
+
+  body.innerHTML = html;
+}
+
+document.getElementById('closeTestDetailBtn').addEventListener('click', () => {
+  hide('testDetail');
+  show('testsTableWrap');
+});
+
+document.getElementById('runTestsBtn').addEventListener('click', async () => {
+  const btn = document.getElementById('runTestsBtn');
+  const spin = document.getElementById('testsRunning');
+  btn.disabled = true;
+  spin.classList.remove('hidden');
+  try {
+    await api('POST', '/api/tests/run');
+    await loadTests();
+  } catch (e) {
+    alert('Tests failed: ' + e.message);
+  }
+  btn.disabled = false;
+  spin.classList.add('hidden');
+});
+
+document.getElementById('testsRefresh').addEventListener('click', loadTests);
+
+// ══════════════════════════════════════════════════
+// Init
+// ══════════════════════════════════════════════════
+loadRecommended();
+refreshConfig();
+</script>
+
+</body>
+</html>

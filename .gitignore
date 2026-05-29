@@ -1,5 +1,7 @@
 tooling/data/
 tooling/trials/
+tooling/test_results/
+tooling/run_config.json
 mesosphere/
 __pycache__/
 tooling/__pycache__/

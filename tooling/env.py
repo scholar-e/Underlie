@@ -105,25 +105,56 @@ class MyEnv(BaseEnv):
                 return c
         return df.columns[-1]
 
+    @staticmethod
+    def _read_run_config() -> dict:
+        path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "run_config.json")
+        if os.path.exists(path):
+            try:
+                with open(path) as f:
+                    return json.load(f)
+            except Exception:
+                pass
+        return {}
+
     def _load_dataset(self, seed: int | None = None, **params: Any) -> None:
         if not HAVE_ML:
             raise RuntimeError(
                 "Missing ML dependencies. Install with: pip install pandas scikit-learn"
             )
 
-        dataset_name = params.get("dataset", os.environ.get("KAGGLE_DATASET", "shyamnadhs/heart-disease-prediction-dataset"))
-        target_column = params.get("target_column", os.environ.get("TARGET_COLUMN"))
+        cfg = self._read_run_config()
+
+        dataset_name = (
+            params.get("dataset")
+            or os.environ.get("KAGGLE_DATASET")
+            or cfg.get("dataset", "shyamnadhs/heart-disease-prediction-dataset")
+        )
+        target_column = (
+            params.get("target_column")
+            or os.environ.get("TARGET_COLUMN")
+            or cfg.get("target_column")
+        )
         self._test_size = float(
-            params.get("test_size", os.environ.get("TEST_SIZE", "0.3"))
+            params.get("test_size")
+            or os.environ.get("TEST_SIZE")
+            or cfg.get("test_size", 0.3)
         )
         self._max_steps = int(
-            params.get("max_steps", os.environ.get("MAX_STEPS", "5"))
+            params.get("max_steps")
+            or os.environ.get("MAX_STEPS")
+            or cfg.get("max_steps", 5)
         )
         self._max_fails = int(
-            params.get("max_fails", os.environ.get("MAX_FAILS", "3"))
+            params.get("max_fails")
+            or os.environ.get("MAX_FAILS")
+            or cfg.get("max_fails", 3)
         )
         use_toy = (
-            str(params.get("toy_data", os.environ.get("KAGGLE_TOY_DATA", "0")))
+            str(
+                params.get("toy_data")
+                or os.environ.get("KAGGLE_TOY_DATA")
+                or str(cfg.get("toy_data", "0"))
+            )
             .lower()
             in ("1", "true", "yes")
         )

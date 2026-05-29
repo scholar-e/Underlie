@@ -23,34 +23,34 @@ except ImportError as e:
 
 RECOMMENDED = [
     {
-        "name": "shyamnadhs/heart-disease-prediction-dataset",
-        "desc": "Heart disease prediction (binary, 1000 rows, mixed features)",
-        "target_hint": "disease",
-        "task": "classification",
-    },
-    {
         "name": "uciml/iris",
         "desc": "Iris flower species classification (3 classes, 150 rows)",
         "target_hint": "Species",
         "task": "classification",
     },
     {
-        "name": "nphp/titanic",
-        "desc": "Titanic passenger survival (binary, 891 rows)",
-        "target_hint": "Survived",
+        "name": "shyamnadhs/heart-disease-prediction-dataset",
+        "desc": "Heart disease prediction (binary, 1000 rows, mixed features)",
+        "target_hint": "disease",
         "task": "classification",
     },
     {
-        "name": "sharood/housing",
-        "desc": "Boston housing price regression (506 rows)",
-        "target_hint": "medv",
+        "name": "altavish/boston-housing-dataset",
+        "desc": "Boston housing price regression (506 rows, 13 features)",
+        "target_hint": "MEDV",
         "task": "regression",
     },
     {
-        "name": "datasnaek/quiz",
-        "desc": "General knowledge Q&A (various topics, ~5000 rows)",
-        "target_hint": "answer",
+        "name": "mathan/fifa-2018-match-statistics",
+        "desc": "FIFA 2018 match statistics (128 rows, 26 features)",
+        "target_hint": "Man of the Match",
         "task": "classification",
+    },
+    {
+        "name": "yasserh/student-marks-dataset",
+        "desc": "Student marks prediction (100 rows, 2 features)",
+        "target_hint": "Marks",
+        "task": "regression",
     },
 ]
 
@@ -82,13 +82,17 @@ def pick_dataset() -> str:
         print(f"  Invalid. Enter 1-{len(RECOMMENDED)} or a dataset name like 'owner/name'.")
 
 
-def download_dataset(name: str) -> str:
-    print(f"\nDownloading {name}...", end=" ", flush=True)
+def download_dataset(name: str, silent: bool = False) -> str:
+    if not silent:
+        print(f"\nDownloading {name}...", end=" ", flush=True)
     try:
         path = kagglehub.dataset_download(name)
-        print("done")
+        if not silent:
+            print("done")
         return path
     except Exception as e:
+        if silent:
+            raise RuntimeError(f"Failed to download '{name}': {e}") from e
         print(f"\nError downloading '{name}': {e}")
         sys.exit(1)
 
@@ -97,8 +101,7 @@ def find_csv(path: str) -> str:
     for f in os.listdir(path):
         if f.endswith(".csv"):
             return os.path.join(path, f)
-    print(f"No CSV files found in dataset. Contents: {os.listdir(path)}")
-    sys.exit(1)
+    raise FileNotFoundError(f"No CSV files found in dataset. Contents: {os.listdir(path)}")
 
 
 def auto_detect_target(df: pd.DataFrame, hint: str | None = None) -> str:
@@ -167,6 +170,53 @@ def suggest_command(name: str, target_col: str, analysis: dict):
     print(f"\n  Expected good score: ~0.95+ accuracy{show_all_flag}")
 
 
+def get_columns_info(df: pd.DataFrame, target_col: str) -> list[dict]:
+    n_rows = len(df)
+    columns = []
+    for col in df.columns:
+        columns.append({
+            "name": col,
+            "dtype": str(df[col].dtype),
+            "nulls": int(df[col].isna().sum()),
+            "unique": int(df[col].nunique()),
+            "is_target": col == target_col,
+            "is_id": int(df[col].nunique()) == n_rows,
+        })
+    return columns
+
+
+def build_command_str(config: dict) -> str:
+    env_vars = []
+    if config.get("dataset") and not config.get("toy_data"):
+        env_vars.append(f"KAGGLE_DATASET={config['dataset']}")
+    if config.get("target_column"):
+        env_vars.append(f"TARGET_COLUMN={config['target_column']}")
+    if config.get("test_size"):
+        env_vars.append(f"TEST_SIZE={config['test_size']}")
+    if config.get("max_steps"):
+        env_vars.append(f"MAX_STEPS={config['max_steps']}")
+    if config.get("max_fails"):
+        env_vars.append(f"MAX_FAILS={config['max_fails']}")
+    if config.get("toy_data"):
+        env_vars.append("KAGGLE_TOY_DATA=1")
+
+    mode = config.get("mode", "local")
+    prefix = (" \\\n  ".join(env_vars) + " \\\n  ") if env_vars else ""
+    model = config.get("model", "ollama/llama3.2")
+    episodes = config.get("episodes", 1)
+
+    if mode == "platform":
+        domain = config.get("domain_id", "YOUR_DOMAIN_ID")
+        vow = config.get("vow_version", "1.0.0")
+        cmd = f"mesocosm run create --domain {domain} --vow-version {vow} --model {model} --episodes {episodes}"
+    else:
+        cmd = f"mesocosm run local --model {model} --manifest tooling/benchanything.json --episodes {episodes}"
+
+    if prefix:
+        return f"{prefix}{cmd}"
+    return cmd
+
+
 def main():
     parser = argparse.ArgumentParser(
         description="Setup a Kaggle dataset for the prediction benchmark",
@@ -185,8 +235,12 @@ def main():
     name = args.dataset or pick_dataset()
     hint = args.target
 
-    path = download_dataset(name)
-    csv_path = find_csv(path)
+    try:
+        path = download_dataset(name)
+        csv_path = find_csv(path)
+    except (RuntimeError, FileNotFoundError) as e:
+        print(f"Error: {e}")
+        sys.exit(1)
     df = pd.read_csv(csv_path)
 
     # Auto-detect target
