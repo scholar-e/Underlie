@@ -1,7 +1,7 @@
-tooling/data/
-tooling/trials/
-tooling/test_results/
-tooling/run_config.json
+auxiliary/data/
+auxiliary/trials/
+auxiliary/test_results/
+auxiliary/run_config.json
+auxiliary/__pycache__/
 mesosphere/
-__pycache__/
-tooling/__pycache__/
+data/
