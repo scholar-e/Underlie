@@ -3,5 +3,6 @@ auxiliary/trials/
 auxiliary/test_results/
 auxiliary/run_config.json
 auxiliary/__pycache__/
+auxiliary/ui/__pycache__/
 mesosphere/
 data/

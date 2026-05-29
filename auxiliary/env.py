@@ -14,22 +14,6 @@ from typing import Any
 
 from bench_common.env_sdk.base import BaseEnv, StepResult
 
-# --- Dependency check ---
-
-try:
-    import pandas as pd
-    from sklearn.metrics import accuracy_score, r2_score
-    from sklearn.model_selection import train_test_split
-    HAVE_ML = True
-except ImportError:
-    HAVE_ML = False
-
-try:
-    import kagglehub
-    HAVE_KAGGLE = True
-except ImportError:
-    HAVE_KAGGLE = False
-
 # --- Constants ---
 
 TRIALS_BASE = os.path.join(os.path.dirname(os.path.abspath(__file__)), "trials")
@@ -83,6 +67,7 @@ class MyEnv(BaseEnv):
     # ------------------------------------------------------------------
 
     def _generate_toy_data(self, seed: int | None) -> pd.DataFrame:
+        import pandas as pd
         rng = __import__("numpy").random.RandomState(seed or 42)
         n = 50
         x1 = rng.rand(n) * 10
@@ -91,6 +76,8 @@ class MyEnv(BaseEnv):
         return pd.DataFrame({"x1": x1, "x2": x2, "target": y})
 
     def _download_and_load(self, dataset_name: str) -> pd.DataFrame:
+        import kagglehub
+        import pandas as pd
         path = kagglehub.dataset_download(dataset_name)
         csv_files = [f for f in os.listdir(path) if f.endswith(".csv")]
         if not csv_files:
@@ -117,7 +104,10 @@ class MyEnv(BaseEnv):
         return {}
 
     def _load_dataset(self, seed: int | None = None, **params: Any) -> None:
-        if not HAVE_ML:
+        try:
+            import pandas as pd
+            from sklearn.model_selection import train_test_split
+        except ImportError:
             raise RuntimeError(
                 "Missing ML dependencies. Install with: pip install pandas scikit-learn"
             )
@@ -163,7 +153,9 @@ class MyEnv(BaseEnv):
             df = self._generate_toy_data(seed)
             self._dataset_name = "toy-data"
         else:
-            if not HAVE_KAGGLE:
+            try:
+                import kagglehub
+            except ImportError:
                 raise RuntimeError(
                     "kagglehub not installed. Install with: pip install kagglehub, "
                     "or set KAGGLE_TOY_DATA=1 to use synthetic data."
@@ -239,6 +231,7 @@ class MyEnv(BaseEnv):
         return trial_dir
 
     def _save_trial_data(self) -> None:
+        import pandas as pd
         train_path = os.path.join(self._trial_dir, "train.csv")
         test_path = os.path.join(self._trial_dir, "test.csv")
         expected_path = os.path.join(self._trial_dir, "expected.json")
@@ -548,6 +541,7 @@ class MyEnv(BaseEnv):
         return predictions, stderr, clean
 
     def _compute_score(self, predictions: list[float]) -> float:
+        from sklearn.metrics import accuracy_score, r2_score
         if self._is_classification:
             return float(accuracy_score(self._test_targets, predictions))
         else:
