@@ -25,7 +25,7 @@ REPO_ROOT = os.path.dirname(TOOLING_DIR)
 CONFIG_PATH = os.path.join(TOOLING_DIR, "run_config.json")
 TRIALS_DIR = os.path.join(TOOLING_DIR, "trials")
 TEST_RESULTS_DIR = os.path.join(TOOLING_DIR, "test_results")
-ADAPTER_PATH = os.path.join(REPO_ROOT, "adapter.py")
+ADAPTER_PATH = os.path.join(TOOLING_DIR, "adapter.py")
 MANIFEST_PATH = os.path.join(TOOLING_DIR, "benchanything.json")
 
 # Ensure auxiliary is importable

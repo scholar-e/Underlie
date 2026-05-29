@@ -158,7 +158,7 @@ def suggest_command(name: str, target_col: str, analysis: dict):
     print(f"Task type: {task}")
     print(f"Target:    {target_col}")
     print(f"\nRun the benchmark with:\n")
-    print(f"  KAGGLE_DATASET={name} TARGET_COLUMN={target_col} python3 adapter.py")
+    print(f"  KAGGLE_DATASET={name} TARGET_COLUMN={target_col} python3 auxiliary/adapter.py")
     print()
     print(f"Or with mesocosm:\n")
     print(f"  KAGGLE_DATASET={name} TARGET_COLUMN={target_col} \\")

@@ -279,7 +279,7 @@ def main():
         print(f"Adapter healthy — env: {resp.get('env', '?')}")
     except Exception as e:
         print(f"Cannot reach adapter at {BASE}: {e}")
-        print("Start with: python3 adapter.py")
+        print("Start with: python3 auxiliary/adapter.py")
         sys.exit(1)
 
     test_health()

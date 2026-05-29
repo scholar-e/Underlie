@@ -11,7 +11,7 @@ The agent receives training data from a downloaded Kaggle dataset, writes a Pyth
 pip install -r requirements.txt
 
 # Terminal 1 — start the env server
-python adapter.py
+python auxiliary/adapter.py
 
 # Terminal 2 — run benchmark locally (uses benchanything.json)
 mesocosm run local --episodes 5
@@ -97,4 +97,4 @@ python auxiliary/cleanup_trial.py --dry-run auxiliary/trials/trial_*
 
 - `AI_README.md` — detailed spec that the AI agent receives, describing the task format and trial directory structure
 - `LOCAL_DEV.md` (repo root) — instructions for local development with Ollama
-- `adapter.py` (repo root) — HTTP server wrapping the environment
+- `auxiliary/adapter.py` — HTTP server wrapping the environment

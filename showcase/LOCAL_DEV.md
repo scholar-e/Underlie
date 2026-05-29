@@ -22,7 +22,7 @@ mesocosm doctor --local   # verify adapter (8765) before run local
 **Terminal 1 — env server**
 
 ```bash
-python adapter.py
+python auxiliary/adapter.py
 # → http://localhost:8765/health
 ```
 
