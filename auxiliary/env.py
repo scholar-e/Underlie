@@ -19,6 +19,9 @@ from bench_common.env_sdk.base import BaseEnv, StepResult
 TRIALS_BASE = os.path.join(os.path.dirname(os.path.abspath(__file__)), "trials")
 os.makedirs(TRIALS_BASE, exist_ok=True)
 
+DATA_CACHE_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "datasets")
+os.makedirs(DATA_CACHE_DIR, exist_ok=True)
+
 # Test counter: persists for the lifetime of the adapter process.
 # Each process restart creates a new test_N directory.
 _TEST_NUMBER: int | None = None
@@ -83,7 +86,13 @@ class MyEnv(BaseEnv):
         if not csv_files:
             raise FileNotFoundError(f"No CSV files found in Kaggle dataset '{dataset_name}'")
         csv_path = os.path.join(path, csv_files[0])
-        return pd.read_csv(csv_path)
+        df = pd.read_csv(csv_path)
+
+        cache_path = self._cache_path_for(dataset_name)
+        os.makedirs(os.path.dirname(cache_path), exist_ok=True)
+        df.to_csv(cache_path, index=False)
+
+        return df
 
     def _auto_detect_target(self, df: pd.DataFrame) -> str:
         candidates = ["target", "label", "class", "y", "outcome", "answer"]
@@ -102,6 +111,11 @@ class MyEnv(BaseEnv):
             except Exception:
                 pass
         return {}
+
+    @staticmethod
+    def _cache_path_for(dataset_name: str) -> str:
+        safe = dataset_name.replace("/", "_").replace("-", "_")
+        return os.path.join(DATA_CACHE_DIR, safe, "data.csv")
 
     def _load_dataset(self, seed: int | None = None, **params: Any) -> None:
         try:
@@ -153,21 +167,31 @@ class MyEnv(BaseEnv):
             df = self._generate_toy_data(seed)
             self._dataset_name = "toy-data"
         else:
-            try:
-                import kagglehub
-            except ImportError:
-                raise RuntimeError(
-                    "kagglehub not installed. Install with: pip install kagglehub, "
-                    "or set KAGGLE_TOY_DATA=1 to use synthetic data."
-                )
-            try:
-                df = self._download_and_load(dataset_name)
-            except Exception as exc:
-                raise RuntimeError(
-                    f"Failed to download dataset '{dataset_name}': {exc}. "
-                    "Set KAGGLE_TOY_DATA=1 to use synthetic data."
-                ) from exc
-            self._dataset_name = dataset_name
+            cache_path = self._cache_path_for(dataset_name)
+            if os.path.isfile(cache_path):
+                df = pd.read_csv(cache_path)
+                self._dataset_name = dataset_name
+            else:
+                try:
+                    import kagglehub  # noqa: F811
+                    df = self._download_and_load(dataset_name)
+                    self._dataset_name = dataset_name
+                except ImportError:
+                    import logging
+                    logging.getLogger(__name__).warning(
+                        "kagglehub not installed and no cached dataset at %s — falling back to toy data",
+                        cache_path,
+                    )
+                    df = self._generate_toy_data(seed)
+                    self._dataset_name = "toy-data"
+                except Exception as exc:
+                    import logging
+                    logging.getLogger(__name__).warning(
+                        "Failed to load dataset '%s': %s — falling back to toy data",
+                        dataset_name, exc,
+                    )
+                    df = self._generate_toy_data(seed)
+                    self._dataset_name = "toy-data"
 
         if target_column:
             if target_column not in df.columns:

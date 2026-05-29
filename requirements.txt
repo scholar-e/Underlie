@@ -1,7 +1,8 @@
 pandas          # Data handling in the benchmark environment
 scikit-learn    # train_test_split, accuracy_score, r2_score
-kagglehub<1.0.0  # Download Kaggle datasets (v1 requires unreleased kagglesdk)
 numpy           # Toy data generation and AI test programs
+# kagglehub (optional) — install locally for real Kaggle datasets:
+#   pip install kagglehub
 
 # bench_common / swecc-mesocosm is NOT listed here.
 # It provides the adapter framework (serve, BaseEnv, StepResult).
