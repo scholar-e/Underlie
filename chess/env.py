@@ -144,7 +144,7 @@ class MyEnv(BaseEnv):
 
         # Check final game conditions
         terminated = self.board.is_game_over()
-        truncated = false
+        truncated = False
         
         if terminated:
             result = self.board.result()
