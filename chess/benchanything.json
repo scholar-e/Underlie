@@ -11,16 +11,16 @@
 
     "observation_space": {
       "type": "json",
-      "description": "{ \"visual_board\": string, \"legal_moves\": array of strings, \"turn\": string, \"is_check\": boolean }"
+      "description": "{ \"visual_board\": str, \"legal_moves\": [str], \"must_avoid_moves\": [str], \"move_number\": int, \"move_history\": [str], \"turn\": str, \"is_check\": bool }"
     },
 
     "action_space": {
       "type": "text",
-      "description": "The desired chess move in Standard Algebraic Notation (SAN), e.g., 'e4', 'Nf3', 'O-O'."
+      "description": "Reason and state the desired chess move in Standard Algebraic Notation (SAN), e.g., 'e4', 'Nf3', 'O-O'. A list of all legal moves has been provided in legal_moves, and you MUST pick a move from the list of legal moves provided. Additionally, you MUST avoid picking moves from the must_avoid_moves list."
     },
 
     "reward": {
-      "type": "continuous",
+      "type": "scalar",
       "range": { "low": -15.0, "high": 15.0 },
       "description": "Based on the centipawn evaluation delta from Stockfish following the move, plus bonuses/penalties for game outcomes or illegal actions."
     },
@@ -33,7 +33,7 @@
       "observability": "full"
     },
 
-    "techniques": ["reinforcement_learning", "self_play", "heuristic_reward_shaping"]
+    "techniques": []
   },
 
   "scoring": {

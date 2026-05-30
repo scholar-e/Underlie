@@ -1,14 +1,14 @@
 import sys
-from env import ChessEnv
+from env import MyEnv
 # If your environment class is in a file named chess_env.py, change the import below accordingly:
-# from chess_env import ChessEnv
+# from chess_env import MyEnv
 
-# For the sake of a self-contained example, we instantiate ChessEnv directly.
-# Make sure you have your ChessEnv class available above this line or imported!
+# For the sake of a self-contained example, we instantiate MyEnv directly.
+# Make sure you have your MyEnv class available above this line or imported!
 
 def run_test_game():
     # 1. Initialize the environment
-    env = ChessEnv()
+    env = MyEnv()
     
     print("=" * 50)
     print("        CHESS BENCHMARK ENVIRONMENT TESTER       ")
