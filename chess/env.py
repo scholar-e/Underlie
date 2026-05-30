@@ -18,17 +18,38 @@ class MyEnv(BaseEnv):
         if self.board is None:
             return {}
             
-        # board.unicode() automatically uses distinct Unicode symbols 
-        # for White (e.g. ♙, ♘) and Black (e.g. ♟, ♞) pieces.
-        # invert_color=True matches standard dark terminal themes better.
-        unicode_board_str = self.board.unicode(invert_color=False, empty_square='·')
-        board_str = unicode_board_str.split('\n')
+        # --- 1. Keep all your existing setup / dictionary code ---
+        # (If you had something like info setups or tracking, leave it here)
+
+        # --- 2. Generate the text-based board description ---
+        white_pieces = []
+        black_pieces = []
+
+        for square in chess.SQUARES:
+            piece = self.board.piece_at(square)
+            if piece is not None:
+                square_name = chess.square_name(square)
+                piece_name = chess.piece_name(piece.piece_type)
+                description = f"{piece_name} on {square_name}"
+            
+                if piece.color == chess.WHITE:
+                    white_pieces.append(description)
+                else:
+                    black_pieces.append(description)
+
+        observation_parts = []
+        if white_pieces:
+            observation_parts.append(f"White has a {', '.join(white_pieces)}.")
+        else:
+            observation_parts.append("White has no pieces left.")
         
-        visual_board = "\n   a b c d e f g h\n  +-----------------+\n"
-        for i, row in enumerate(board_str):
-            rank = 8 - i
-            visual_board += f"{rank} | {row} | {rank}\n"
-        visual_board += "  +-----------------+\n   a b c d e f g h\n"
+        if black_pieces:
+            observation_parts.append(f"Black has a {', '.join(black_pieces)}.")
+        else:
+            observation_parts.append("Black has no pieces left.")
+
+        # This is our new natural language string
+        text_board_string = " ".join(observation_parts)
 
         legal_moves = [self.board.san(move) for move in self.board.legal_moves]
 
@@ -41,7 +62,7 @@ class MyEnv(BaseEnv):
             temp_board.push(move)
 
         return {
-            "visual_board": visual_board,
+            "board": text_board_string,
             "legal_moves": legal_moves,
             "must_avoid_moves": self.current_consecutive_illegal_moves,
             "move_number": self.board.fullmove_number,

@@ -11,7 +11,7 @@
 
     "observation_space": {
       "type": "json",
-      "description": "{ \"visual_board\": str, \"legal_moves\": [str], \"must_avoid_moves\": [str], \"move_number\": int, \"move_history\": [str], \"turn\": str, \"is_check\": bool }"
+      "description": "{ \"board\": str, \"legal_moves\": [str], \"must_avoid_moves\": [str], \"move_number\": int, \"move_history\": [str], \"turn\": str, \"is_check\": bool }"
     },
 
     "action_space": {

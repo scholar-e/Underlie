@@ -23,7 +23,7 @@ def run_test_game():
     while not terminated:
         # Print the current visual state returned by the environment's observation
         print(f"\n--- Turn {turn_count} ({obs['turn']}) ---")
-        print(obs["visual_board"])
+        print(obs["board"])
         
         if obs["is_check"]:
             print("⚠️  King is in check!")
@@ -63,7 +63,7 @@ def run_test_game():
     print("\n" + "=" * 50)
     print("                GAME OVER RESULTS                ")
     print("=" * 50)
-    print(obs["visual_board"])
+    print(obs["board"])
     print(f"Final Game Result Code: {info.get('game_result', 'N/A')}")
     print(f"Final Step Reward Value: {reward}")
     print("=" * 50)
