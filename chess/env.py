@@ -144,6 +144,8 @@ class MyEnv(BaseEnv):
 
         # Check final game conditions
         terminated = self.board.is_game_over()
+        truncated = false
+        
         if terminated:
             result = self.board.result()
             info["game_result"] = result
@@ -152,7 +154,6 @@ class MyEnv(BaseEnv):
             elif result == "0-1":
                 reward += 10.0 if not player_is_white else -10.0
 
-        truncated = false
         elif self.current_consecutive_illegal_moves.__len__() >= self.max_consecutive_illegal_moves:
             terminated = true
             reward -= 20
