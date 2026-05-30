@@ -155,9 +155,9 @@ class MyEnv(BaseEnv):
                 reward += 10.0 if not player_is_white else -10.0
 
         elif self.current_consecutive_illegal_moves.__len__() >= self.max_consecutive_illegal_moves:
-            terminated = true
+            terminated = True
             reward -= 20
-            truncated = true
+            truncated = True
         
         return StepResult(
             observation=self._get_observation(),
