@@ -21,7 +21,7 @@
 
     "reward": {
       "type": "scalar",
-      "range": { "low": -15.0, "high": 15.0 },
+      "range": { "low": -20.0, "high": 15.0 },
       "description": "Based on the centipawn evaluation delta from Stockfish following the move, plus bonuses/penalties for game outcomes or illegal actions."
     },
 
