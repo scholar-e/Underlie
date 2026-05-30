@@ -1,49 +1,49 @@
 {
-  "id": "my-env",
+  "id": "chessEnv",
   "adapter": "adapter.py",
-  "name": "My Environment",
-  "description": "One-sentence description of what this benchmark evaluates.",
+  "name": "Chess Player",
+  "description": "Evaluates an agent's ability to play competitive chess against itself or an engine using Standard Algebraic Notation.",
 
   "binding_vow": {
     "version": "1.0.0",
     "tier": "tier1",
-    "description": "Longer description of the task and what makes a good agent.",
+    "description": "A self-play or engine-based chess task where the agent must select high-quality legal moves. Success is determined by maximizing positional advantage (centipawn delta) and ultimately winning games.",
 
     "observation_space": {
       "type": "json",
-      "description": "{ \"question\": string }"
+      "description": "{ \"visual_board\": string, \"legal_moves\": array of strings, \"turn\": string, \"is_check\": boolean }"
     },
 
     "action_space": {
       "type": "text",
-      "description": "Free-text answer from the agent"
+      "description": "The desired chess move in Standard Algebraic Notation (SAN), e.g., 'e4', 'Nf3', 'O-O'."
     },
 
     "reward": {
-      "type": "binary",
-      "range": { "low": 0.0, "high": 1.0 },
-      "description": "1.0 if correct, 0.0 otherwise"
+      "type": "continuous",
+      "range": { "low": -15.0, "high": 15.0 },
+      "description": "Based on the centipawn evaluation delta from Stockfish following the move, plus bonuses/penalties for game outcomes or illegal actions."
     },
 
     "episode": {
-      "max_steps": 10,
+      "max_steps": 150,
       "deterministic_reset": true,
       "supports_seed": true,
       "parallel_episodes": 1,
       "observability": "full"
     },
 
-    "techniques": []
+    "techniques": ["reinforcement_learning", "self_play", "heuristic_reward_shaping"]
   },
 
   "scoring": {
-    "primary_metric": "accuracy",
+    "primary_metric": "mean_episode_reward",
     "higher_is_better": true,
     "metrics": [
       {
-        "name": "accuracy",
+        "name": "mean_episode_reward",
         "type": "episode_reward",
-        "aggregation": "pass_rate"
+        "aggregation": "mean"
       }
     ]
   }

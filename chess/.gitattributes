@@ -1,0 +1,2 @@
+stockfish/stockfish-windows-x86-64-avx2.exe filter=lfs diff=lfs merge=lfs -text
+stockfish/stockfish-windows-x86-64-avx2.exe filter=lfs diff=lfs merge=lfs -text

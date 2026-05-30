@@ -6,7 +6,7 @@ from typing import Any
 from bench_common.env_sdk.base import BaseEnv, StepResult
 
 class ChessEnv(BaseEnv):
-    def __init__(self, stockfish_path: str = "path/to/your/stockfish/executable") -> None:
+    def __init__(self, stockfish_path: str = ".\stockfish\stockfish-windows-x86-64-avx2.exe") -> None:
         self.board: chess.Board | None = None
         # Initialize Stockfish. Adjust depth based on how fast you want your benchmarks to run.
         self.engine = Stockfish(path=stockfish_path, depth=10)
@@ -32,31 +32,32 @@ class ChessEnv(BaseEnv):
             "is_check": self.board.is_check()
         }
 
-    def _get_engine_evaluation(self, perspective_is_white: bool) -> float:
-        """
-        Gets the current board evaluation from Stockfish.
-        Returns a normalized score where positive is good for the active perspective.
-        """
-        self.engine.set_fen_position(self.board.fen())
-        eval_data = self.engine.get_evaluation()
-        
-        # If it's a forced checkmate sequence
-        if eval_data["type"] == "mate":
-            mate_moves = eval_data["value"]
-            # Assign a massive score for mate, decaying slightly if it takes more moves
-            base_mate_score = 10000.0 if mate_moves > 0 else -10000.0
-            raw_score = base_mate_score / (abs(mate_moves) + 1)
-        else:
-            # Centipawn value (100 cp = 1 pawn advantage)
-            raw_score = float(eval_data["value"])
-            
-        # Stockfish gives evaluation relative to White. 
-        # Flip it if we want the evaluation from Black's perspective.
-        return raw_score if perspective_is_white else -raw_score
-
     def reset(self, seed: int | None = None, **params: Any) -> dict[str, Any]:
         self.board = chess.Board()
         return self._get_observation()
+
+    def _get_engine_evaluation(self, current_board: chess.Board) -> float:
+        """
+        Always returns the evaluation from WHITE's perspective, 
+        regardless of whose turn it is.
+        """
+        self.engine.set_fen_position(current_board.fen())
+        eval_data = self.engine.get_evaluation()
+        
+        if eval_data["type"] == "mate":
+            mate_moves = eval_data["value"]
+            base_mate_score = 10000.0 if mate_moves > 0 else -10000.0
+            raw_score = base_mate_score / (abs(mate_moves) + 1)
+        else:
+            raw_score = float(eval_data["value"])
+            
+        # FIX: Stockfish returns values from the perspective of the player whose turn it is.
+        # If it's White's turn, Stockfish's perspective is already White's perspective.
+        # If it's Black's turn, Stockfish's positive score means Black is better, 
+        # so we must invert it to get White's perspective.
+        if current_board.turn == chess.BLACK:
+            return -raw_score
+        return raw_score
 
     def step(self, action: Any) -> StepResult:
         if self.board is None:
@@ -65,36 +66,53 @@ class ChessEnv(BaseEnv):
         move_input = str(action).strip()
         info = {"requested_move": move_input, "legal_move": False}
         reward = 0.0
-        
-        # 1. Get the engine evaluation BEFORE the move is made
-        # (Relative to the player whose turn it currently is)
-        current_turn_is_white = (self.board.turn == chess.WHITE)
-        eval_before = self._get_engine_evaluation(perspective_is_white=current_turn_is_white)
 
         try:
             move = self.board.parse_san(move_input)
             
             if move in self.board.legal_moves:
-                # 2. Execute the move
+                # Track who is making the move BEFORE pushing it
+                player_is_white = (self.board.turn == chess.WHITE)
+                
+                # 1. Get White-absolute score BEFORE the move
+                white_eval_before = self._get_engine_evaluation(self.board)
+                
+                # 2. Apply the move to the real board
                 self.board.push(move)
                 info["legal_move"] = True
                 
-                # 3. Get the evaluation AFTER the move
-                # (Still relative to the player who just moved to see if they improved or hurt their position)
-                eval_after = self._get_engine_evaluation(perspective_is_white=current_turn_is_white)
+                # 3. Get White-absolute score AFTER the move
+                white_eval_after = self._get_engine_evaluation(self.board)
                 
-                # 4. Calculate reward based on Centipawn Shift
-                # Scaling by 100 turns a 1-pawn blunder into a -1.0 reward
-                reward = (eval_after - eval_before) / 100.0
-                info["stockfish_cp_delta"] = eval_after - eval_before
+                # 4. Calculate the delta from White's perspective
+                white_cp_delta = white_eval_after - white_eval_before
+                info["stockfish_cp_delta"] = white_cp_delta
+                
+                # 5. Assign reward using an epsilon threshold
+                # Let's say a loss of less than 0.20 cp is perfectly acceptable (engine noise/book move)
+                EPSILON_THRESHOLD = -0.20 
+
+                if player_is_white:
+                    # white_cp_delta is negative if White made things worse
+                    if white_cp_delta >= EPSILON_THRESHOLD:
+                        reward = 0.1  # Small positive reward for maintaining the position/good move
+                    else:
+                        reward = white_cp_delta / 100.0  # Negative reward for a real mistake
+                else:
+                    # Black wants white_cp_delta to be negative (White's score goes down)
+                    black_cp_delta = -white_cp_delta
+                    if black_cp_delta >= EPSILON_THRESHOLD:
+                        reward = 0.1
+                    else:
+                        reward = black_cp_delta / 100.0
                 
             else:
                 info["error"] = "Illegal move"
-                reward = -5.0  # Heavy penalty for picking an illegal move so the AI learns rules
+                reward = -5.0  
                 
         except ValueError:
             info["error"] = "Invalid notation syntax"
-            reward = -5.0  # Heavy penalty for complete syntax gibberish
+            reward = -5.0
 
         # Check final game conditions
         terminated = self.board.is_game_over()
@@ -102,9 +120,9 @@ class ChessEnv(BaseEnv):
             result = self.board.result()
             info["game_result"] = result
             if result == "1-0":
-                reward += 10.0 if current_turn_is_white else -10.0
+                reward += 10.0 if player_is_white else -10.0
             elif result == "0-1":
-                reward += 10.0 if not current_turn_is_white else -10.0
+                reward += 10.0 if not player_is_white else -10.0
 
         return StepResult(
             observation=self._get_observation(),
