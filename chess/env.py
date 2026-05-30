@@ -152,10 +152,16 @@ class MyEnv(BaseEnv):
             elif result == "0-1":
                 reward += 10.0 if not player_is_white else -10.0
 
+        truncated = false
+        elif self.current_consecutive_illegal_moves.__len__() >= self.max_consecutive_illegal_moves:
+            terminated = true
+            reward -= 20
+            truncated = true
+        
         return StepResult(
             observation=self._get_observation(),
             reward=reward,
-            terminated=terminated or self.current_consecutive_illegal_moves.__len__() >= self.max_consecutive_illegal_moves,
-            truncated=self.current_consecutive_illegal_moves.__len__() >= self.max_consecutive_illegal_moves,
+            terminated=terminated,
+            truncated=truncated,
             info=info,
         )
