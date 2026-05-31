@@ -12,3 +12,10 @@ chess/auxiliary/ui/__pycache__/
 chess/__pycache__/
 mesosphere/
 data/
+
+# Stockfish compiled binary and large assets
+chess/stockfish/src/stockfish
+chess/stockfish/src/*.o
+chess/stockfish/src/nn-c288c895ea92.nnue
+chess/stockfish/src/.depend
+chess/stockfish/stockfish-windows-*.exe

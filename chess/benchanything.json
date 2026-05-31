@@ -11,12 +11,12 @@
 
     "observation_space": {
       "type": "json",
-      "description": "{ \"board\": str, \"legal_moves\": [str], \"must_avoid_moves\": [str], \"move_number\": int, \"move_history\": [str], \"turn\": str, \"is_check\": bool }"
+      "description": "{ \"board\": str, \"legal_moves\": [str], \"must_avoid_moves\": [str], \"rejected_moves\": [{attempt, reason, turn}], \"move_number\": int, \"move_history\": [str], \"turn\": str, \"is_check\": bool }"
     },
 
     "action_space": {
       "type": "text",
-      "description": "Reason and state the desired chess move in Standard Algebraic Notation (SAN), e.g., 'e4', 'Nf3', 'O-O'. A list of all legal moves has been provided in legal_moves, and you MUST pick a move from the list of legal moves provided. Additionally, you MUST avoid picking moves from the must_avoid_moves list."
+      "description": "State your reasoning, then output your move on its own line at the end as MOVE: <san>. Examples: MOVE: e4 | MOVE: Nf3 | MOVE: O-O | MOVE: Qxf7# | MOVE: Nbd2 | MOVE: e8=Q. Pick only from legal_moves and avoid must_avoid_moves."
     },
 
     "reward": {

@@ -43,7 +43,7 @@ templates = Jinja2Templates(directory=os.path.join(UI_DIR, "templates"))
 
 @dataclass
 class RunConfig:
-    stockfish_path: str = r".\stockfish\stockfish-windows-x86-64-avx2.exe"
+    stockfish_path: str = "stockfish/src/stockfish"
     model: str = "ollama/llama3.2"
     episodes: int = 1
     max_steps: int = 150
@@ -352,7 +352,7 @@ async def list_trials():
         test_path = os.path.join(TRIALS_DIR, test_dir)
         if not os.path.isdir(test_path):
             continue
-        for trial_dir in sorted(os.listdir(test_path), reverse=True):
+        for trial_dir in os.listdir(test_path):
             trial_path = os.path.join(test_path, trial_dir)
             if not os.path.isdir(trial_path):
                 continue
@@ -369,13 +369,16 @@ async def list_trials():
                         results = json.load(f)
             except Exception:
                 pass
+            mtime = os.path.getmtime(trial_path)
             trials.append({
                 "id": f"{test_dir}/{trial_dir}",
+                "timestamp": datetime.fromtimestamp(mtime, tz=timezone.utc).isoformat(),
                 "best_reward": results.get("best_reward") or meta.get("best_reward"),
                 "total_steps": results.get("total_steps") or meta.get("total_steps"),
                 "game_result": results.get("game_result") or meta.get("game_result"),
                 "num_moves": results.get("num_moves") or meta.get("num_moves"),
             })
+    trials.sort(key=lambda t: t.get("timestamp", ""), reverse=True)
     return trials
 
 

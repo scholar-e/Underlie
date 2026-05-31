@@ -153,11 +153,12 @@
       <table>
         <thead>
           <tr>
-            <th>Trial</th>
-            <th>Best Reward</th>
-            <th>Steps</th>
-            <th>Game Result</th>
-            <th>Moves</th>
+              <th>Time</th>
+              <th>Trial</th>
+              <th>Best Reward</th>
+              <th>Steps</th>
+              <th>Game Result</th>
+              <th>Moves</th>
           </tr>
         </thead>
         <tbody id="resultsBody"></tbody>
@@ -477,6 +478,76 @@ function updateProcessUI(name, alive, logLines, port) {
 }
 
 // ══════════════════════════════════════════════════
+// Chess board renderer
+// ══════════════════════════════════════════════════
+const PIECES = {
+  'K': '♔', 'Q': '♕', 'R': '♖', 'B': '♗', 'N': '♘', 'P': '♙',
+  'k': '♚', 'q': '♛', 'r': '♜', 'b': '♝', 'n': '♞', 'p': '♟',
+};
+
+function fenToBoard(fen) {
+  const position = fen.split(' ')[0];
+  const ranks = position.split('/');
+  const board = [];
+  for (const rank of ranks) {
+    const row = [];
+    for (const ch of rank) {
+      if (ch >= '1' && ch <= '8') {
+        for (let i = 0; i < parseInt(ch); i++) row.push(null);
+      } else {
+        row.push(ch);
+      }
+    }
+    board.push(row);
+  }
+  return board;
+}
+
+function parseLastSquare(move) {
+  const m = move.match(/[a-h][1-8]/);
+  return m ? m[0] : null;
+}
+
+function renderChessBoard(fen, lastMove, turn, moveNumber, isCheck) {
+  if (!fen) return '';
+  const board = fenToBoard(fen);
+  const lastSquare = lastMove ? parseLastSquare(lastMove) : null;
+  const files = ['a','b','c','d','e','f','g','h'];
+  const ranks = ['8','7','6','5','4','3','2','1'];
+  const turnLabel = turn === 'w' ? 'White' : turn === 'b' ? 'Black' : turn;
+
+  let html = '<div class="chess-board-card">';
+  html += '<div><div style="display:flex;align-items:center;gap:0">';
+  html += '<div class="chess-coords-vertical">';
+  for (const r of ranks) html += `<span>${r}</span>`;
+  html += '</div>';
+  html += '<div><div class="chess-board">';
+  for (let r = 0; r < 8; r++) {
+    for (let f = 0; f < 8; f++) {
+      const isLight = (r + f) % 2 === 0;
+      const sq = files[f] + ranks[r];
+      const isHighlight = sq === lastSquare;
+      const piece = board[r][f];
+      html += `<div class="chess-square ${isLight ? 'light' : 'dark'}${isHighlight ? ' highlight' : ''}">`;
+      if (piece) html += `<span class="chess-piece">${PIECES[piece] || piece}</span>`;
+      html += '</div>';
+    }
+  }
+  html += '</div>';
+  html += '<div class="chess-coords">';
+  for (const f of files) html += `<span>${f}</span>`;
+  html += '</div></div></div>';
+
+  html += '<div class="chess-info">';
+  html += `<div class="info-row"><span class="info-label">Turn:</span><span class="info-value">${turnLabel}</span></div>`;
+  if (moveNumber) html += `<div class="info-row"><span class="info-label">Move:</span><span class="info-value">${moveNumber}</span></div>`;
+  if (lastMove) html += `<div class="info-row"><span class="info-label">Last:</span><span class="info-value">${esc(lastMove)}</span></div>`;
+  if (isCheck) html += '<div style="margin-top:8px"><span class="badge" style="background:#fff5f5;color:#c62828">CHECK</span></div>';
+  html += '</div></div>';
+  return html;
+}
+
+// ══════════════════════════════════════════════════
 // Tab 3: Results
 // ══════════════════════════════════════════════════
 async function loadTrials() {
@@ -496,8 +567,15 @@ async function loadTrials() {
   wrap.classList.remove('hidden');
   hide('trialDetail');
 
+  const fmtTime = ts => {
+    if (!ts) return '—';
+    const d = new Date(ts);
+    return d.toLocaleString(undefined, {month:'short', day:'numeric', hour:'2-digit', minute:'2-digit'});
+  };
+
   body.innerHTML = trials.map(t => `
     <tr class="clickable" data-test="${t.id.split('/')[0]}" data-trial="${t.id.split('/')[1]}">
+      <td style="white-space:nowrap">${fmtTime(t.timestamp)}</td>
       <td>${esc(t.id)}</td>
       <td>${t.best_reward != null ? t.best_reward.toFixed(4) : '—'}</td>
       <td>${t.total_steps ?? '—'}</td>
@@ -520,20 +598,25 @@ async function showTrialDetail(testId, trialId) {
   setText('trialDetailTitle', `${testId}/${trialId}`);
 
   const stepsContainer = document.getElementById('trialSteps');
-  stepsContainer.innerHTML = data.steps.map(s => `
-    <div class="step-card">
+  stepsContainer.innerHTML = data.steps.map(s => {
+    const obs = s.observation || {};
+    const fen = obs.fen || s.fen || '';
+    const turn = obs.turn ? obs.turn[0].toLowerCase() : '';
+    const boardHtml = renderChessBoard(fen, s.move, turn, obs.move_number, obs.is_check);
+
+    return `<div class="step-card">
       <div class="step-header">
         <strong>Step ${s.step}</strong>
         <div class="flex-row">
           <span>Reward: <strong>${s.reward != null ? s.reward.toFixed(4) : '—'}</strong></span>
           <span>Best: <strong>${s.best_reward != null ? s.best_reward.toFixed(4) : '—'}</strong></span>
           ${s.legal_move === false ? '<span class="badge" style="background:#fff5f5;color:#c62828">ILLEGAL</span>' : ''}
+          ${obs.is_check ? '<span class="badge" style="background:#fff5f5;color:#c62828">CHECK</span>' : ''}
         </div>
       </div>
-      ${s.move ? `<div class="text-muted mb-8">Move: <strong>${esc(s.move)}</strong></div>` : ''}
-      ${s.observation ? `<div class="text-muted mb-8">Board: ${esc(s.observation)}</div>` : ''}
-    </div>
-  `).join('') || '<div class="alert info">No step data available.</div>';
+      ${boardHtml}
+    </div>`;
+  }).join('') || '<div class="alert info">No step data available.</div>';
 }
 
 document.getElementById('closeDetailBtn').addEventListener('click', () => {
