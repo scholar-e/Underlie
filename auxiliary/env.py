@@ -42,11 +42,23 @@ class MyEnv(BaseEnv):
 
     def __init__(self, stockfish_path: str | None = None) -> None:
         self.board: chess.Board | None = None
-        sf_path = stockfish_path or os.environ.get("STOCKFISH_PATH")
+        self._stockfish_path = stockfish_path or os.environ.get("STOCKFISH_PATH") or None
+        self.engine: Stockfish | None = None
+        self.current_consecutive_illegal_moves: list[str] = []
+        self._all_rejected_moves: list[dict[str, Any]] = []
+        self._trial_dir: str | None = None
+        self._current_step: int = 0
+        self._best_reward: float = 0.0
+        self._game_result: str = ""
+
+    def _init_engine(self) -> None:
+        if self.engine is not None:
+            return
+        sf_path = self._stockfish_path
         if not sf_path:
             _chess_dir = os.path.dirname(os.path.abspath(__file__))
             _candidates = [
-                "stockfish",  # system PATH (e.g. apt-get install stockfish)
+                "stockfish",
                 os.path.join(_chess_dir, "stockfish", "src", "stockfish"),
             ]
             if sys.platform == "win32":
@@ -85,17 +97,14 @@ class MyEnv(BaseEnv):
                     print(f"Stockfish compilation failed: {err}", file=sys.stderr)
         if not sf_path:
             raise RuntimeError(
-                "Stockfish binary not found. Set STOCKFISH_PATH env var, place "
-                "stockfish binary at chess/stockfish/src/stockfish, or ensure "
-                "stockfish source with Makefile is present for auto-compilation."
+                "Stockfish binary not found. To run this environment "
+                "install stockfish (apt: sudo apt-get install stockfish, "
+                "brew: brew install stockfish) or set STOCKFISH_PATH env var. "
+                "Alternatively ensure stockfish source with Makefile is present "
+                "at auxiliary/stockfish/src/ for auto-compilation."
             )
         self.engine = Stockfish(path=sf_path, depth=10)
-        self.current_consecutive_illegal_moves: list[str] = []
-        self._all_rejected_moves: list[dict[str, Any]] = []
-        self._trial_dir: str | None = None
-        self._current_step: int = 0
-        self._best_reward: float = 0.0
-        self._game_result: str = ""
+        self._stockfish_path = sf_path
 
     @staticmethod
     def _pieces_summary(board: chess.Board, color: chess.Color) -> str:
@@ -259,6 +268,7 @@ class MyEnv(BaseEnv):
             json.dump(diag, f, indent=2)
 
     def reset(self, seed: int | None = None, **params: Any) -> dict[str, Any]:
+        self._init_engine()
         self.board = chess.Board()
         self.current_consecutive_illegal_moves = []
         self._all_rejected_moves = []
