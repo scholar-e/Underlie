@@ -12,7 +12,7 @@ chess/auxiliary/ui/__pycache__/
 chess/__pycache__/
 mesosphere/
 data/
-
+auxiliary/auxiliary/trials
 # Stockfish compiled binary and large assets
 
 # Stockfish build artifacts
