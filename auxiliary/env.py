@@ -6,6 +6,8 @@ import os
 import re
 import subprocess
 import sys
+import tarfile
+import urllib.request
 from stockfish import Stockfish
 from typing import Any
 from bench_common.env_sdk.base import BaseEnv, StepResult
@@ -96,15 +98,96 @@ class MyEnv(BaseEnv):
                     err = e.stderr.decode(errors="replace")[:200] if e.stderr else str(e)
                     print(f"Stockfish compilation failed: {err}", file=sys.stderr)
         if not sf_path:
-            raise RuntimeError(
-                "Stockfish binary not found. To run this environment "
-                "install stockfish (apt: sudo apt-get install stockfish, "
-                "brew: brew install stockfish) or set STOCKFISH_PATH env var. "
-                "Alternatively ensure stockfish source with Makefile is present "
-                "at auxiliary/stockfish/src/ for auto-compilation."
+            sf_path = self._download_stockfish()
+        if not sf_path:
+            print("Stockfish not available — running without engine evaluation", file=sys.stderr)
+            self.engine = None
+            return
+        try:
+            self.engine = Stockfish(path=sf_path, depth=10)
+            self._stockfish_path = sf_path
+        except Exception as e:
+            print(f"Stockfish init failed: {e} — running without engine evaluation", file=sys.stderr)
+            self.engine = None
+
+    @staticmethod
+    def _download_stockfish() -> str | None:
+        _chess_dir = os.path.dirname(os.path.abspath(__file__))
+        _dest_dir = os.path.join(_chess_dir, "stockfish", "src")
+        os.makedirs(_dest_dir, exist_ok=True)
+        _binary = os.path.join(_dest_dir, "stockfish")
+
+        if os.path.isfile(_binary) and os.access(_binary, os.X_OK):
+            return _binary
+
+        import platform
+        arch = platform.machine()
+        if arch not in ("x86_64", "amd64"):
+            return None
+
+        # Try GitHub API first to get the latest release
+        variants = ["bmi2", "avx2", "sse41-popcnt"]
+        download_urls: list[str] = []
+        try:
+            api = "https://api.github.com/repos/official-stockfish/Stockfish/releases/latest"
+            req = urllib.request.Request(api, headers={"User-Agent": "python", "Accept": "application/json"})
+            with urllib.request.urlopen(req, timeout=10) as r:
+                import json
+                release = json.loads(r.read())
+                tag = release["tag_name"]
+                for asset in release.get("assets", []):
+                    name = asset["name"]
+                    for v in variants:
+                        if f"ubuntu-x86-64-{v}" in name or name == "stockfish-ubuntu-x86-64.tar":
+                            download_urls.append(asset["browser_download_url"])
+                            break
+        except Exception:
+            pass
+
+        # Fallback static URLs if API failed
+        if not download_urls:
+            for v in variants:
+                download_urls.append(
+                    f"https://github.com/official-stockfish/Stockfish/releases/download/sf_18/stockfish-ubuntu-x86-64-{v}.tar"
+                )
+            download_urls.append(
+                "https://github.com/official-stockfish/Stockfish/releases/download/sf_18/stockfish-ubuntu-x86-64.tar"
             )
-        self.engine = Stockfish(path=sf_path, depth=10)
-        self._stockfish_path = sf_path
+
+        import tempfile, shutil
+        print("Downloading Stockfish...", file=sys.stderr)
+        for url in download_urls:
+            short = url.rsplit("/", 1)[-1]
+            try:
+                print(f"  trying {short}...", file=sys.stderr)
+                req = urllib.request.Request(url, headers={"User-Agent": "python"})
+                with urllib.request.urlopen(req, timeout=120) as resp:
+                    with tempfile.TemporaryDirectory() as tmp:
+                        tarpath = os.path.join(tmp, "sf.tar")
+                        with open(tarpath, "wb") as f:
+                            f.write(resp.read())
+                        with tarfile.open(tarpath, "r") as tar:
+                            tar.extractall(path=tmp)
+                        # Find the binary (large executable file with stockfish in name)
+                        found = None
+                        for root, _dirs, files in os.walk(tmp):
+                            for f in files:
+                                fp = os.path.join(root, f)
+                                if "stockfish" in f and os.path.isfile(fp) and os.path.getsize(fp) > 1_000_000:
+                                    found = fp
+                                    break
+                            if found:
+                                break
+                        if found:
+                            shutil.copy2(found, _binary)
+                            os.chmod(_binary, 0o755)
+                            print(f"Stockfish downloaded: {_binary}", file=sys.stderr)
+                            return _binary
+            except Exception as e:
+                print(f"  {short} failed: {e}", file=sys.stderr)
+                continue
+
+        return None
 
     @staticmethod
     def _pieces_summary(board: chess.Board, color: chess.Color) -> str:
