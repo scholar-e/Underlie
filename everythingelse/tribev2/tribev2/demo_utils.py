@@ -208,9 +208,14 @@ class TribeModel(TribeExperiment):
             ckpt_path = hf_hub_download(repo_id, checkpoint_name)
         with open(config_path, "r") as f:
             config = ConfDict(yaml.load(f, Loader=yaml.UnsafeLoader))
-        for modality in ["text", "audio", "video"]:
+        for modality in ["text", "audio"]:
             config[f"data.{modality}_feature.infra.folder"] = cache_folder
             config[f"data.{modality}_feature.infra.cluster"] = cluster
+            config[f"data.{modality}_feature.device"] = device
+        # video wraps an inner HuggingFaceImage that has the device field
+        config["data.video_feature.infra.folder"] = cache_folder
+        config["data.video_feature.infra.cluster"] = cluster
+        config["data.video_feature.image.device"] = device
 
         for param in [
             "infra.workdir",
