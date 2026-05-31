@@ -4,5 +4,11 @@ auxiliary/test_results/
 auxiliary/run_config.json
 auxiliary/__pycache__/
 auxiliary/ui/__pycache__/
+chess/auxiliary/trials/
+chess/auxiliary/test_results/
+chess/auxiliary/run_config.json
+chess/auxiliary/__pycache__/
+chess/auxiliary/ui/__pycache__/
+chess/__pycache__/
 mesosphere/
 data/
