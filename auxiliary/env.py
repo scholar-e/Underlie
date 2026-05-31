@@ -56,62 +56,76 @@ class MyEnv(BaseEnv):
     def _init_engine(self) -> None:
         if self.engine is not None:
             return
-        sf_path = self._stockfish_path
-        if not sf_path:
-            _chess_dir = os.path.dirname(os.path.abspath(__file__))
-            _candidates = [
-                "stockfish",
-                os.path.join(_chess_dir, "stockfish", "src", "stockfish"),
-            ]
-            if sys.platform == "win32":
-                _candidates.append(
-                    os.path.join(_chess_dir, "stockfish", "stockfish-windows-x86-64-avx2.exe")
-                )
-            for c in _candidates:
-                if c == "stockfish":
-                    try:
-                        subprocess.run(["stockfish", "--version"], capture_output=True, timeout=5)
-                        sf_path = "stockfish"
-                        break
-                    except (FileNotFoundError, subprocess.TimeoutExpired):
-                        pass
-                elif os.path.isfile(c) and os.access(c, os.X_OK):
-                    sf_path = c
-                    break
-        if not sf_path:
-            _chess_dir = os.path.dirname(os.path.abspath(__file__))
-            _src_dir = os.path.join(_chess_dir, "stockfish", "src")
-            _makefile = os.path.join(_src_dir, "Makefile")
-            if os.path.isfile(_makefile):
-                print("Compiling Stockfish from source...", file=sys.stderr)
-                try:
-                    subprocess.run(
-                        ["make", "-j", str(os.cpu_count() or 2), "build"],
-                        cwd=_src_dir, check=True,
-                        stdout=subprocess.DEVNULL, stderr=subprocess.PIPE,
-                    )
-                    _binary = os.path.join(_src_dir, "stockfish")
-                    if os.path.isfile(_binary):
-                        sf_path = _binary
-                        print(f"Stockfish compiled: {sf_path}", file=sys.stderr)
-                except subprocess.CalledProcessError as e:
-                    err = e.stderr.decode(errors="replace")[:200] if e.stderr else str(e)
-                    print(f"Stockfish compilation failed: {err}", file=sys.stderr)
-        if not sf_path:
-            sf_path = self._download_stockfish()
-        if not sf_path:
-            print("Stockfish not available — running without engine evaluation", file=sys.stderr)
-            self.engine = None
-            return
         try:
+            sf_path = self._stockfish_path
+            if not sf_path:
+                _chess_dir = os.path.dirname(os.path.abspath(__file__))
+                _candidates = [
+                    "stockfish",
+                    os.path.join(_chess_dir, "stockfish", "src", "stockfish"),
+                ]
+                if sys.platform == "win32":
+                    _candidates.append(
+                        os.path.join(_chess_dir, "stockfish", "stockfish-windows-x86-64-avx2.exe")
+                    )
+                for c in _candidates:
+                    if c == "stockfish":
+                        try:
+                            subprocess.run(["stockfish", "--version"], capture_output=True, timeout=3)
+                            sf_path = "stockfish"
+                            break
+                        except (FileNotFoundError, subprocess.TimeoutExpired):
+                            pass
+                    elif os.path.isfile(c) and os.access(c, os.X_OK):
+                        sf_path = c
+                        break
+            if not sf_path:
+                _chess_dir = os.path.dirname(os.path.abspath(__file__))
+                _src_dir = os.path.join(_chess_dir, "stockfish", "src")
+                _makefile = os.path.join(_src_dir, "Makefile")
+                if os.path.isfile(_makefile):
+                    import shutil
+                    if shutil.which("make") and shutil.which("g++"):
+                        print("Compiling Stockfish from source...", file=sys.stderr)
+                        try:
+                            subprocess.run(
+                                ["make", "-j", str(os.cpu_count() or 2), "build"],
+                                cwd=_src_dir, check=True, timeout=120,
+                                stdout=subprocess.DEVNULL, stderr=subprocess.PIPE,
+                            )
+                            _binary = os.path.join(_src_dir, "stockfish")
+                            if os.path.isfile(_binary):
+                                sf_path = _binary
+                                print(f"Stockfish compiled: {sf_path}", file=sys.stderr)
+                        except subprocess.CalledProcessError as e:
+                            err = e.stderr.decode(errors="replace")[:200] if e.stderr else str(e)
+                            print(f"Stockfish compilation failed: {err}", file=sys.stderr)
+                    else:
+                        print("make/g++ not available, skipping compilation", file=sys.stderr)
+            if not sf_path:
+                sf_path = self._download_stockfish()
+            if not sf_path:
+                print("Stockfish not available — running without engine evaluation", file=sys.stderr)
+                self.engine = None
+                return
             self.engine = Stockfish(path=sf_path, depth=10)
             self._stockfish_path = sf_path
         except Exception as e:
-            print(f"Stockfish init failed: {e} — running without engine evaluation", file=sys.stderr)
+            import traceback
+            print(f"Stockfish engine init failed: {e}\n{traceback.format_exc()}", file=sys.stderr)
             self.engine = None
 
     @staticmethod
     def _download_stockfish() -> str | None:
+        try:
+            return MyEnv._do_download()
+        except Exception as e:
+            import traceback
+            print(f"Stockfish download failed: {e}\n{traceback.format_exc()}", file=sys.stderr)
+            return None
+
+    @staticmethod
+    def _do_download() -> str | None:
         _chess_dir = os.path.dirname(os.path.abspath(__file__))
         _dest_dir = os.path.join(_chess_dir, "stockfish", "src")
         os.makedirs(_dest_dir, exist_ok=True)
@@ -161,7 +175,7 @@ class MyEnv(BaseEnv):
             try:
                 print(f"  trying {short}...", file=sys.stderr)
                 req = urllib.request.Request(url, headers={"User-Agent": "python"})
-                with urllib.request.urlopen(req, timeout=120) as resp:
+                with urllib.request.urlopen(req, timeout=15) as resp:
                     with tempfile.TemporaryDirectory() as tmp:
                         tarpath = os.path.join(tmp, "sf.tar")
                         with open(tarpath, "wb") as f:
@@ -362,6 +376,8 @@ class MyEnv(BaseEnv):
         return self._get_observation()
 
     def _get_engine_evaluation(self, current_board: chess.Board) -> float:
+        if self.engine is None:
+            return 0.0
         self.engine.set_fen_position(current_board.fen())
         eval_data = self.engine.get_evaluation()
 
