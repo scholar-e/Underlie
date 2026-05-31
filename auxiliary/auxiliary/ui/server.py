@@ -44,7 +44,7 @@ templates = Jinja2Templates(directory=os.path.join(UI_DIR, "templates"))
 @dataclass
 class RunConfig:
     stockfish_path: str = "stockfish/src/stockfish"
-    model: str = "ollama/llama3.2"
+    model: str = "deepseek/deepseek-reasoner"
     episodes: int = 1
     max_steps: int = 150
     mode: str = "local"

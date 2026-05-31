@@ -12,7 +12,7 @@ from stockfish import Stockfish
 from typing import Any
 from bench_common.env_sdk.base import BaseEnv, StepResult
 
-AUX_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "auxiliary")
+AUX_DIR = os.path.dirname(os.path.abspath(__file__))
 TRIALS_DIR = os.path.join(AUX_DIR, "trials")
 os.makedirs(TRIALS_DIR, exist_ok=True)
 
@@ -59,7 +59,7 @@ class MyEnv(BaseEnv):
         try:
             sf_path = self._stockfish_path
             if not sf_path:
-                _chess_dir = os.path.dirname(os.path.abspath(__file__))
+                _chess_dir = AUX_DIR
                 _candidates = [
                     "stockfish",
                     os.path.join(_chess_dir, "stockfish", "src", "stockfish"),
@@ -82,39 +82,14 @@ class MyEnv(BaseEnv):
             if not sf_path:
                 sf_path = self._download_stockfish()
             if not sf_path:
-                _chess_dir = os.path.dirname(os.path.abspath(__file__))
-                _src_dir = os.path.join(_chess_dir, "stockfish", "src")
-                _makefile = os.path.join(_src_dir, "Makefile")
-                if os.path.isfile(_makefile):
-                    import shutil
-                    if shutil.which("make") and shutil.which("g++"):
-                        print("Compiling Stockfish from source...", file=sys.stderr)
-                        try:
-                            subprocess.run(
-                                ["make", "-j", str(os.cpu_count() or 2), "build"],
-                                cwd=_src_dir, check=True, timeout=30,
-                                stdout=subprocess.DEVNULL, stderr=subprocess.PIPE,
-                            )
-                            _binary = os.path.join(_src_dir, "stockfish")
-                            if os.path.isfile(_binary):
-                                sf_path = _binary
-                                print(f"Stockfish compiled: {sf_path}", file=sys.stderr)
-                        except subprocess.TimeoutExpired:
-                            print("Compilation timed out (30s), skipping", file=sys.stderr)
-                        except subprocess.CalledProcessError as e:
-                            err = e.stderr.decode(errors="replace")[:200] if e.stderr else str(e)
-                            print(f"Stockfish compilation failed: {err}", file=sys.stderr)
-                    else:
-                        print("make/g++ not available, skipping compilation", file=sys.stderr)
-            if not sf_path:
-                print("Stockfish not available — running without engine evaluation", file=sys.stderr)
+                print("Stockfish not available — no engine", file=sys.stderr)
                 self.engine = None
                 return
             self.engine = Stockfish(path=sf_path, depth=10)
             self._stockfish_path = sf_path
         except Exception as e:
             import traceback
-            print(f"Stockfish engine init failed: {e}\n{traceback.format_exc()}", file=sys.stderr)
+            print(f"Stockfish init failed: {e}\n{traceback.format_exc()}", file=sys.stderr)
             self.engine = None
 
     @staticmethod
@@ -128,7 +103,7 @@ class MyEnv(BaseEnv):
 
     @staticmethod
     def _do_download() -> str | None:
-        _chess_dir = os.path.dirname(os.path.abspath(__file__))
+        _chess_dir = AUX_DIR
         _dest_dir = os.path.join(_chess_dir, "stockfish", "src")
         _binary = os.path.join(_dest_dir, "stockfish")
 
@@ -137,7 +112,6 @@ class MyEnv(BaseEnv):
         if arch not in ("x86_64", "amd64"):
             return None
 
-        # Try GitHub API to get the download URL (3s timeout, 1 attempt)
         url = None
         try:
             api = "https://api.github.com/repos/official-stockfish/Stockfish/releases/latest"
@@ -146,7 +120,7 @@ class MyEnv(BaseEnv):
                 import json
                 for asset in json.loads(r.read()).get("assets", []):
                     name = asset["name"]
-                    if "ubuntu-x86-64" in name and (".tar" in name) and name.endswith(".tar"):
+                    if "ubuntu-x86-64" in name and name.endswith(".tar"):
                         if "bmi2" in name or "avx2" in name or "sse41" in name:
                             url = asset["browser_download_url"]
                             break
@@ -176,7 +150,6 @@ class MyEnv(BaseEnv):
                                 os.chmod(_binary, 0o755)
                                 print(f"Stockfish downloaded: {_binary}", file=sys.stderr)
                                 return _binary
-            print(f"  {short}: binary not found in archive", file=sys.stderr)
         except Exception as e:
             print(f"  download failed: {e}", file=sys.stderr)
 
