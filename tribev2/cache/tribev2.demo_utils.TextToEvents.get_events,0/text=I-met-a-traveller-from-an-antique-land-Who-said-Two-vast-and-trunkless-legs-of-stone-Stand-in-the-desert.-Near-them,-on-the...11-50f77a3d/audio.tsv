@@ -1,0 +1,113 @@
+text	start	duration	sequence_id	sentence
+I	0.131	0.06	0	 I met a traveler from an antique land.
+met	0.251	0.2	0	 I met a traveler from an antique land.
+a	0.492	0.040000000000000036	0	 I met a traveler from an antique land.
+traveler	0.592	0.5399999999999999	0	 I met a traveler from an antique land.
+from	1.232	0.16100000000000003	0	 I met a traveler from an antique land.
+an	1.433	0.06000000000000005	0	 I met a traveler from an antique land.
+antique	1.593	0.40000000000000013	0	 I met a traveler from an antique land.
+land.	2.073	0.3810000000000002	0	 I met a traveler from an antique land.
+Who	2.954	0.17999999999999972	1	Who said.
+said.	3.195	0.38000000000000034	1	Who said.
+Two	3.915	0.20099999999999962	2	Two vast and trunkless legs of stone.
+vast	4.216	0.35999999999999943	2	Two vast and trunkless legs of stone.
+and	4.636	0.09999999999999964	2	Two vast and trunkless legs of stone.
+trunkless	4.776	0.5209999999999999	2	Two vast and trunkless legs of stone.
+legs	5.377	0.2400000000000002	2	Two vast and trunkless legs of stone.
+of	5.697	0.05999999999999961	2	Two vast and trunkless legs of stone.
+stone.	5.838	0.41999999999999993	2	Two vast and trunkless legs of stone.
+Stand	6.859	0.3600000000000003	3	Stand in the desert.
+in	7.279	0.08000000000000007	3	Stand in the desert.
+the	7.379	0.10000000000000053	3	Stand in the desert.
+desert.	7.539	0.4410000000000007	3	Stand in the desert.
+Near	8.38	0.22100000000000009	4	Near them.
+them.	8.661	0.2599999999999998	4	Near them.
+On	9.402	0.08000000000000007	5	On the sand.
+the	9.522	0.09999999999999964	5	On the sand.
+sand.	9.702	0.46000000000000085	5	On the sand.
+Half	10.603	0.27999999999999936	6	Half sunk.
+sunk.	10.983	0.4009999999999998	6	Half sunk.
+A	11.824	0.040000000000000924	7	A shattered visage lies.
+shattered	11.964	0.4209999999999994	7	A shattered visage lies.
+visage	12.465	0.41999999999999993	7	A shattered visage lies.
+lies.	13.006	0.40000000000000036	7	A shattered visage lies.
+Whose	13.907	0.2599999999999998	8	Whose frown.
+frown.	14.287	0.4609999999999985	8	Whose frown.
+And	15.228	0.120000000000001	9	And wrinkled lip.
+wrinkled	15.428	0.4209999999999994	9	And wrinkled lip.
+lip.	15.949	0.2599999999999998	9	And wrinkled lip.
+And	16.59	0.10000000000000142	10	And sneer of cold command.
+sneer	16.75	0.379999999999999	10	And sneer of cold command.
+of	17.19	0.05999999999999872	10	And sneer of cold command.
+cold	17.33	0.28100000000000236	10	And sneer of cold command.
+command.	17.671	0.5600000000000023	10	And sneer of cold command.
+Tell	18.792	0.21999999999999886	11	 Tell that its sculptor well those passions read.
+that	19.052	0.14000000000000057	11	 Tell that its sculptor well those passions read.
+its	19.252	0.120000000000001	11	 Tell that its sculptor well those passions read.
+sculptor	19.432	0.5210000000000008	11	 Tell that its sculptor well those passions read.
+well	20.033	0.21999999999999886	11	 Tell that its sculptor well those passions read.
+those	20.313	0.20000000000000284	11	 Tell that its sculptor well those passions read.
+passions	20.593	0.5	11	 Tell that its sculptor well those passions read.
+read.	21.193	0.33999999999999986	11	 Tell that its sculptor well those passions read.
+Which	22.054	0.22000000000000242	12	Which yet survive.
+yet	22.394	0.18000000000000327	12	Which yet survive.
+survive.	22.654	0.620000000000001	12	Which yet survive.
+Stamped	23.674	0.40000000000000213	13	Stamped on these lifeless things.
+on	24.175	0.09999999999999787	13	Stamped on these lifeless things.
+these	24.295	0.1999999999999993	13	Stamped on these lifeless things.
+lifeless	24.635	0.5	13	Stamped on these lifeless things.
+things.	25.215	0.4400000000000013	13	Stamped on these lifeless things.
+The	26.376	0.11999999999999744	14	The hand that mocked them and the heart that fed.
+hand	26.556	0.259999999999998	14	The hand that mocked them and the heart that fed.
+that	26.856	0.13999999999999702	14	The hand that mocked them and the heart that fed.
+mocked	27.076	0.28000000000000114	14	The hand that mocked them and the heart that fed.
+them	27.396	0.16000000000000014	14	The hand that mocked them and the heart that fed.
+and	27.616	0.08000000000000185	14	The hand that mocked them and the heart that fed.
+the	27.716	0.09999999999999787	14	The hand that mocked them and the heart that fed.
+heart	27.856	0.23999999999999844	14	The hand that mocked them and the heart that fed.
+that	28.136	0.14000000000000057	14	The hand that mocked them and the heart that fed.
+fed.	28.356	0.3409999999999975	14	The hand that mocked them and the heart that fed.
+And	29.237	0.10000000000000142	15	And on the pedestal these words appear.
+on	29.457	0.0799999999999983	15	And on the pedestal these words appear.
+the	29.577	0.09999999999999787	15	And on the pedestal these words appear.
+pedestal	29.717	0.5800000000000018	15	And on the pedestal these words appear.
+these	30.337	0.17999999999999972	15	And on the pedestal these words appear.
+words	30.597	0.26099999999999923	15	And on the pedestal these words appear.
+appear.	30.918	0.4200000000000017	15	And on the pedestal these words appear.
+My	31.918	0.1600000000000037	16	My name is Ozymandias.
+name	32.138	0.21999999999999886	16	My name is Ozymandias.
+is	32.438	0.0799999999999983	16	My name is Ozymandias.
+Ozymandias.	32.638	0.8610000000000042	16	My name is Ozymandias.
+King	33.979	0.21999999999999886	17	 King of kings.
+of	34.239	0.08100000000000307	17	 King of kings.
+kings.	34.4	0.480000000000004	17	 King of kings.
+Look	35.421	0.20000000000000284	18	Look on my works.
+on	35.701	0.0799999999999983	18	Look on my works.
+my	35.841	0.14099999999999824	18	Look on my works.
+works.	36.042	0.3999999999999986	18	Look on my works.
+Ye	37.003	0.17999999999999972	19	Ye mighty.
+mighty.	37.283	0.4409999999999954	19	Ye mighty.
+And	38.144	0.10000000000000142	20	And despair.
+despair.	38.304	0.6009999999999991	20	And despair.
+Quote.	39.386	0.3999999999999986	21	Quote.
+Nothing	40.167	0.3399999999999963	22	Nothing beside remains.
+beside	40.567	0.48100000000000165	22	Nothing beside remains.
+remains.	41.108	1.1010000000000062	22	Nothing beside remains.
+Round	42.249	0.2609999999999957	23	Round the decay.
+the	42.55	0.10000000000000142	23	Round the decay.
+decay.	42.69	0.480000000000004	23	Round the decay.
+Of	43.591	0.060000000000002274	24	Of that colossal wreck.
+that	43.711	0.17999999999999972	24	Of that colossal wreck.
+colossal	43.951	0.6009999999999991	24	Of that colossal wreck.
+wreck.	44.652	0.2809999999999988	24	Of that colossal wreck.
+Boundless	45.333	0.5410000000000039	25	Boundless and bare.
+and	45.954	0.10000000000000142	25	Boundless and bare.
+bare.	46.114	0.3200000000000003	25	Boundless and bare.
+The	46.855	0.12000000000000455	26	The lone and level sands stretch far away.
+lone	47.055	0.2809999999999988	26	The lone and level sands stretch far away.
+and	47.416	0.10000000000000142	26	The lone and level sands stretch far away.
+level	47.596	0.3200000000000003	26	The lone and level sands stretch far away.
+sands	47.996	0.4209999999999994	26	The lone and level sands stretch far away.
+stretch	48.517	0.3810000000000002	26	The lone and level sands stretch far away.
+far	48.998	0.20000000000000284	26	The lone and level sands stretch far away.
+away.	49.258	0.35999999999999943	26	The lone and level sands stretch far away.
