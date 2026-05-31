@@ -46,6 +46,7 @@ class MyEnv(BaseEnv):
         if not sf_path:
             _chess_dir = os.path.dirname(os.path.abspath(__file__))
             _candidates = [
+                "stockfish",  # system PATH (e.g. apt-get install stockfish)
                 os.path.join(_chess_dir, "stockfish", "src", "stockfish"),
             ]
             if sys.platform == "win32":
@@ -53,7 +54,14 @@ class MyEnv(BaseEnv):
                     os.path.join(_chess_dir, "stockfish", "stockfish-windows-x86-64-avx2.exe")
                 )
             for c in _candidates:
-                if os.path.isfile(c) and os.access(c, os.X_OK):
+                if c == "stockfish":
+                    try:
+                        subprocess.run(["stockfish", "--version"], capture_output=True, timeout=5)
+                        sf_path = "stockfish"
+                        break
+                    except (FileNotFoundError, subprocess.TimeoutExpired):
+                        pass
+                elif os.path.isfile(c) and os.access(c, os.X_OK):
                     sf_path = c
                     break
         if not sf_path:
