@@ -1,10 +1,16 @@
-from tribev2 import TribeModel
 import os
 
 os.environ["CUDA_VISIBLE_DEVICES"] = ""
 
-model = TribeModel.from_pretrained("facebook/tribev2", cache_folder="./cache")
+from tribev2 import TribeModel
 
-df = model.get_events_dataframe(text_path="./test_text.txt")
-preds, segments = model.predict(events=df)
-print(preds.shape)  # (n_timesteps, n_vertices)
+
+def main():
+    model = TribeModel.from_pretrained("facebook/tribev2", cache_folder="./cache")
+    df = model.get_events_dataframe(text_path="./test_text.txt")
+    preds, segments = model.predict(events=df)
+    print(preds.shape)  # (n_timesteps, n_vertices)
+
+
+if __name__ == "__main__":
+    main()
