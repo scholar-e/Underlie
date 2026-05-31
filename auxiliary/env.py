@@ -201,6 +201,16 @@ class MyEnv(BaseEnv):
             lines.append(f"!!! Last move REJECTED: {last['attempt']} - {last['reason']} !!!")
             lines.append("")
 
+        if self.current_consecutive_illegal_moves:
+            counts = {}
+            for m in self.current_consecutive_illegal_moves:
+                counts[m] = counts.get(m, 0) + 1
+            for m, c in counts.items():
+                if c >= 2:
+                    lines.append(f"!!! You suggested '{m}' {c} times in a row and it was rejected each time !!!")
+                    lines.append(f"!!! '{m}' is NOT in legal_moves. Pick something from legal_moves. !!!")
+                    lines.append("")
+
         lines.append(f"White: {self._pieces_summary(self.board, chess.WHITE)}")
         lines.append(f"Black: {self._pieces_summary(self.board, chess.BLACK)}")
 

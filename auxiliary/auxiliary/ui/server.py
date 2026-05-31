@@ -158,14 +158,10 @@ class ProcessManager:
         env.update(config.to_env())
         env["MESOCOSM_LOCAL"] = "1"
         self._mesocosm_log = []
-        import random as _random
-        base_seed = _random.randint(0, 999999)
-        seeds = [base_seed + i for i in range(config.episodes)]
         cmd = [
             "mesocosm", "run", "local",
             "--model", config.model,
             "--episodes", str(config.episodes),
-            "--seeds", *map(str, seeds),
             "--manifest", MANIFEST_PATH,
             "--env-url", f"http://127.0.0.1:{self._adapter_port}",
             "--temperature", str(config.temperature),
