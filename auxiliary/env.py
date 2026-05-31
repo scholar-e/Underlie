@@ -224,6 +224,10 @@ class MyEnv(BaseEnv):
             for r in recent:
                 lines.append(f"  - {r['attempt']} ({r['reason']})")
 
+        lines.append("")
+        lines.append("RESPONSE FORMAT: End your response with MOVE: <move> on its own line (e.g. MOVE: e4 or MOVE: Nf3).")
+        lines.append("Pick only from legal_moves. Do NOT repeat rejected moves.")
+
         text_board_string = "\n".join(lines)
 
         visual_lines = []

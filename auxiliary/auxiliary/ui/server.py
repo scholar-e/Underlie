@@ -47,6 +47,9 @@ class RunConfig:
     model: str = "deepseek/deepseek-reasoner"
     episodes: int = 1
     max_steps: int = 150
+    temperature: float = 0.6
+    max_tokens: int = 4096
+    system_prompt: str = ""
     mode: str = "local"
     env_name: str = "Chess Player"
     github_url: str = ""
@@ -155,14 +158,23 @@ class ProcessManager:
         env.update(config.to_env())
         env["MESOCOSM_LOCAL"] = "1"
         self._mesocosm_log = []
+        import random as _random
+        base_seed = _random.randint(0, 999999)
+        seeds = [base_seed + i for i in range(config.episodes)]
+        cmd = [
+            "mesocosm", "run", "local",
+            "--model", config.model,
+            "--episodes", str(config.episodes),
+            "--seeds", *map(str, seeds),
+            "--manifest", MANIFEST_PATH,
+            "--env-url", f"http://127.0.0.1:{self._adapter_port}",
+            "--temperature", str(config.temperature),
+            "--max-tokens", str(config.max_tokens),
+        ]
+        if config.system_prompt:
+            cmd += ["--system-prompt", config.system_prompt]
         self._mesocosm = subprocess.Popen(
-            [
-                "mesocosm", "run", "local",
-                "--model", config.model,
-                "--episodes", str(config.episodes),
-                "--manifest", MANIFEST_PATH,
-                "--env-url", f"http://127.0.0.1:{self._adapter_port}",
-            ],
+            cmd,
             env=env,
             cwd=REPO_ROOT,
             stdout=subprocess.PIPE,

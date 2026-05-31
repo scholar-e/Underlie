@@ -5,6 +5,7 @@ Usage:
     python3 test_env.py
 """
 
+import chess
 import sys
 import traceback
 from env import MyEnv
