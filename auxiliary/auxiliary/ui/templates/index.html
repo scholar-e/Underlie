@@ -1,0 +1,705 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Chess Player — Local UI</title>
+<link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+
+<header>
+  <h1>Chess Player</h1>
+  <span class="subtitle">Local Testing UI</span>
+</header>
+
+<nav class="tab-nav" id="tabNav">
+  <button class="tab-btn active" data-tab="config">1. Config</button>
+  <button class="tab-btn" data-tab="monitor">2. Monitor</button>
+  <button class="tab-btn" data-tab="results">3. Results</button>
+  <button class="tab-btn" data-tab="tests">4. Tests</button>
+</nav>
+
+<!-- ════════════ Tab 1: Config ════════════ -->
+<section id="tab-config" class="tab-content active">
+
+  <h2>Run Configuration</h2>
+
+  <div class="card">
+    <h3>Chess Engine</h3>
+    <div class="config-grid">
+      <div class="form-row" style="grid-column:1/-1">
+        <label>Stockfish Path</label>
+        <input type="text" id="cfgStockfishPath" placeholder=".\stockfish\stockfish-windows-x86-64-avx2.exe">
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>Parameters</h3>
+    <div class="config-grid">
+      <div class="form-row">
+        <label>Model</label>
+        <input type="text" id="cfgModel" value="ollama/llama3.2">
+      </div>
+      <div class="form-row">
+        <label>Episodes</label>
+        <input type="number" id="cfgEpisodes" min="1" max="20" value="1">
+      </div>
+      <div class="form-row">
+        <label>Max Steps</label>
+        <input type="range" id="cfgMaxSteps" min="1" max="150" step="1" value="150">
+        <div class="range-label"><span id="cfgMaxStepsVal">150</span><span>moves per game</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>Run Mode</h3>
+    <div class="form-row-inline mb-8">
+      <label style="font-weight:normal;display:flex;align-items:center;gap:4px">
+        <input type="radio" name="mode" value="local" checked> Local (Ollama)
+      </label>
+      <label style="font-weight:normal;display:flex;align-items:center;gap:4px">
+        <input type="radio" name="mode" value="platform"> Platform (Submit to Mesocosm)
+      </label>
+    </div>
+    <div id="platformFields" class="hidden config-grid">
+      <div class="form-row">
+        <label>Env Name</label>
+        <input type="text" id="cfgEnvName" value="Chess Player">
+      </div>
+      <div class="form-row">
+        <label>GitHub URL</label>
+        <input type="text" id="cfgGithubUrl" placeholder="https://github.com/your-org/your-env">
+      </div>
+      <div class="form-row" style="grid-column:1/-1">
+        <label>Description</label>
+        <input type="text" id="cfgEnvDescription" value="Evaluates an agent's ability to play competitive chess using Standard Algebraic Notation.">
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>Generate Command</h3>
+    <button id="genCmdBtn" class="primary">Generate Command</button>
+    <div id="cmdOutput" class="mt-8 hidden">
+      <div class="code-block">
+        <button class="copy-btn" id="copyCmdBtn">Copy</button>
+        <pre id="cmdText"></pre>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="flex-row">
+      <button id="saveConfigBtn" class="success">Save Configuration</button>
+      <span id="saveStatus" class="text-muted"></span>
+    </div>
+  </div>
+
+</section>
+
+<!-- ════════════ Tab 2: Monitor ════════════ -->
+<section id="tab-monitor" class="tab-content">
+
+  <h2>Run Monitor</h2>
+
+  <div class="card">
+    <h3>Adapter (env server)</h3>
+    <div class="process-panel">
+      <span class="status-dot dead" id="adapterDot"></span>
+      <span id="adapterStatus">Stopped</span>
+      <span id="adapterPortInfo" class="text-muted"></span>
+      <button id="startAdapterBtn" class="success">Start</button>
+      <button id="stopAdapterBtn" class="danger">Stop</button>
+    </div>
+    <div class="log-area" id="adapterLog">Adapter not running.</div>
+  </div>
+
+  <div class="card">
+    <h3>Mesocosm (benchmark runner)</h3>
+    <div class="process-panel">
+      <span class="status-dot dead" id="mesocosmDot"></span>
+      <span id="mesocosmStatus">Stopped</span>
+      <span id="mesocosmMode" class="text-muted"></span>
+      <button id="startMesocosmBtn" class="primary">Run</button>
+      <button id="stopMesocosmBtn" class="danger">Stop</button>
+    </div>
+    <div class="log-area" id="mesocosmLog">Not started.</div>
+  </div>
+
+  <div id="monitorComplete" class="hidden">
+    <div class="alert success">
+      Run completed! <a href="#" id="gotoResults">View full Results →</a>
+    </div>
+    <div class="card" id="monitorSummary">
+      <h3>Trial Scores</h3>
+      <div id="monitorSummaryBody"></div>
+    </div>
+  </div>
+
+</section>
+
+<!-- ════════════ Tab 3: Results ════════════ -->
+<section id="tab-results" class="tab-content">
+
+  <h2>Results</h2>
+
+  <div id="resultsEmpty" class="alert info">No trials yet. Configure and run the benchmark first.</div>
+
+  <div id="resultsTableWrap" class="hidden">
+    <div style="overflow-x:auto">
+      <table>
+        <thead>
+          <tr>
+              <th>Time</th>
+              <th>Trial</th>
+              <th>Best Reward</th>
+              <th>Steps</th>
+              <th>Game Result</th>
+              <th>Moves</th>
+          </tr>
+        </thead>
+        <tbody id="resultsBody"></tbody>
+        <tfoot id="resultsFooter"></tfoot>
+      </table>
+    </div>
+  </div>
+
+  <!-- Trial detail -->
+  <div id="trialDetail" class="hidden">
+    <div class="flex-row mt-16 mb-8">
+      <button id="closeDetailBtn">← Back to list</button>
+      <h3 id="trialDetailTitle" style="margin:0"></h3>
+    </div>
+    <div id="trialSteps"></div>
+  </div>
+
+</section>
+
+<!-- ════════════ Tab 4: Tests ════════════ -->
+<section id="tab-tests" class="tab-content">
+
+  <h2>Integration Tests</h2>
+
+  <div class="card">
+    <div class="flex-row">
+      <button id="runTestsBtn" class="primary">Run Tests</button>
+      <span id="testsRunning" class="hidden"><span class="spinner"></span> Running…</span>
+    </div>
+  </div>
+
+  <div id="testsEmpty" class="alert info">No test results yet. Click "Run Tests" to run the integration test suite (if available).</div>
+
+  <div id="testsTableWrap" class="hidden">
+    <div style="overflow-x:auto">
+      <table>
+        <thead>
+          <tr>
+            <th>Run</th>
+            <th>Timestamp</th>
+            <th>Passed</th>
+            <th>Failed</th>
+            <th>Total</th>
+          </tr>
+        </thead>
+        <tbody id="testsBody"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <div id="testDetail" class="hidden">
+    <div class="flex-row mt-16 mb-8">
+      <button id="closeTestDetailBtn">← Back to list</button>
+      <h3 id="testDetailTitle" style="margin:0"></h3>
+    </div>
+    <div id="testDetailBody"></div>
+  </div>
+
+</section>
+
+<script>
+// ══════════════════════════════════════════════════
+// Tab navigation
+// ══════════════════════════════════════════════════
+const tabs = document.querySelectorAll('.tab-btn');
+tabs.forEach(btn => {
+  btn.addEventListener('click', () => {
+    tabs.forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    document.querySelectorAll('.tab-content').forEach(tc => tc.classList.remove('active'));
+    document.getElementById('tab-' + btn.dataset.tab).classList.add('active');
+    if (btn.dataset.tab === 'monitor') pollLogs();
+    if (btn.dataset.tab === 'results') loadTrials();
+    if (btn.dataset.tab === 'tests') loadTests();
+  });
+});
+
+// ══════════════════════════════════════════════════
+// API helper
+// ══════════════════════════════════════════════════
+async function api(method, path, body) {
+  let url = path;
+  const opts = { method, headers: { 'Content-Type': 'application/json' } };
+  if (body !== undefined) {
+    if (method === 'GET') {
+      url += '?' + new URLSearchParams(body).toString();
+    } else {
+      opts.body = JSON.stringify(body);
+    }
+  }
+  const res = await fetch(url, opts);
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({ detail: res.statusText }));
+    throw new Error(err.detail || res.statusText);
+  }
+  return res.json();
+}
+
+function getVal(id) { return document.getElementById(id).value; }
+function setVal(id, v) { document.getElementById(id).value = v; }
+function setText(id, t) { document.getElementById(id).textContent = t; }
+function show(id) { document.getElementById(id).classList.remove('hidden'); }
+function hide(id) { document.getElementById(id).classList.add('hidden'); }
+
+// ══════════════════════════════════════════════════
+// Tab 1: Config
+// ══════════════════════════════════════════════════
+async function refreshConfig() {
+  const cfg = await api('GET', '/api/config');
+  setVal('cfgStockfishPath', cfg.stockfish_path);
+  setVal('cfgModel', cfg.model);
+  setVal('cfgEpisodes', cfg.episodes);
+  setVal('cfgMaxSteps', cfg.max_steps);
+  setText('cfgMaxStepsVal', cfg.max_steps);
+
+  document.querySelector(`input[name="mode"][value="${cfg.mode || 'local'}"]`).checked = true;
+  setVal('cfgEnvName', cfg.env_name || '');
+  setVal('cfgGithubUrl', cfg.github_url || '');
+  setVal('cfgEnvDescription', cfg.env_description || '');
+  togglePlatformFields();
+}
+
+function togglePlatformFields() {
+  const mode = document.querySelector('input[name="mode"]:checked').value;
+  document.getElementById('platformFields').classList.toggle('hidden', mode !== 'platform');
+}
+
+document.querySelectorAll('input[name="mode"]').forEach(el => {
+  el.addEventListener('change', togglePlatformFields);
+});
+
+document.getElementById('cfgMaxSteps').addEventListener('input', () => {
+  setText('cfgMaxStepsVal', document.getElementById('cfgMaxSteps').value);
+});
+
+document.getElementById('genCmdBtn').addEventListener('click', async () => {
+  const data = readConfigForm();
+  const res = await api('POST', '/api/runs/generate-command', data);
+  setText('cmdText', res.command);
+  show('cmdOutput');
+});
+
+document.getElementById('copyCmdBtn').addEventListener('click', () => {
+  const text = document.getElementById('cmdText').textContent;
+  navigator.clipboard.writeText(text).then(() => {
+    document.getElementById('copyCmdBtn').textContent = 'Copied!';
+    setTimeout(() => { document.getElementById('copyCmdBtn').textContent = 'Copy'; }, 2000);
+  });
+});
+
+document.getElementById('saveConfigBtn').addEventListener('click', async () => {
+  const data = readConfigForm();
+  await api('PUT', '/api/config', data);
+  const status = document.getElementById('saveStatus');
+  status.textContent = 'Saved to run_config.json ✓';
+  setTimeout(() => { status.textContent = ''; }, 3000);
+  refreshConfig();
+});
+
+function readConfigForm() {
+  return {
+    stockfish_path: getVal('cfgStockfishPath').trim(),
+    model: getVal('cfgModel'),
+    episodes: parseInt(getVal('cfgEpisodes')) || 1,
+    max_steps: parseInt(getVal('cfgMaxSteps')),
+    mode: document.querySelector('input[name="mode"]:checked').value,
+    env_name: getVal('cfgEnvName').trim(),
+    github_url: getVal('cfgGithubUrl').trim(),
+    env_description: getVal('cfgEnvDescription').trim(),
+  };
+}
+
+// ══════════════════════════════════════════════════
+// Tab 2: Monitor
+// ══════════════════════════════════════════════════
+let logPollTimer = null;
+let lastAdapterLogLen = 0;
+let lastMesocosmLogLen = 0;
+
+async function syncConfigBeforeRun() {
+  const data = readConfigForm();
+  await api('PUT', '/api/config', data);
+}
+
+document.getElementById('startAdapterBtn').addEventListener('click', async () => {
+  const btn = document.getElementById('startAdapterBtn');
+  btn.disabled = true;
+  try {
+    await syncConfigBeforeRun();
+    const res = await api('POST', '/api/runs/adapter/start');
+    setText('adapterPortInfo', 'Port: ' + res.port);
+    pollLogs();
+  } catch (e) {
+    alert('Failed to start adapter: ' + e.message);
+  }
+  btn.disabled = false;
+});
+
+document.getElementById('stopAdapterBtn').addEventListener('click', async () => {
+  try {
+    await api('POST', '/api/runs/adapter/stop');
+    pollLogs();
+  } catch (e) {
+    alert('Failed to stop adapter: ' + e.message);
+  }
+});
+
+document.getElementById('startMesocosmBtn').addEventListener('click', async () => {
+  const btn = document.getElementById('startMesocosmBtn');
+  btn.disabled = true;
+  try {
+    await syncConfigBeforeRun();
+    const cfg = await api('GET', '/api/config');
+    if (cfg.mode === 'platform') {
+      const res = await api('POST', '/api/runs/mesocosm/start');
+      if (res.command) {
+        setText('cmdText', res.command);
+        show('cmdOutput');
+        document.getElementById('mesocosmLog').textContent =
+          'Commands generated. Copy and run them in your terminal.';
+      }
+      btn.disabled = false;
+      return;
+    }
+    await api('POST', '/api/runs/mesocosm/start');
+    pollLogs();
+  } catch (e) {
+    alert('Failed to start: ' + e.message);
+  }
+  btn.disabled = false;
+});
+
+document.getElementById('stopMesocosmBtn').addEventListener('click', async () => {
+  await api('POST', '/api/runs/mesocosm/stop');
+  pollLogs();
+});
+
+document.getElementById('gotoResults').addEventListener('click', e => {
+  e.preventDefault();
+  document.querySelector('[data-tab="results"]').click();
+});
+
+async function pollLogs() {
+  if (logPollTimer) clearTimeout(logPollTimer);
+  const status = await api('GET', '/api/runs/status');
+  const logs = await api('GET', '/api/runs/logs', { n: 200 });
+
+  updateProcessUI('adapter', status.adapter, logs.adapter, status.adapter_port);
+  updateProcessUI('mesocosm', status.mesocosm, logs.mesocosm);
+
+  const modeEl = document.getElementById('mesocosmMode');
+  const startBtn = document.getElementById('startMesocosmBtn');
+  if (!status.mesocosm) {
+    const cfg = await api('GET', '/api/config');
+    const isPlatform = cfg.mode === 'platform';
+    modeEl.textContent = isPlatform ? '[platform — submit env]' : '[local]';
+    startBtn.textContent = isPlatform ? 'Generate Platform Commands' : 'Run Locally';
+    if (isPlatform) {
+      document.getElementById('mesocosmLog').textContent =
+        'Click "Generate Platform Commands" to get the submit command for your terminal.';
+    }
+  }
+
+  if (!status.mesocosm && status.adapter && lastMesocosmLogLen > 0 && logs.mesocosm.length > 0) {
+    show('monitorComplete');
+    showTrialSummary();
+  } else {
+    hide('monitorComplete');
+  }
+
+  lastAdapterLogLen = logs.adapter.length;
+  lastMesocosmLogLen = logs.mesocosm.length;
+
+  if (status.adapter || status.mesocosm) {
+    logPollTimer = setTimeout(pollLogs, 1500);
+  }
+}
+
+async function showTrialSummary() {
+  const trials = await api('GET', '/api/trials');
+  const body = document.getElementById('monitorSummaryBody');
+  if (!trials.length) {
+    body.innerHTML = '<div class="text-muted">No trial data found.</div>';
+    return;
+  }
+  const lines = trials.map((t, i) => {
+    const s = t.best_reward != null ? t.best_reward.toFixed(4) : '—';
+    return `<div class="flex-row mb-8">
+      <span style="min-width:80px;font-weight:600">Trial ${i + 1}</span>
+      <span class="text-muted" style="flex:1">${esc(t.id)}</span>
+      <span style="font-weight:600">${s}</span>
+    </div>`;
+  }).join('');
+  body.innerHTML = lines;
+}
+
+function updateProcessUI(name, alive, logLines, port) {
+  const dot = document.getElementById(name + 'Dot');
+  const statusEl = document.getElementById(name + 'Status');
+  const logEl = document.getElementById(name + 'Log');
+
+  dot.className = 'status-dot ' + (alive ? 'alive' : 'dead');
+  statusEl.textContent = alive ? 'Running' : 'Stopped';
+  statusEl.style.color = alive ? '#2ec4b6' : '#888';
+
+  if (alive) {
+    logEl.textContent = logLines.length ? logLines.join('\n') : 'Starting…';
+    logEl.scrollTop = logEl.scrollHeight;
+  } else if (logLines.length) {
+    logEl.textContent = logLines.join('\n') + '\n\n[Process stopped]';
+    logEl.scrollTop = logEl.scrollHeight;
+  }
+
+  if (name === 'adapter' && port) {
+    setText('adapterPortInfo', 'Port: ' + port);
+  }
+}
+
+// ══════════════════════════════════════════════════
+// Chess board renderer
+// ══════════════════════════════════════════════════
+const PIECES = {
+  'K': '♔', 'Q': '♕', 'R': '♖', 'B': '♗', 'N': '♘', 'P': '♙',
+  'k': '♚', 'q': '♛', 'r': '♜', 'b': '♝', 'n': '♞', 'p': '♟',
+};
+
+function fenToBoard(fen) {
+  const position = fen.split(' ')[0];
+  const ranks = position.split('/');
+  const board = [];
+  for (const rank of ranks) {
+    const row = [];
+    for (const ch of rank) {
+      if (ch >= '1' && ch <= '8') {
+        for (let i = 0; i < parseInt(ch); i++) row.push(null);
+      } else {
+        row.push(ch);
+      }
+    }
+    board.push(row);
+  }
+  return board;
+}
+
+function parseLastSquare(move) {
+  const m = move.match(/[a-h][1-8]/);
+  return m ? m[0] : null;
+}
+
+function renderChessBoard(fen, lastMove, turn, moveNumber, isCheck) {
+  if (!fen) return '';
+  const board = fenToBoard(fen);
+  const lastSquare = lastMove ? parseLastSquare(lastMove) : null;
+  const files = ['a','b','c','d','e','f','g','h'];
+  const ranks = ['8','7','6','5','4','3','2','1'];
+  const turnLabel = turn === 'w' ? 'White' : turn === 'b' ? 'Black' : turn;
+
+  let html = '<div class="chess-board-card">';
+  html += '<div><div style="display:flex;align-items:center;gap:0">';
+  html += '<div class="chess-coords-vertical">';
+  for (const r of ranks) html += `<span>${r}</span>`;
+  html += '</div>';
+  html += '<div><div class="chess-board">';
+  for (let r = 0; r < 8; r++) {
+    for (let f = 0; f < 8; f++) {
+      const isLight = (r + f) % 2 === 0;
+      const sq = files[f] + ranks[r];
+      const isHighlight = sq === lastSquare;
+      const piece = board[r][f];
+      html += `<div class="chess-square ${isLight ? 'light' : 'dark'}${isHighlight ? ' highlight' : ''}">`;
+      if (piece) html += `<span class="chess-piece">${PIECES[piece] || piece}</span>`;
+      html += '</div>';
+    }
+  }
+  html += '</div>';
+  html += '<div class="chess-coords">';
+  for (const f of files) html += `<span>${f}</span>`;
+  html += '</div></div></div>';
+
+  html += '<div class="chess-info">';
+  html += `<div class="info-row"><span class="info-label">Turn:</span><span class="info-value">${turnLabel}</span></div>`;
+  if (moveNumber) html += `<div class="info-row"><span class="info-label">Move:</span><span class="info-value">${moveNumber}</span></div>`;
+  if (lastMove) html += `<div class="info-row"><span class="info-label">Last:</span><span class="info-value">${esc(lastMove)}</span></div>`;
+  if (isCheck) html += '<div style="margin-top:8px"><span class="badge" style="background:#fff5f5;color:#c62828">CHECK</span></div>';
+  html += '</div></div>';
+  return html;
+}
+
+// ══════════════════════════════════════════════════
+// Tab 3: Results
+// ══════════════════════════════════════════════════
+async function loadTrials() {
+  const trials = await api('GET', '/api/trials');
+  const empty = document.getElementById('resultsEmpty');
+  const wrap = document.getElementById('resultsTableWrap');
+  const body = document.getElementById('resultsBody');
+  const footer = document.getElementById('resultsFooter');
+
+  if (!trials.length) {
+    empty.classList.remove('hidden');
+    wrap.classList.add('hidden');
+    return;
+  }
+
+  empty.classList.add('hidden');
+  wrap.classList.remove('hidden');
+  hide('trialDetail');
+
+  const fmtTime = ts => {
+    if (!ts) return '—';
+    const d = new Date(ts);
+    return d.toLocaleString(undefined, {month:'short', day:'numeric', hour:'2-digit', minute:'2-digit'});
+  };
+
+  body.innerHTML = trials.map(t => `
+    <tr class="clickable" data-test="${t.id.split('/')[0]}" data-trial="${t.id.split('/')[1]}">
+      <td style="white-space:nowrap">${fmtTime(t.timestamp)}</td>
+      <td>${esc(t.id)}</td>
+      <td>${t.best_reward != null ? t.best_reward.toFixed(4) : '—'}</td>
+      <td>${t.total_steps ?? '—'}</td>
+      <td>${esc(t.game_result || '—')}</td>
+      <td>${t.num_moves ?? '—'}</td>
+    </tr>
+  `).join('');
+
+  body.querySelectorAll('tr').forEach(tr => {
+    tr.addEventListener('click', () => {
+      showTrialDetail(tr.dataset.test, tr.dataset.trial);
+    });
+  });
+}
+
+async function showTrialDetail(testId, trialId) {
+  hide('resultsTableWrap');
+  show('trialDetail');
+  const data = await api('GET', `/api/trials/${testId}/${trialId}`);
+  setText('trialDetailTitle', `${testId}/${trialId}`);
+
+  const stepsContainer = document.getElementById('trialSteps');
+  stepsContainer.innerHTML = data.steps.map(s => {
+    const obs = s.observation || {};
+    const fen = obs.fen || s.fen || '';
+    const turn = obs.turn ? obs.turn[0].toLowerCase() : '';
+    const boardHtml = renderChessBoard(fen, s.move, turn, obs.move_number, obs.is_check);
+
+    return `<div class="step-card">
+      <div class="step-header">
+        <strong>Step ${s.step}</strong>
+        <div class="flex-row">
+          <span>Reward: <strong>${s.reward != null ? s.reward.toFixed(4) : '—'}</strong></span>
+          <span>Best: <strong>${s.best_reward != null ? s.best_reward.toFixed(4) : '—'}</strong></span>
+          ${s.legal_move === false ? '<span class="badge" style="background:#fff5f5;color:#c62828">ILLEGAL</span>' : ''}
+          ${obs.is_check ? '<span class="badge" style="background:#fff5f5;color:#c62828">CHECK</span>' : ''}
+        </div>
+      </div>
+      ${boardHtml}
+    </div>`;
+  }).join('') || '<div class="alert info">No step data available.</div>';
+}
+
+document.getElementById('closeDetailBtn').addEventListener('click', () => {
+  hide('trialDetail');
+  show('resultsTableWrap');
+});
+
+// ══════════════════════════════════════════════════
+// Tab 4: Tests (placeholder)
+// ══════════════════════════════════════════════════
+async function loadTests() {
+  const r = await api('GET', '/api/tests');
+  const empty = document.getElementById('testsEmpty');
+  const wrap = document.getElementById('testsTableWrap');
+  const body = document.getElementById('testsBody');
+  hide('testDetail');
+
+  if (!r.length) {
+    empty.classList.remove('hidden');
+    wrap.classList.add('hidden');
+    return;
+  }
+  empty.classList.add('hidden');
+  wrap.classList.remove('hidden');
+
+  body.innerHTML = r.map(t => {
+    const cls = t.failed > 0 ? 'style="color:#c62828"' : '';
+    return `<tr class="clickable" data-id="${esc(t.id)}">
+      <td>${esc(t.id)}</td>
+      <td>${esc(t.timestamp)}</td>
+      <td style="color:#166534">${t.passed}</td>
+      <td ${cls}>${t.failed}</td>
+      <td>${t.total}</td>
+    </tr>`;
+  }).join('');
+
+  body.querySelectorAll('tr').forEach(tr => {
+    tr.addEventListener('click', () => showTestDetail(tr.dataset.id));
+  });
+}
+
+async function showTestDetail(id) {
+  // Placeholder — will expand when test suite exists
+  hide('testsTableWrap');
+  show('testDetail');
+  setText('testDetailTitle', id);
+  document.getElementById('testDetailBody').innerHTML = '<div class="alert info">No test details available.</div>';
+}
+
+document.getElementById('closeTestDetailBtn').addEventListener('click', () => {
+  hide('testDetail');
+  show('testsTableWrap');
+});
+
+document.getElementById('runTestsBtn').addEventListener('click', async () => {
+  const btn = document.getElementById('runTestsBtn');
+  const spin = document.getElementById('testsRunning');
+  btn.disabled = true;
+  spin.classList.remove('hidden');
+  try {
+    const res = await api('POST', '/api/tests/run');
+    alert(res.output || 'Tests completed.');
+  } catch (e) {
+    alert('Tests failed: ' + e.message);
+  }
+  btn.disabled = false;
+  spin.classList.add('hidden');
+});
+
+// ══════════════════════════════════════════════════
+// Utility
+// ══════════════════════════════════════════════════
+function esc(s) {
+  const div = document.createElement('div');
+  div.textContent = s;
+  return div.innerHTML;
+}
+
+// ══════════════════════════════════════════════════
+// Init
+// ══════════════════════════════════════════════════
+refreshConfig();
+</script>
+
+</body>
+</html>

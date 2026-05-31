@@ -4,5 +4,21 @@ auxiliary/test_results/
 auxiliary/run_config.json
 auxiliary/__pycache__/
 auxiliary/ui/__pycache__/
+chess/auxiliary/trials/
+chess/auxiliary/test_results/
+chess/auxiliary/run_config.json
+chess/auxiliary/__pycache__/
+chess/auxiliary/ui/__pycache__/
+chess/__pycache__/
 mesosphere/
 data/
+auxiliary/auxiliary/trials
+# Stockfish compiled binary and large assets
+
+# Stockfish build artifacts
+auxiliary/stockfish/src/stockfish
+auxiliary/stockfish/src/*.o
+auxiliary/stockfish/src/nn-c288c895ea92.nnue
+auxiliary/stockfish/src/.depend
+auxiliary/stockfish/stockfish-windows-*.exe
+auxiliary/stockfish/src/sf.dltest

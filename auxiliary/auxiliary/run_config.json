@@ -1,0 +1,10 @@
+{
+  "stockfish_path": "stockfish/src/stockfish",
+  "model": "ollama/llama3.2",
+  "episodes": 1,
+  "max_steps": 150,
+  "mode": "local",
+  "env_name": "Chess Player",
+  "github_url": "",
+  "env_description": "Evaluates an agent's ability to play competitive chess using Standard Algebraic Notation."
+}

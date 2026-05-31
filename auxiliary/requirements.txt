@@ -1,6 +1,5 @@
 chess
 stockfish
-re
 # Optional: packages YOUR env imports (numpy, pandas, …).
 #
 # - Local dev: only needed if env.py (or helpers) import them. Default scaffold
