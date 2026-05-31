@@ -43,7 +43,7 @@ class MyEnv(BaseEnv):
     def __init__(self, stockfish_path: str | None = None) -> None:
         self.board: chess.Board | None = None
         sf_path = stockfish_path or os.environ.get("STOCKFISH_PATH")
-        if sf_path is None:
+        if not sf_path:
             _chess_dir = os.path.dirname(os.path.abspath(__file__))
             _candidates = [
                 os.path.join(_chess_dir, "stockfish", "src", "stockfish"),
@@ -56,7 +56,7 @@ class MyEnv(BaseEnv):
                 if os.path.isfile(c) and os.access(c, os.X_OK):
                     sf_path = c
                     break
-        if sf_path is None:
+        if not sf_path:
             _chess_dir = os.path.dirname(os.path.abspath(__file__))
             _src_dir = os.path.join(_chess_dir, "stockfish", "src")
             _makefile = os.path.join(_src_dir, "Makefile")
@@ -75,7 +75,7 @@ class MyEnv(BaseEnv):
                 except subprocess.CalledProcessError as e:
                     err = e.stderr.decode(errors="replace")[:200] if e.stderr else str(e)
                     print(f"Stockfish compilation failed: {err}", file=sys.stderr)
-        if sf_path is None:
+        if not sf_path:
             raise RuntimeError(
                 "Stockfish binary not found. Set STOCKFISH_PATH env var, place "
                 "stockfish binary at chess/stockfish/src/stockfish, or ensure "
