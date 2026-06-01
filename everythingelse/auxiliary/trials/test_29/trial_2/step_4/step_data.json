@@ -1,0 +1,58 @@
+{
+  "step": 4,
+  "move": "Nc6",
+  "reward": 0.0,
+  "best_reward": 0.0,
+  "legal_move": true,
+  "observation": {
+    "board": "=== BLACK MOVED Nc6 ===\n>>> WHITE TO MOVE <<<\nMove: 3\nCheck: no\n\nWhite: Ra1, Nb1, Bc1, Qd1, Ke1, Bf1, Rh1, Pa2, Pb2, Pc2, Pd2, Pf2, Pg2, Ph2, Nf3, Pe4\nBlack: pe5, nc6, pa7, pb7, pc7, pd7, pf7, pg7, ph7, ra8, bc8, qd8, ke8, bf8, ng8, rh8\nHistory (last 10 turns): 1. e4 e5 2. Nf3 Nc6\nLegal moves: Ng5, Nxe5, Nh4, Nd4, Ng1, Rg1, Ba6, Bb5, Bc4, Bd3, Be2, Ke2, Qe2, Nc3, Na3, h3, g3, d3, c3, b3, a3, h4, g4, d4, c4, b4, a4\n\nRESPONSE FORMAT: End your response with MOVE: <move> on its own line (e.g. MOVE: e4 or MOVE: Nf3).\nPick only from legal_moves. Do NOT repeat rejected moves.",
+    "board_visual": "  -----------------\n8 |\u265c|\u2b58|\u265d|\u265b|\u265a|\u265d|\u265e|\u265c|\n  -----------------\n7 |\u265f|\u265f|\u265f|\u265f|\u2b58|\u265f|\u265f|\u265f|\n  -----------------\n6 |\u2b58|\u2b58|\u265e|\u2b58|\u2b58|\u2b58|\u2b58|\u2b58|\n  -----------------\n5 |\u2b58|\u2b58|\u2b58|\u2b58|\u265f|\u2b58|\u2b58|\u2b58|\n  -----------------\n4 |\u2b58|\u2b58|\u2b58|\u2b58|\u2659|\u2b58|\u2b58|\u2b58|\n  -----------------\n3 |\u2b58|\u2b58|\u2b58|\u2b58|\u2b58|\u2658|\u2b58|\u2b58|\n  -----------------\n2 |\u2659|\u2659|\u2659|\u2659|\u2b58|\u2659|\u2659|\u2659|\n  -----------------\n1 |\u2656|\u2658|\u2657|\u2655|\u2654|\u2657|\u2b58|\u2656|\n  -----------------\n   a b c d e f g h",
+    "fen": "r1bqkbnr/pppp1ppp/2n5/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 2 3",
+    "legal_moves": [
+      "Ng5",
+      "Nxe5",
+      "Nh4",
+      "Nd4",
+      "Ng1",
+      "Rg1",
+      "Ba6",
+      "Bb5",
+      "Bc4",
+      "Bd3",
+      "Be2",
+      "Ke2",
+      "Qe2",
+      "Nc3",
+      "Na3",
+      "h3",
+      "g3",
+      "d3",
+      "c3",
+      "b3",
+      "a3",
+      "h4",
+      "g4",
+      "d4",
+      "c4",
+      "b4",
+      "a4"
+    ],
+    "must_avoid_moves": [],
+    "rejected_moves": [],
+    "move_number": 3,
+    "move_history": [
+      "e4",
+      "e5",
+      "Nf3",
+      "Nc6"
+    ],
+    "turn": "White",
+    "is_check": false
+  },
+  "fen": "r1bqkbnr/pppp1ppp/2n5/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 2 3",
+  "info": {
+    "requested_move": "Nc6",
+    "legal_move": "True",
+    "stockfish_cp_delta": "4.0"
+  }
+}

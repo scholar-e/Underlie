@@ -1,0 +1,6 @@
+{
+  "best_reward": 0.0,
+  "total_steps": 36,
+  "game_result": "Terminated after 5 consecutive illegal/failed moves. Last input: 'Black has a strong queen on d6 and several active pieces. The best move is to develop the knight to a strong square, but since that is not legal, the next best option is to play Ne7 to support the center and prepare for further piece activity. MOVE: Ne7'",
+  "num_moves": 36
+}

@@ -1,0 +1,53 @@
+{
+  "step": 21,
+  "move": "Qh5+",
+  "reward": -1.58,
+  "best_reward": 0.0,
+  "legal_move": true,
+  "observation": {
+    "board": "=== WHITE MOVED Qh5+ ===\n>>> BLACK TO MOVE <<<\nMove: 11\nCheck: YES\n\nWhite: Ra1, Bc1, Rf1, Kg1, Pa2, Pb2, Pc2, Pd2, Pf2, Pg2, Ph2, Pe4, Qh5\nBlack: pe5, nf5, nc6, pa7, pb7, qc7, pd7, kf7, pg7, ph7, ra8, bc8, bf8, rh8\nHistory: 1. Nf3 Nf6 2. Nc3 Nc6 3. Ng5 Ng8 4. Nxf7 Kxf7 5. Nd5 e5 6. Nxc7 Qxc7 7. e4 Nge7 8. Bc4+ Kg6 9. Bf7+ Kxf7 10. O-O Nf5 11. Qh5+\nLegal moves: Kg8, Ke7, Kf6, Ke6, g6\n\nRESPONSE FORMAT: End your response with MOVE: <move> on its own line (e.g. MOVE: e4 or MOVE: Nf3).\nPick only from legal_moves. Do NOT repeat rejected moves.",
+    "board_visual": "  -----------------\n8 |\u265c|\u2b58|\u265d|\u2b58|\u2b58|\u265d|\u2b58|\u265c|\n  -----------------\n7 |\u265f|\u265f|\u265b|\u265f|\u2b58|\u265a|\u265f|\u265f|\n  -----------------\n6 |\u2b58|\u2b58|\u265e|\u2b58|\u2b58|\u2b58|\u2b58|\u2b58|\n  -----------------\n5 |\u2b58|\u2b58|\u2b58|\u2b58|\u265f|\u265e|\u2b58|\u2655|\n  -----------------\n4 |\u2b58|\u2b58|\u2b58|\u2b58|\u2659|\u2b58|\u2b58|\u2b58|\n  -----------------\n3 |\u2b58|\u2b58|\u2b58|\u2b58|\u2b58|\u2b58|\u2b58|\u2b58|\n  -----------------\n2 |\u2659|\u2659|\u2659|\u2659|\u2b58|\u2659|\u2659|\u2659|\n  -----------------\n1 |\u2656|\u2b58|\u2657|\u2b58|\u2b58|\u2656|\u2654|\u2b58|\n  -----------------\n   a b c d e f g h",
+    "fen": "r1b2b1r/ppqp1kpp/2n5/4pn1Q/4P3/8/PPPP1PPP/R1B2RK1 b - - 3 11",
+    "legal_moves": [
+      "Kg8",
+      "Ke7",
+      "Kf6",
+      "Ke6",
+      "g6"
+    ],
+    "must_avoid_moves": [],
+    "rejected_moves": [],
+    "move_number": 11,
+    "move_history": [
+      "Nf3",
+      "Nf6",
+      "Nc3",
+      "Nc6",
+      "Ng5",
+      "Ng8",
+      "Nxf7",
+      "Kxf7",
+      "Nd5",
+      "e5",
+      "Nxc7",
+      "Qxc7",
+      "e4",
+      "Nge7",
+      "Bc4+",
+      "Kg6",
+      "Bf7+",
+      "Kxf7",
+      "O-O",
+      "Nf5",
+      "Qh5+"
+    ],
+    "turn": "Black",
+    "is_check": true
+  },
+  "fen": "r1b2b1r/ppqp1kpp/2n5/4pn1Q/4P3/8/PPPP1PPP/R1B2RK1 b - - 3 11",
+  "info": {
+    "requested_move": "The position is complex, with Black having a strong knight on f5 and some central pawns. White's best move is to develop the queen effectively while maintaining control over the center. Qh5+ is a strong option that pressures Black's king and could lead to tactical opportunities.\n\nMOVE: Qh5+",
+    "legal_move": "True",
+    "stockfish_cp_delta": "-158.0"
+  }
+}

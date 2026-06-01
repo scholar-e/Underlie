@@ -1,0 +1,88 @@
+{
+  "step": 33,
+  "move": "Qxg7+",
+  "reward": -8.14,
+  "best_reward": 0.0,
+  "legal_move": true,
+  "observation": {
+    "board": "=== WHITE MOVED Qxg7+ ===\n>>> BLACK TO MOVE <<<\nMove: 14\nCheck: YES\n\n!!! Last move REJECTED: Black has a strong position with a king on g6 and several pieces developed. The best move is to reposition the knight to - Not legal for Black !!!\n\nWhite: Ra1, Bc1, Ke1, Bf1, Rh1, Pa2, Pb2, Pc2, Pd2, Pf2, Pg2, Ph2, Pe5, Qg7\nBlack: pa7, pb7, pc7, pd7, pe7, kf7, ph7, ra8, bc8, qe8, bf8, ng8, rh8\nHistory: 1. Nf3 Nh6 2. Ng5 Nc6 3. Nxf7 Kxf7 4. Nc3 Ng8 5. Nd5 Ne5 6. Nf6 Ng6 7. Ne4 Ne5 8. Nd6+ Kg6 9. Ne8 Qxe8 10. e4 Nf3+ 11. Qxf3 Nf6 12. Qg3+ Kf7 13. e5 Ng8 14. Qxg7+\nLegal moves: Kxg7, Ke6, Bxg7\nPreviously rejected (do not repeat):\n  - Black has a strong position with a king on g6 and several pieces developed. The best move is to reposition the knight to (Not legal for Black)\n  - Black has a strong position with a king on g6 and several pieces developed. The best move is to reposition the knight to (Not legal for Black)\n  - Black has a strong position with a king on g6 and several pieces developed. The best move is to reposition the knight to (Not legal for Black)\n\nRESPONSE FORMAT: End your response with MOVE: <move> on its own line (e.g. MOVE: e4 or MOVE: Nf3).\nPick only from legal_moves. Do NOT repeat rejected moves.",
+    "board_visual": "  -----------------\n8 |\u265c|\u2b58|\u265d|\u2b58|\u265b|\u265d|\u265e|\u265c|\n  -----------------\n7 |\u265f|\u265f|\u265f|\u265f|\u265f|\u265a|\u2655|\u265f|\n  -----------------\n6 |\u2b58|\u2b58|\u2b58|\u2b58|\u2b58|\u2b58|\u2b58|\u2b58|\n  -----------------\n5 |\u2b58|\u2b58|\u2b58|\u2b58|\u2659|\u2b58|\u2b58|\u2b58|\n  -----------------\n4 |\u2b58|\u2b58|\u2b58|\u2b58|\u2b58|\u2b58|\u2b58|\u2b58|\n  -----------------\n3 |\u2b58|\u2b58|\u2b58|\u2b58|\u2b58|\u2b58|\u2b58|\u2b58|\n  -----------------\n2 |\u2659|\u2659|\u2659|\u2659|\u2b58|\u2659|\u2659|\u2659|\n  -----------------\n1 |\u2656|\u2b58|\u2657|\u2b58|\u2654|\u2657|\u2b58|\u2656|\n  -----------------\n   a b c d e f g h",
+    "fen": "r1b1qbnr/pppppkQp/8/4P3/8/8/PPPP1PPP/R1B1KB1R b KQ - 0 14",
+    "legal_moves": [
+      "Kxg7",
+      "Ke6",
+      "Bxg7"
+    ],
+    "must_avoid_moves": [],
+    "rejected_moves": [
+      {
+        "attempt": "Black has a strong position with a king on f7 and several pieces developed. The best move is to develop the knight to a ",
+        "reason": "Not legal for Black",
+        "turn": "Black",
+        "step": 9
+      },
+      {
+        "attempt": "The position is complex, with White having a knight on d6 that is under pressure. The best move is to reposition the kni",
+        "reason": "Not legal for White",
+        "turn": "White",
+        "step": 19
+      },
+      {
+        "attempt": "Black has a strong position with a king on g6 and several pieces developed. The best move is to reposition the knight to",
+        "reason": "Not legal for Black",
+        "turn": "Black",
+        "step": 21
+      },
+      {
+        "attempt": "Black has a strong position with a king on g6 and several pieces developed. The best move is to reposition the knight to",
+        "reason": "Not legal for Black",
+        "turn": "Black",
+        "step": 22
+      },
+      {
+        "attempt": "Black has a strong position with a king on g6 and several pieces developed. The best move is to reposition the knight to",
+        "reason": "Not legal for Black",
+        "turn": "Black",
+        "step": 27
+      }
+    ],
+    "move_number": 14,
+    "move_history": [
+      "Nf3",
+      "Nh6",
+      "Ng5",
+      "Nc6",
+      "Nxf7",
+      "Kxf7",
+      "Nc3",
+      "Ng8",
+      "Nd5",
+      "Ne5",
+      "Nf6",
+      "Ng6",
+      "Ne4",
+      "Ne5",
+      "Nd6+",
+      "Kg6",
+      "Ne8",
+      "Qxe8",
+      "e4",
+      "Nf3+",
+      "Qxf3",
+      "Nf6",
+      "Qg3+",
+      "Kf7",
+      "e5",
+      "Ng8",
+      "Qxg7+"
+    ],
+    "turn": "Black",
+    "is_check": true
+  },
+  "fen": "r1b1qbnr/pppppkQp/8/4P3/8/8/PPPP1PPP/R1B1KB1R b KQ - 0 14",
+  "info": {
+    "requested_move": "White is in a critical position where the king is exposed, and Black has a strong presence on the board. The best strategy is to attack the Black king directly by opening lines and delivering a decisive check. The move Qxg7+ is a strong candidate as it targets the Black king and potentially opens up the board for further attacks.\n\nMOVE: Qxg7+",
+    "legal_move": "True",
+    "stockfish_cp_delta": "-814.0"
+  }
+}

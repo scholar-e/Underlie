@@ -1,0 +1,6 @@
+{
+  "best_reward": 0.0,
+  "total_steps": 49,
+  "game_result": "Terminated after 5 consecutive illegal/failed moves. Last input: 'The position is complex, but White has a strong pawn on e5 and a queen that can exert pressure. The best move is to advance the pawn on d7 to promote, which is a forced move and maximizes the positional advantage. MOVE: d8=Q'",
+  "num_moves": 49
+}

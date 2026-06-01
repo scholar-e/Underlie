@@ -1,0 +1,113 @@
+{
+  "step": 30,
+  "move": "Nh6",
+  "reward": -1.35,
+  "best_reward": 0.0,
+  "legal_move": true,
+  "observation": {
+    "board": "=== BLACK MOVED Nh6 ===\n>>> WHITE TO MOVE <<<\nMove: 13\nCheck: no\n\n!!! Last move REJECTED: The white knight on g5 is attacking the black knight on f5, creating a strong positional advantage. A good move would be - Not legal for White !!!\n\nWhite: Ra1, Bc1, Ke1, Bf1, Rh1, Pa2, Pb2, Pc2, Pd2, Pf2, Pg2, Ph2, Nd5\nBlack: pg5, pe6, bf6, nh6, pa7, pb7, pc7, pd7, ph7, ra8, bc8, qd8, ke8, rh8\nHistory: 1. Nf3 Nh6 2. Ng5 Nf5 3. Ne6 Nc6 4. Nd4 Ne5 5. Nxf5 g5 6. Ng7+ Bxg7 7. e4 Bf6 8. Nc3 Ng6 9. Qh5 e6 10. e5 Nxe5 11. Qxf7+ Nxf7 12. Nd5 Nh6\nLegal moves: Ne7, Nxc7+, Nxf6+, Nb6, Nf4, Nb4, Ne3, Nc3, Rg1, Ba6, Bb5, Bc4, Bd3, Be2, Ke2, Kd1, Rb1, h3, g3, f3, d3, c3, b3, a3, h4, g4, f4, d4, c4, b4, a4\nPreviously rejected (do not repeat):\n  - White has a strong position with a knight on g5, which is attacking the black knight on f5. A good move would be to deve (Not legal for White)\n  - White has a strong position with a knight on g5, which is attacking the black knight on f5. A good move would be to deve (Not legal for White)\n  - The white knight on g5 is attacking the black knight on f5, creating a strong positional advantage. A good move would be (Not legal for White)\n\nRESPONSE FORMAT: End your response with MOVE: <move> on its own line (e.g. MOVE: e4 or MOVE: Nf3).\nPick only from legal_moves. Do NOT repeat rejected moves.",
+    "board_visual": "  -----------------\n8 |\u265c|\u2b58|\u265d|\u265b|\u265a|\u2b58|\u2b58|\u265c|\n  -----------------\n7 |\u265f|\u265f|\u265f|\u265f|\u2b58|\u2b58|\u2b58|\u265f|\n  -----------------\n6 |\u2b58|\u2b58|\u2b58|\u2b58|\u265f|\u265d|\u2b58|\u265e|\n  -----------------\n5 |\u2b58|\u2b58|\u2b58|\u2658|\u2b58|\u2b58|\u265f|\u2b58|\n  -----------------\n4 |\u2b58|\u2b58|\u2b58|\u2b58|\u2b58|\u2b58|\u2b58|\u2b58|\n  -----------------\n3 |\u2b58|\u2b58|\u2b58|\u2b58|\u2b58|\u2b58|\u2b58|\u2b58|\n  -----------------\n2 |\u2659|\u2659|\u2659|\u2659|\u2b58|\u2659|\u2659|\u2659|\n  -----------------\n1 |\u2656|\u2b58|\u2657|\u2b58|\u2654|\u2657|\u2b58|\u2656|\n  -----------------\n   a b c d e f g h",
+    "fen": "r1bqk2r/pppp3p/4pb1n/3N2p1/8/8/PPPP1PPP/R1B1KB1R w KQkq - 2 13",
+    "legal_moves": [
+      "Ne7",
+      "Nxc7+",
+      "Nxf6+",
+      "Nb6",
+      "Nf4",
+      "Nb4",
+      "Ne3",
+      "Nc3",
+      "Rg1",
+      "Ba6",
+      "Bb5",
+      "Bc4",
+      "Bd3",
+      "Be2",
+      "Ke2",
+      "Kd1",
+      "Rb1",
+      "h3",
+      "g3",
+      "f3",
+      "d3",
+      "c3",
+      "b3",
+      "a3",
+      "h4",
+      "g4",
+      "f4",
+      "d4",
+      "c4",
+      "b4",
+      "a4"
+    ],
+    "must_avoid_moves": [],
+    "rejected_moves": [
+      {
+        "attempt": "The white knight on g5 is attacking the black knight on f5, creating a strong positional advantage. A good move is to de",
+        "reason": "Not legal for White",
+        "turn": "White",
+        "step": 6
+      },
+      {
+        "attempt": "White has a strong position with a knight on g5, which is attacking the black knight on f5. The best move is to continue",
+        "reason": "Not legal for White",
+        "turn": "White",
+        "step": 13
+      },
+      {
+        "attempt": "White has a strong position with a knight on g5, which is attacking the black knight on f5. A good move would be to deve",
+        "reason": "Not legal for White",
+        "turn": "White",
+        "step": 16
+      },
+      {
+        "attempt": "White has a strong position with a knight on g5, which is attacking the black knight on f5. A good move would be to deve",
+        "reason": "Not legal for White",
+        "turn": "White",
+        "step": 17
+      },
+      {
+        "attempt": "The white knight on g5 is attacking the black knight on f5, creating a strong positional advantage. A good move would be",
+        "reason": "Not legal for White",
+        "turn": "White",
+        "step": 18
+      }
+    ],
+    "move_number": 13,
+    "move_history": [
+      "Nf3",
+      "Nh6",
+      "Ng5",
+      "Nf5",
+      "Ne6",
+      "Nc6",
+      "Nd4",
+      "Ne5",
+      "Nxf5",
+      "g5",
+      "Ng7+",
+      "Bxg7",
+      "e4",
+      "Bf6",
+      "Nc3",
+      "Ng6",
+      "Qh5",
+      "e6",
+      "e5",
+      "Nxe5",
+      "Qxf7+",
+      "Nxf7",
+      "Nd5",
+      "Nh6"
+    ],
+    "turn": "White",
+    "is_check": false
+  },
+  "fen": "r1bqk2r/pppp3p/4pb1n/3N2p1/8/8/PPPP1PPP/R1B1KB1R w KQkq - 2 13",
+  "info": {
+    "requested_move": "Black is in a difficult position, with the white knight on d5 and g5 exerting pressure. The black knight on f5 is under attack, and Black needs to respond carefully. One of the best options is to move the knight to h6, which defends the f5 knight and prepares to develop other pieces. This move also avoids further tactical threats from White.\n\nMOVE: Nh6",
+    "legal_move": "True",
+    "stockfish_cp_delta": "135.0"
+  }
+}

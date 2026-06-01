@@ -1,0 +1,40 @@
+{
+  "termination_reason": "Episode closed with 5 unresolved illegal moves",
+  "last_raw_input": "The white king is exposed, and Black has a strong position with a rook on b1 and a bishop on g7. While Rf8 and Rg8 were previously rejected, other strong options remain. Rb8 is a solid move that supports the rook and prepares for further pressure on the kingside. MOVE: Rb8",
+  "parse_attempts": {},
+  "board_fen": "r1b1k2r/pppp2bp/6PP/5P1K/8/8/PPPP4/R1B5 b - - 26 58",
+  "legal_moves": [
+    "Rg8",
+    "Rf8",
+    "Kf8",
+    "Kd8",
+    "Ke7",
+    "Rb8",
+    "Bf8",
+    "Bxh6",
+    "Bf6",
+    "Be5",
+    "Bd4",
+    "Bc3",
+    "Bxb2",
+    "hxg6+",
+    "d6",
+    "c6",
+    "b6",
+    "a6",
+    "d5",
+    "c5",
+    "b5",
+    "a5"
+  ],
+  "consecutive_illegal": [
+    "Black has a strong position with a rook on b1 and a bishop on g7, and the white king is exposed. The best move is to exploit the vulnerable white king by playing a check that forces it to move, limiting its options. Rg8 is a strong candidate, but Rf8 is more direct and threatens to capture the pawn on e7. MOVE: Rf8",
+    "Black has a strong position with a rook on b1 and a bishop on g7, and the white king is exposed. The best move is to exploit the vulnerable white king by playing a check that forces it to move, limiting its options. Rg8 is a strong candidate, but Rf8 is more direct and threatens to capture the pawn on e7. MOVE: Rf8",
+    "Black has a strong position with a rook on b1 and a bishop on g7, and the white king is exposed. The best move is to exploit the vulnerable white king by playing a check that forces it to move, limiting its options. Rg8 is a strong candidate, but Rf8 is more direct and threatens to capture the pawn on e7. MOVE: Rg8",
+    "Black has a strong position with a rook on b1 and a bishop on g7, and the white king is exposed. The best move is to exploit the vulnerable white king by playing a check that forces it to move, limiting its options. Rg8 is a strong candidate, but Rf8 is more direct and threatens to capture the pawn on e7. MOVE: Rg8",
+    "The white king is exposed, and Black has a strong position with a rook on b1 and a bishop on g7. While Rf8 and Rg8 were previously rejected, other strong options remain. Rb8 is a solid move that supports the rook and prepares for further pressure on the kingside. MOVE: Rb8"
+  ],
+  "step": 138,
+  "move_number": 58,
+  "turn": "Black"
+}

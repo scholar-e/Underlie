@@ -1,0 +1,56 @@
+{
+  "step": 8,
+  "move": "Kxf7",
+  "reward": -2.6,
+  "best_reward": 0.0,
+  "legal_move": true,
+  "observation": {
+    "board": "=== BLACK MOVED Kxf7 ===\n>>> WHITE TO MOVE <<<\nMove: 5\nCheck: no\n\nWhite: Ra1, Bc1, Qd1, Ke1, Bf1, Rh1, Pa2, Pb2, Pc2, Pd2, Pe2, Pf2, Pg2, Ph2, Nc3\nBlack: ne5, nf6, pa7, pb7, pc7, pd7, pe7, kf7, pg7, ph7, ra8, bc8, qd8, bf8, rh8\nHistory: 1. Nf3 Nf6 2. Nc3 Nc6 3. Ng5 Ne5 4. Nxf7 Kxf7\nLegal moves: Nd5, Nb5, Ne4, Na4, Nb1, Rg1, Rb1, h3, g3, f3, e3, d3, b3, a3, h4, g4, f4, e4, d4, b4, a4\n\nRESPONSE FORMAT: End your response with MOVE: <move> on its own line (e.g. MOVE: e4 or MOVE: Nf3).\nPick only from legal_moves. Do NOT repeat rejected moves.",
+    "board_visual": "  -----------------\n8 |\u265c|\u2b58|\u265d|\u265b|\u2b58|\u265d|\u2b58|\u265c|\n  -----------------\n7 |\u265f|\u265f|\u265f|\u265f|\u265f|\u265a|\u265f|\u265f|\n  -----------------\n6 |\u2b58|\u2b58|\u2b58|\u2b58|\u2b58|\u265e|\u2b58|\u2b58|\n  -----------------\n5 |\u2b58|\u2b58|\u2b58|\u2b58|\u265e|\u2b58|\u2b58|\u2b58|\n  -----------------\n4 |\u2b58|\u2b58|\u2b58|\u2b58|\u2b58|\u2b58|\u2b58|\u2b58|\n  -----------------\n3 |\u2b58|\u2b58|\u2658|\u2b58|\u2b58|\u2b58|\u2b58|\u2b58|\n  -----------------\n2 |\u2659|\u2659|\u2659|\u2659|\u2659|\u2659|\u2659|\u2659|\n  -----------------\n1 |\u2656|\u2b58|\u2657|\u2655|\u2654|\u2657|\u2b58|\u2656|\n  -----------------\n   a b c d e f g h",
+    "fen": "r1bq1b1r/pppppkpp/5n2/4n3/8/2N5/PPPPPPPP/R1BQKB1R w KQ - 0 5",
+    "legal_moves": [
+      "Nd5",
+      "Nb5",
+      "Ne4",
+      "Na4",
+      "Nb1",
+      "Rg1",
+      "Rb1",
+      "h3",
+      "g3",
+      "f3",
+      "e3",
+      "d3",
+      "b3",
+      "a3",
+      "h4",
+      "g4",
+      "f4",
+      "e4",
+      "d4",
+      "b4",
+      "a4"
+    ],
+    "must_avoid_moves": [],
+    "rejected_moves": [],
+    "move_number": 5,
+    "move_history": [
+      "Nf3",
+      "Nf6",
+      "Nc3",
+      "Nc6",
+      "Ng5",
+      "Ne5",
+      "Nxf7",
+      "Kxf7"
+    ],
+    "turn": "White",
+    "is_check": false
+  },
+  "fen": "r1bq1b1r/pppppkpp/5n2/4n3/8/2N5/PPPPPPPP/R1BQKB1R w KQ - 0 5",
+  "info": {
+    "requested_move": "The position after White's move Nxf7 is critical. Black has several options, but the best move is to capture the knight on f7 with the king, as it avoids further complications and keeps the position balanced. This move is both legal and avoids any potential pitfalls.\n\nMOVE: Kxf7",
+    "legal_move": "True",
+    "stockfish_cp_delta": "260.0"
+  }
+}

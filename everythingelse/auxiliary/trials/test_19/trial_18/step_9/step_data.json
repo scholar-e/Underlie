@@ -1,0 +1,59 @@
+{
+  "step": 9,
+  "move": "Nd5",
+  "reward": -1.39,
+  "best_reward": 0.0,
+  "legal_move": true,
+  "observation": {
+    "board": "=== WHITE MOVED Nd5 ===\n>>> BLACK TO MOVE <<<\nMove: 5\nCheck: no\n\nWhite: Ra1, Bc1, Qd1, Ke1, Bf1, Rh1, Pa2, Pb2, Pc2, Pd2, Pe2, Pf2, Pg2, Ph2, Nd5\nBlack: nc6, pa7, pb7, pc7, pd7, pe7, kf7, pg7, ph7, ra8, bc8, qd8, bf8, ng8, rh8\nHistory: 1. Nf3 Nf6 2. Nc3 Nc6 3. Ng5 Ng8 4. Nxf7 Kxf7 5. Nd5\nLegal moves: Nh6, Nf6, Qe8, Rb8, Ke8, Kg6, Ke6, Nb8, Ne5, Na5, Nd4, Nb4, h6, g6, e6, d6, b6, a6, h5, g5, e5, b5, a5\n\nRESPONSE FORMAT: End your response with MOVE: <move> on its own line (e.g. MOVE: e4 or MOVE: Nf3).\nPick only from legal_moves. Do NOT repeat rejected moves.",
+    "board_visual": "  -----------------\n8 |\u265c|\u2b58|\u265d|\u265b|\u2b58|\u265d|\u265e|\u265c|\n  -----------------\n7 |\u265f|\u265f|\u265f|\u265f|\u265f|\u265a|\u265f|\u265f|\n  -----------------\n6 |\u2b58|\u2b58|\u265e|\u2b58|\u2b58|\u2b58|\u2b58|\u2b58|\n  -----------------\n5 |\u2b58|\u2b58|\u2b58|\u2658|\u2b58|\u2b58|\u2b58|\u2b58|\n  -----------------\n4 |\u2b58|\u2b58|\u2b58|\u2b58|\u2b58|\u2b58|\u2b58|\u2b58|\n  -----------------\n3 |\u2b58|\u2b58|\u2b58|\u2b58|\u2b58|\u2b58|\u2b58|\u2b58|\n  -----------------\n2 |\u2659|\u2659|\u2659|\u2659|\u2659|\u2659|\u2659|\u2659|\n  -----------------\n1 |\u2656|\u2b58|\u2657|\u2655|\u2654|\u2657|\u2b58|\u2656|\n  -----------------\n   a b c d e f g h",
+    "fen": "r1bq1bnr/pppppkpp/2n5/3N4/8/8/PPPPPPPP/R1BQKB1R b KQ - 1 5",
+    "legal_moves": [
+      "Nh6",
+      "Nf6",
+      "Qe8",
+      "Rb8",
+      "Ke8",
+      "Kg6",
+      "Ke6",
+      "Nb8",
+      "Ne5",
+      "Na5",
+      "Nd4",
+      "Nb4",
+      "h6",
+      "g6",
+      "e6",
+      "d6",
+      "b6",
+      "a6",
+      "h5",
+      "g5",
+      "e5",
+      "b5",
+      "a5"
+    ],
+    "must_avoid_moves": [],
+    "rejected_moves": [],
+    "move_number": 5,
+    "move_history": [
+      "Nf3",
+      "Nf6",
+      "Nc3",
+      "Nc6",
+      "Ng5",
+      "Ng8",
+      "Nxf7",
+      "Kxf7",
+      "Nd5"
+    ],
+    "turn": "Black",
+    "is_check": false
+  },
+  "fen": "r1bq1bnr/pppppkpp/2n5/3N4/8/8/PPPPPPPP/R1BQKB1R b KQ - 1 5",
+  "info": {
+    "requested_move": "The position after Black's move Kxf7 has left White with a strong initiative. The best move is to develop the knight to a strong central square, which is Nd5. This move supports the center and prepares for further development.\n\nMOVE: Nd5",
+    "legal_move": "True",
+    "stockfish_cp_delta": "-139.0"
+  }
+}

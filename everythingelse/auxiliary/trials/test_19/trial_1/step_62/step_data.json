@@ -1,0 +1,110 @@
+{
+  "step": 62,
+  "move": "White is in check, and the only legal move is to move the king to g3. This move is necessary to escape the check and maintain the position. MOVE: Kg3",
+  "reward": -5.0,
+  "best_reward": 0.0,
+  "legal_move": false,
+  "observation": {
+    "board": "=== BLACK MOVED Nd4+ ===\n>>> WHITE TO MOVE <<<\nMove: 25\nCheck: YES\n\n!!! Last move REJECTED: White is in check, and the only legal move is to move the king to g3. This move is necessary to escape the check and mai - Not legal for White !!!\n\nWhite: Ra1, Rh1, Pa2, Pb2, Pc2, Pf2, Pg2, Ph3, Pe4, Bf4, Kg4\nBlack: nd4, pe5, pa7, pb7, kc7, be7, pg7, ph7, ra8, bc8, qe8, rh8\nHistory: 1. Nf3 Nh6 2. Ng5 Nc6 3. Nxf7 Kxf7 4. Nc3 Ng8 5. Nd5 Nh6 6. Nxc7 Qxc7 7. e4 e5 8. Bc4+ Ke8 9. Ke2 Ng8 10. Bf7+ Kd8 11. Bxg8 Rxg8 12. d4 Nxd4+ 13. Ke3 Ne6 14. Qxd7+ Kxd7 15. Kf3 Ke7 16. Kg3 Ke8 17. Kh4 Rh8 18. h3 Ke7 19. Bg5+ Kd6 20. Bf4 Qd8+ 21. Kh5 Qe8+ 22. Kg4 Kc7 23. Kf5 Be7 24. Kg4 Nd4+\nLegal moves: Kg3\nPreviously rejected (do not repeat):\n  - Black has a strong position with active pieces and a passed pawn on e5. The best move is to push the e-pawn forward to e (Not legal for Black)\n  - Black has a strong position with active pieces and a passed pawn on e5. The best move is to push the e-pawn forward to e (Not legal for Black)\n  - White is in check, and the only legal move is to move the king to g3. This move is necessary to escape the check and mai (Not legal for White)\n\nRESPONSE FORMAT: End your response with MOVE: <move> on its own line (e.g. MOVE: e4 or MOVE: Nf3).\nPick only from legal_moves. Do NOT repeat rejected moves.",
+    "board_visual": "  -----------------\n8 |\u265c|\u2b58|\u265d|\u2b58|\u265b|\u2b58|\u2b58|\u265c|\n  -----------------\n7 |\u265f|\u265f|\u265a|\u2b58|\u265d|\u2b58|\u265f|\u265f|\n  -----------------\n6 |\u2b58|\u2b58|\u2b58|\u2b58|\u2b58|\u2b58|\u2b58|\u2b58|\n  -----------------\n5 |\u2b58|\u2b58|\u2b58|\u2b58|\u265f|\u2b58|\u2b58|\u2b58|\n  -----------------\n4 |\u2b58|\u2b58|\u2b58|\u265e|\u2659|\u2657|\u2654|\u2b58|\n  -----------------\n3 |\u2b58|\u2b58|\u2b58|\u2b58|\u2b58|\u2b58|\u2b58|\u2659|\n  -----------------\n2 |\u2659|\u2659|\u2659|\u2b58|\u2b58|\u2659|\u2659|\u2b58|\n  -----------------\n1 |\u2656|\u2b58|\u2b58|\u2b58|\u2b58|\u2b58|\u2b58|\u2656|\n  -----------------\n   a b c d e f g h",
+    "fen": "r1b1q2r/ppk1b1pp/8/4p3/3nPBK1/7P/PPP2PP1/R6R w - - 13 25",
+    "legal_moves": [
+      "Kg3"
+    ],
+    "must_avoid_moves": [
+      "White is in check, and the only legal move is to move the king to g3. This move is necessary to escape the check and maintain the position. MOVE: Kg3"
+    ],
+    "rejected_moves": [
+      {
+        "attempt": "Black has a strong position with active pieces and a passed pawn on e5. The best move is to push the e-pawn forward to e",
+        "reason": "Not legal for Black",
+        "turn": "Black",
+        "step": 57
+      },
+      {
+        "attempt": "Black has a strong position with active pieces and a passed pawn on e5. The best move is to push the e-pawn forward to e",
+        "reason": "Not legal for Black",
+        "turn": "Black",
+        "step": 58
+      },
+      {
+        "attempt": "Black has a strong position with active pieces and a passed pawn on e5. The best move is to push the e-pawn forward to e",
+        "reason": "Not legal for Black",
+        "turn": "Black",
+        "step": 59
+      },
+      {
+        "attempt": "Black has a strong position with active pieces and a passed pawn on e5. The best move is to push the e-pawn forward to e",
+        "reason": "Not legal for Black",
+        "turn": "Black",
+        "step": 60
+      },
+      {
+        "attempt": "White is in check, and the only legal move is to move the king to g3. This move is necessary to escape the check and mai",
+        "reason": "Not legal for White",
+        "turn": "White",
+        "step": 62
+      }
+    ],
+    "move_number": 25,
+    "move_history": [
+      "Nf3",
+      "Nh6",
+      "Ng5",
+      "Nc6",
+      "Nxf7",
+      "Kxf7",
+      "Nc3",
+      "Ng8",
+      "Nd5",
+      "Nh6",
+      "Nxc7",
+      "Qxc7",
+      "e4",
+      "e5",
+      "Bc4+",
+      "Ke8",
+      "Ke2",
+      "Ng8",
+      "Bf7+",
+      "Kd8",
+      "Bxg8",
+      "Rxg8",
+      "d4",
+      "Nxd4+",
+      "Ke3",
+      "Ne6",
+      "Qxd7+",
+      "Kxd7",
+      "Kf3",
+      "Ke7",
+      "Kg3",
+      "Ke8",
+      "Kh4",
+      "Rh8",
+      "h3",
+      "Ke7",
+      "Bg5+",
+      "Kd6",
+      "Bf4",
+      "Qd8+",
+      "Kh5",
+      "Qe8+",
+      "Kg4",
+      "Kc7",
+      "Kf5",
+      "Be7",
+      "Kg4",
+      "Nd4+"
+    ],
+    "turn": "White",
+    "is_check": true
+  },
+  "fen": "r1b1q2r/ppk1b1pp/8/4p3/3nPBK1/7P/PPP2PP1/R6R w - - 13 25",
+  "info": {
+    "requested_move": "White is in check, and the only legal move is to move the king to g3. This move is necessary to escape the check and maintain the position. MOVE: Kg3",
+    "legal_move": "False",
+    "error": "Illegal move. 'White is in check, and the only legal move is to move the king to g3. This move is necessary to escape the check and maintain the position. MOVE: Kg3' is not a legal move for White. Choose one from legal_moves and avoid must_avoid_moves.",
+    "illegal_count": "1"
+  }
+}

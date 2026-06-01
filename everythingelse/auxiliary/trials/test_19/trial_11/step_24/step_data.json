@@ -1,0 +1,93 @@
+{
+  "step": 24,
+  "move": "Qxe5",
+  "reward": 0.0,
+  "best_reward": 0.0,
+  "legal_move": true,
+  "observation": {
+    "board": "=== WHITE MOVED Qxe5 ===\n>>> BLACK TO MOVE <<<\nMove: 11\nCheck: no\n\n!!! Last move REJECTED: White has a strong position with a knight on d5, and Black's knight on e5 is vulnerable. The best move is to capture the - Not legal for White !!!\n\nWhite: Ra1, Bc1, Ke1, Rh1, Pa2, Pb2, Pc2, Pd2, Pf2, Pg2, Ph2, Qe5\nBlack: nh6, pa7, pb7, pc7, pd7, be7, pg7, ph7, ra8, bc8, qd8, kg8, rh8\nHistory: 1. Nf3 Nh6 2. Ng5 Nc6 3. Nxf7 Kxf7 4. Nc3 Ng8 5. Nd5 Ne5 6. Nxe7 Bxe7 7. e4 Nh6 8. Bc4+ Nxc4 9. e5 Nxe5 10. Qh5+ Kg8 11. Qxe5\nLegal moves: Kf8, Kf7, Qf8, Qe8, Rb8, Bf8, Bf6, Bd6, Bg5, Bc5, Bh4, Bb4, Ba3, Nf7, Nf5, Ng4, g6, d6, c6, b6, a6, g5, d5, c5, b5, a5\nPreviously rejected (do not repeat):\n  - Black has a strong position after the move Nc3, and the best strategy is to develop pieces and control the center. The m (Not legal for Black)\n  - White has a strong position with a knight on d5, and Black's knight on e5 is vulnerable. The best move is to capture the (Not legal for White)\n  - White has a strong position with a knight on d5, and Black's knight on e5 is vulnerable. The best move is to capture the (Not legal for White)\n\nRESPONSE FORMAT: End your response with MOVE: <move> on its own line (e.g. MOVE: e4 or MOVE: Nf3).\nPick only from legal_moves. Do NOT repeat rejected moves.",
+    "board_visual": "  -----------------\n8 |\u265c|\u2b58|\u265d|\u265b|\u2b58|\u2b58|\u265a|\u265c|\n  -----------------\n7 |\u265f|\u265f|\u265f|\u265f|\u265d|\u2b58|\u265f|\u265f|\n  -----------------\n6 |\u2b58|\u2b58|\u2b58|\u2b58|\u2b58|\u2b58|\u2b58|\u265e|\n  -----------------\n5 |\u2b58|\u2b58|\u2b58|\u2b58|\u2655|\u2b58|\u2b58|\u2b58|\n  -----------------\n4 |\u2b58|\u2b58|\u2b58|\u2b58|\u2b58|\u2b58|\u2b58|\u2b58|\n  -----------------\n3 |\u2b58|\u2b58|\u2b58|\u2b58|\u2b58|\u2b58|\u2b58|\u2b58|\n  -----------------\n2 |\u2659|\u2659|\u2659|\u2659|\u2b58|\u2659|\u2659|\u2659|\n  -----------------\n1 |\u2656|\u2b58|\u2657|\u2b58|\u2654|\u2b58|\u2b58|\u2656|\n  -----------------\n   a b c d e f g h",
+    "fen": "r1bq2kr/ppppb1pp/7n/4Q3/8/8/PPPP1PPP/R1B1K2R b KQ - 0 11",
+    "legal_moves": [
+      "Kf8",
+      "Kf7",
+      "Qf8",
+      "Qe8",
+      "Rb8",
+      "Bf8",
+      "Bf6",
+      "Bd6",
+      "Bg5",
+      "Bc5",
+      "Bh4",
+      "Bb4",
+      "Ba3",
+      "Nf7",
+      "Nf5",
+      "Ng4",
+      "g6",
+      "d6",
+      "c6",
+      "b6",
+      "a6",
+      "g5",
+      "d5",
+      "c5",
+      "b5",
+      "a5"
+    ],
+    "must_avoid_moves": [],
+    "rejected_moves": [
+      {
+        "attempt": "Black has a strong position after the move Nc3, and the best strategy is to develop pieces and control the center. The m",
+        "reason": "Not legal for Black",
+        "turn": "Black",
+        "step": 8
+      },
+      {
+        "attempt": "White has a strong position with a knight on d5, and Black's knight on e5 is vulnerable. The best move is to capture the",
+        "reason": "Not legal for White",
+        "turn": "White",
+        "step": 12
+      },
+      {
+        "attempt": "White has a strong position with a knight on d5, and Black's knight on e5 is vulnerable. The best move is to capture the",
+        "reason": "Not legal for White",
+        "turn": "White",
+        "step": 19
+      }
+    ],
+    "move_number": 11,
+    "move_history": [
+      "Nf3",
+      "Nh6",
+      "Ng5",
+      "Nc6",
+      "Nxf7",
+      "Kxf7",
+      "Nc3",
+      "Ng8",
+      "Nd5",
+      "Ne5",
+      "Nxe7",
+      "Bxe7",
+      "e4",
+      "Nh6",
+      "Bc4+",
+      "Nxc4",
+      "e5",
+      "Nxe5",
+      "Qh5+",
+      "Kg8",
+      "Qxe5"
+    ],
+    "turn": "Black",
+    "is_check": false
+  },
+  "fen": "r1bq2kr/ppppb1pp/7n/4Q3/8/8/PPPP1PPP/R1B1K2R b KQ - 0 11",
+  "info": {
+    "requested_move": "The position is highly favorable for White, with a strong knight on d5 and a vulnerable Black knight on e5. The best move is to capture the e5 knight with the queen, which is both legal and maximizes the positional advantage. This move exploits the weakness in Black's position and increases White's control over the board.\n\nMOVE: Qxe5",
+    "legal_move": "True",
+    "stockfish_cp_delta": "-4.0"
+  }
+}

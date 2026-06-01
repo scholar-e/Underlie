@@ -1,0 +1,43 @@
+{
+  "termination_reason": "Episode closed with 1 unresolved illegal moves",
+  "last_raw_input": "not_a_move",
+  "parse_attempts": {},
+  "board_fen": "rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
+  "legal_moves": [
+    "Nh3",
+    "Nf3",
+    "Ne2",
+    "Ba6",
+    "Bb5",
+    "Bc4",
+    "Bd3",
+    "Be2",
+    "Ke2",
+    "Qh5",
+    "Qg4",
+    "Qf3",
+    "Qe2",
+    "Nc3",
+    "Na3",
+    "h3",
+    "g3",
+    "f3",
+    "d3",
+    "c3",
+    "b3",
+    "a3",
+    "h4",
+    "g4",
+    "f4",
+    "d4",
+    "c4",
+    "b4",
+    "a4"
+  ],
+  "consecutive_illegal": [
+    "not_a_move"
+  ],
+  "step": 3,
+  "move_number": 2,
+  "turn": "White"
+}

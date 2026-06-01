@@ -1,0 +1,68 @@
+{
+  "step": 22,
+  "move": "Qf7+",
+  "reward": -12.52,
+  "best_reward": 0.0,
+  "legal_move": true,
+  "observation": {
+    "board": "=== WHITE MOVED Qf7+ ===\n>>> BLACK TO MOVE <<<\nMove: 10\nCheck: YES\n\n!!! Last move REJECTED: White's queen is under pressure, and the best move is to recapture the knight on e4 with the queen, which also attacks t - Not legal for White !!!\n\nWhite: Ra1, Bc1, Ke1, Bf1, Rh1, Pa2, Pb2, Pc2, Pd2, Pf2, Pg2, Ph2, Qf7\nBlack: ne4, nh6, pa7, pb7, pd7, pe7, pg7, ph7, ra8, bc8, qe8, bf8, kg8, rh8\nHistory: 1. Nf3 Nf6 2. Nc3 Nc6 3. Ng5 Ne5 4. Nxf7 Nxf7 5. Nd5 Nh6 6. Nxc7+ Kf7 7. Ne8 Qxe8 8. e4 Nxe4 9. Qh5+ Kg8 10. Qf7+\nLegal moves: Kxf7, Qxf7, Nxf7\nPreviously rejected (do not repeat):\n  - Black is in check after White's move Nxc7+. The two legal moves are Kf7 and Qxc7. Capturing the knight with Qxc7 is a st (Not legal for Black)\n  - The position is complex, with White having a strong initiative. The queen is under pressure, and the best move is to rec (Not legal for White)\n  - White's queen is under pressure, and the best move is to recapture the knight on e4 with the queen, which also attacks t (Not legal for White)\n\nRESPONSE FORMAT: End your response with MOVE: <move> on its own line (e.g. MOVE: e4 or MOVE: Nf3).\nPick only from legal_moves. Do NOT repeat rejected moves.",
+    "board_visual": "  -----------------\n8 |\u265c|\u2b58|\u265d|\u2b58|\u265b|\u265d|\u265a|\u265c|\n  -----------------\n7 |\u265f|\u265f|\u2b58|\u265f|\u265f|\u2655|\u265f|\u265f|\n  -----------------\n6 |\u2b58|\u2b58|\u2b58|\u2b58|\u2b58|\u2b58|\u2b58|\u265e|\n  -----------------\n5 |\u2b58|\u2b58|\u2b58|\u2b58|\u2b58|\u2b58|\u2b58|\u2b58|\n  -----------------\n4 |\u2b58|\u2b58|\u2b58|\u2b58|\u265e|\u2b58|\u2b58|\u2b58|\n  -----------------\n3 |\u2b58|\u2b58|\u2b58|\u2b58|\u2b58|\u2b58|\u2b58|\u2b58|\n  -----------------\n2 |\u2659|\u2659|\u2659|\u2659|\u2b58|\u2659|\u2659|\u2659|\n  -----------------\n1 |\u2656|\u2b58|\u2657|\u2b58|\u2654|\u2657|\u2b58|\u2656|\n  -----------------\n   a b c d e f g h",
+    "fen": "r1b1qbkr/pp1ppQpp/7n/8/4n3/8/PPPP1PPP/R1B1KB1R b KQ - 3 10",
+    "legal_moves": [
+      "Kxf7",
+      "Qxf7",
+      "Nxf7"
+    ],
+    "must_avoid_moves": [],
+    "rejected_moves": [
+      {
+        "attempt": "Black is in check after White's move Nxc7+. The two legal moves are Kf7 and Qxc7. Capturing the knight with Qxc7 is a st",
+        "reason": "Not legal for Black",
+        "turn": "Black",
+        "step": 12
+      },
+      {
+        "attempt": "The position is complex, with White having a strong initiative. The queen is under pressure, and the best move is to rec",
+        "reason": "Not legal for White",
+        "turn": "White",
+        "step": 20
+      },
+      {
+        "attempt": "White's queen is under pressure, and the best move is to recapture the knight on e4 with the queen, which also attacks t",
+        "reason": "Not legal for White",
+        "turn": "White",
+        "step": 21
+      }
+    ],
+    "move_number": 10,
+    "move_history": [
+      "Nf3",
+      "Nf6",
+      "Nc3",
+      "Nc6",
+      "Ng5",
+      "Ne5",
+      "Nxf7",
+      "Nxf7",
+      "Nd5",
+      "Nh6",
+      "Nxc7+",
+      "Kf7",
+      "Ne8",
+      "Qxe8",
+      "e4",
+      "Nxe4",
+      "Qh5+",
+      "Kg8",
+      "Qf7+"
+    ],
+    "turn": "Black",
+    "is_check": true
+  },
+  "fen": "r1b1qbkr/pp1ppQpp/7n/8/4n3/8/PPPP1PPP/R1B1KB1R b KQ - 3 10",
+  "info": {
+    "requested_move": "The position is complex, with White having a strong initiative. The queen is under pressure, and the best move is to recapture the knight on e4 with the queen, which also attacks the knight on f3. This move maintains pressure and keeps the game dynamic. However, since that move is not legal, I will choose a strong alternative that continues the attack.\n\nMOVE: Qf7+",
+    "legal_move": "True",
+    "stockfish_cp_delta": "-1252.0"
+  }
+}

@@ -1,0 +1,38 @@
+{
+  "step": 9,
+  "move": "Nxg7+",
+  "reward": -1.64,
+  "best_reward": 0.0,
+  "legal_move": true,
+  "observation": {
+    "board": "=== WHITE MOVED Nxg7+ ===\n>>> BLACK TO MOVE <<<\nMove: 5\nCheck: YES\n\nWhite: Ra1, Nb1, Bc1, Qd1, Ke1, Bf1, Rh1, Pa2, Pb2, Pc2, Pd2, Pf2, Pg2, Ph2, Ng7\nBlack: ne4, pe5, nc6, pa7, pb7, pc7, pd7, pf7, ph7, ra8, bc8, qd8, ke8, bf8, rh8\nHistory: 1. e4 e5 2. Nf3 Nf6 3. Nd4 Nxe4 4. Nf5 Nc6 5. Nxg7+\nLegal moves: Ke7, Bxg7\n\nRESPONSE FORMAT: End your response with MOVE: <move> on its own line (e.g. MOVE: e4 or MOVE: Nf3).\nPick only from legal_moves. Do NOT repeat rejected moves.",
+    "board_visual": "  -----------------\n8 |\u265c|\u2b58|\u265d|\u265b|\u265a|\u265d|\u2b58|\u265c|\n  -----------------\n7 |\u265f|\u265f|\u265f|\u265f|\u2b58|\u265f|\u2658|\u265f|\n  -----------------\n6 |\u2b58|\u2b58|\u265e|\u2b58|\u2b58|\u2b58|\u2b58|\u2b58|\n  -----------------\n5 |\u2b58|\u2b58|\u2b58|\u2b58|\u265f|\u2b58|\u2b58|\u2b58|\n  -----------------\n4 |\u2b58|\u2b58|\u2b58|\u2b58|\u265e|\u2b58|\u2b58|\u2b58|\n  -----------------\n3 |\u2b58|\u2b58|\u2b58|\u2b58|\u2b58|\u2b58|\u2b58|\u2b58|\n  -----------------\n2 |\u2659|\u2659|\u2659|\u2659|\u2b58|\u2659|\u2659|\u2659|\n  -----------------\n1 |\u2656|\u2658|\u2657|\u2655|\u2654|\u2657|\u2b58|\u2656|\n  -----------------\n   a b c d e f g h",
+    "fen": "r1bqkb1r/pppp1pNp/2n5/4p3/4n3/8/PPPP1PPP/RNBQKB1R b KQkq - 0 5",
+    "legal_moves": [
+      "Ke7",
+      "Bxg7"
+    ],
+    "must_avoid_moves": [],
+    "rejected_moves": [],
+    "move_number": 5,
+    "move_history": [
+      "e4",
+      "e5",
+      "Nf3",
+      "Nf6",
+      "Nd4",
+      "Nxe4",
+      "Nf5",
+      "Nc6",
+      "Nxg7+"
+    ],
+    "turn": "Black",
+    "is_check": true
+  },
+  "fen": "r1bqkb1r/pppp1pNp/2n5/4p3/4n3/8/PPPP1PPP/RNBQKB1R b KQkq - 0 5",
+  "info": {
+    "requested_move": "The position features a critical opportunity for White to capitalize on the exposed Black king and weakened pawns. The move Nxg7+ directly attacks the f7 pawn (a common weakness) and forces Black's king into a vulnerable position. This move not only gains material but also restricts Black's king, creating long-term positional advantages. Other options like Qh5 or Ne7 are less aggressive and don't exploit the immediate threat as effectively.\n\nMOVE: Nxg7+",
+    "legal_move": "True",
+    "stockfish_cp_delta": "-164.0"
+  }
+}

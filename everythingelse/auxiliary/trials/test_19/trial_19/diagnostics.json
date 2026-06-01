@@ -1,0 +1,43 @@
+{
+  "termination_reason": "Episode closed with 5 unresolved illegal moves",
+  "last_raw_input": "The white king is in a vulnerable position, and the black knight on f5 is attacking e4. To improve the position, moving the king to g3 is a safer option that avoids immediate threats and keeps the king out of harm's way. MOVE: Kg3",
+  "parse_attempts": {},
+  "board_fen": "3r1b2/pp2k2p/5p2/5p2/4p2K/4P3/PPP3PP/R1BR4 w - - 10 27",
+  "legal_moves": [
+    "Kh5",
+    "Kh3",
+    "Kg3",
+    "Rxd8",
+    "Rd7+",
+    "Rd6",
+    "Rd5",
+    "Rd4",
+    "Rd3",
+    "Rd2",
+    "Rh1",
+    "Rg1",
+    "Rf1",
+    "Re1",
+    "Bd2",
+    "Rb1",
+    "h3",
+    "g3",
+    "c3",
+    "b3",
+    "a3",
+    "g4",
+    "c4",
+    "b4",
+    "a4"
+  ],
+  "consecutive_illegal": [
+    "The white king is in a vulnerable position, and the black knight on f5 is attacking e4. To improve the position, moving the king to h5 is a strong choice, as it centralizes the king and prepares for further development. MOVE: Kh5",
+    "The white king is in a vulnerable position, and the black knight on f5 is attacking e4. To improve the position, moving the king to h5 is a strong choice, as it centralizes the king and prepares for further development. MOVE: Kh5",
+    "The white king is in a vulnerable position, and the black knight on f5 is attacking e4. To improve the position, moving the king to h3 is a safer option that avoids immediate threats and keeps the king out of harm's way. MOVE: Kh3",
+    "The white king is in a vulnerable position, and the black knight on f5 is attacking e4. To improve the position, moving the king to h3 is a safer option that avoids immediate threats and keeps the king out of harm's way. MOVE: Kh3",
+    "The white king is in a vulnerable position, and the black knight on f5 is attacking e4. To improve the position, moving the king to g3 is a safer option that avoids immediate threats and keeps the king out of harm's way. MOVE: Kg3"
+  ],
+  "step": 73,
+  "move_number": 27,
+  "turn": "White"
+}

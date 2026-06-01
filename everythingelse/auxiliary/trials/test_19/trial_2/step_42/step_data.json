@@ -1,0 +1,90 @@
+{
+  "step": 42,
+  "move": "Qh4#",
+  "reward": 10.1,
+  "best_reward": 10.1,
+  "legal_move": true,
+  "observation": {
+    "board": "=== BLACK MOVED Qh4# ===\n>>> WHITE TO MOVE <<<\nMove: 17\nCheck: YES\n\n!!! Last move REJECTED: White is under pressure due to Black's knight on h6 attacking the pawn on g5. The best move is to move the king to g4, b - Not legal for White !!!\n\nWhite: Ra1, Bc1, Qd1, Bf1, Rh1, Pa2, Pb2, Pc2, Pd2, Pe2, Ph3, Pg4, Kh5\nBlack: qh4, pg5, bh6, pa7, pb7, pc7, pd7, kf7, ph7, ra8, nb8, bc8, rg8\nHistory: 1. Nf3 Nh6 2. Nc3 e5 3. Ng5 Qf6 4. Nxf7 g6 5. Nxh6 Bxh6 6. Nd5 Qg7 7. h3 e4 8. Ne7 e3 9. Ng8 exf2+ 10. Kxf2 g5 11. Kg3 Qe5+ 12. Kg4 Qe3 13. Kh5 Kf7 14. Ne7 Qf2 15. Ng8 Rxg8 16. g4 Qh4#\nLegal moves: \nPreviously rejected (do not repeat):\n  - White is under pressure due to Black's knight on h6 attacking the pawn on g5. The best move is to move the king to g4 to (Not legal for White)\n  - White is under pressure due to Black's knight on h6 attacking the pawn on g5. The best move is to move the king to g4, b (Not legal for White)\n  - White is under pressure due to Black's knight on h6 attacking the pawn on g5. The best move is to move the king to g4, b (Not legal for White)\n\nRESPONSE FORMAT: End your response with MOVE: <move> on its own line (e.g. MOVE: e4 or MOVE: Nf3).\nPick only from legal_moves. Do NOT repeat rejected moves.",
+    "board_visual": "  -----------------\n8 |\u265c|\u265e|\u265d|\u2b58|\u2b58|\u2b58|\u265c|\u2b58|\n  -----------------\n7 |\u265f|\u265f|\u265f|\u265f|\u2b58|\u265a|\u2b58|\u265f|\n  -----------------\n6 |\u2b58|\u2b58|\u2b58|\u2b58|\u2b58|\u2b58|\u2b58|\u265d|\n  -----------------\n5 |\u2b58|\u2b58|\u2b58|\u2b58|\u2b58|\u2b58|\u265f|\u2654|\n  -----------------\n4 |\u2b58|\u2b58|\u2b58|\u2b58|\u2b58|\u2b58|\u2659|\u265b|\n  -----------------\n3 |\u2b58|\u2b58|\u2b58|\u2b58|\u2b58|\u2b58|\u2b58|\u2659|\n  -----------------\n2 |\u2659|\u2659|\u2659|\u2659|\u2659|\u2b58|\u2b58|\u2b58|\n  -----------------\n1 |\u2656|\u2b58|\u2657|\u2655|\u2b58|\u2657|\u2b58|\u2656|\n  -----------------\n   a b c d e f g h",
+    "fen": "rnb3r1/pppp1k1p/7b/6pK/6Pq/7P/PPPPP3/R1BQ1B1R w - - 1 17",
+    "legal_moves": [],
+    "must_avoid_moves": [],
+    "rejected_moves": [
+      {
+        "attempt": "White's position is under pressure, with Black's knight on h6 attacking the pawn on g5. However, the best move is to cap",
+        "reason": "Not legal for White",
+        "turn": "White",
+        "step": 26
+      },
+      {
+        "attempt": "White is under pressure due to Black's knight on h6 attacking the pawn on g5. The best move is to capture the pawn on f2",
+        "reason": "Not legal for White",
+        "turn": "White",
+        "step": 27
+      },
+      {
+        "attempt": "White is under pressure due to Black's knight on h6 attacking the pawn on g5. The best move is to move the king to g4 to",
+        "reason": "Not legal for White",
+        "turn": "White",
+        "step": 38
+      },
+      {
+        "attempt": "White is under pressure due to Black's knight on h6 attacking the pawn on g5. The best move is to move the king to g4, b",
+        "reason": "Not legal for White",
+        "turn": "White",
+        "step": 39
+      },
+      {
+        "attempt": "White is under pressure due to Black's knight on h6 attacking the pawn on g5. The best move is to move the king to g4, b",
+        "reason": "Not legal for White",
+        "turn": "White",
+        "step": 40
+      }
+    ],
+    "move_number": 17,
+    "move_history": [
+      "Nf3",
+      "Nh6",
+      "Nc3",
+      "e5",
+      "Ng5",
+      "Qf6",
+      "Nxf7",
+      "g6",
+      "Nxh6",
+      "Bxh6",
+      "Nd5",
+      "Qg7",
+      "h3",
+      "e4",
+      "Ne7",
+      "e3",
+      "Ng8",
+      "exf2+",
+      "Kxf2",
+      "g5",
+      "Kg3",
+      "Qe5+",
+      "Kg4",
+      "Qe3",
+      "Kh5",
+      "Kf7",
+      "Ne7",
+      "Qf2",
+      "Ng8",
+      "Rxg8",
+      "g4",
+      "Qh4#"
+    ],
+    "turn": "White",
+    "is_check": true
+  },
+  "fen": "rnb3r1/pppp1k1p/7b/6pK/6Pq/7P/PPPPP3/R1BQ1B1R w - - 1 17",
+  "info": {
+    "requested_move": "Black is under pressure due to the knight on h6 attacking the pawn on g5. White's king is in a vulnerable position, and Black has several strong options to exploit this. The best move is to play Qh4#, delivering checkmate. This move takes advantage of the open h-file and the weakness around White's king.\n\nMOVE: Qh4#",
+    "legal_move": "True",
+    "stockfish_cp_delta": "-5000.0",
+    "game_result": "0-1"
+  }
+}

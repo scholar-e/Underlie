@@ -1,0 +1,38 @@
+{
+  "termination_reason": "Episode closed with 5 unresolved illegal moves",
+  "last_raw_input": "Qe99",
+  "parse_attempts": {},
+  "board_fen": "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
+  "legal_moves": [
+    "Nh3",
+    "Nf3",
+    "Nc3",
+    "Na3",
+    "h3",
+    "g3",
+    "f3",
+    "e3",
+    "d3",
+    "c3",
+    "b3",
+    "a3",
+    "h4",
+    "g4",
+    "f4",
+    "e4",
+    "d4",
+    "c4",
+    "b4",
+    "a4"
+  ],
+  "consecutive_illegal": [
+    "Qe99",
+    "Qe99",
+    "Qe99",
+    "Qe99",
+    "Qe99"
+  ],
+  "step": 5,
+  "move_number": 1,
+  "turn": "White"
+}

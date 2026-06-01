@@ -1,0 +1,87 @@
+{
+  "step": 32,
+  "move": "Qe8+",
+  "reward": -4.14,
+  "best_reward": 0.1,
+  "legal_move": true,
+  "observation": {
+    "board": "=== WHITE MOVED Qe8+ ===\n>>> BLACK TO MOVE <<<\nMove: 14\nCheck: YES\n\n!!! Last move REJECTED: The position is a critical point in the opening. White has several strong options, but the most natural move is to devel - Not legal for White !!!\n\nWhite: Ra1, Bc1, Ke1, Rg1, Pa2, Pb2, Pc2, Pd2, Pf2, Pg2, Ph2, Pe4, Qe8\nBlack: pe5, nc6, nh6, pa7, pb7, pc7, qe7, pg7, ph7, ra8, bc8, kg8, rh8\nHistory: 1. Nf3 Nf6 2. Nc3 Nc6 3. Ng5 e6 4. Nd5 Be7 5. Nxe6 dxe6 6. Nxe7 Qxe7 7. Rg1 Ng8 8. e4 Nf6 9. Bc4 Ng8 10. Bb5 Nh6 11. Bc4 e5 12. Bxf7+ Kxf7 13. Qh5+ Kg8 14. Qe8+\nLegal moves: Qf8, Qxe8\nPreviously rejected (do not repeat):\n  - The position is a standard opening after 1. Nf3 Nf6 2. Nc3 Nc6. White has several strong options, but the most natural a (Not legal for White)\n  - The position is a critical point in the opening, and White has several strong options. The most natural move is to devel (Not legal for White)\n  - The position is a critical point in the opening. White has several strong options, but the most natural move is to devel (Not legal for White)\n\nRESPONSE FORMAT: End your response with MOVE: <move> on its own line (e.g. MOVE: e4 or MOVE: Nf3).\nPick only from legal_moves. Do NOT repeat rejected moves.",
+    "board_visual": "  -----------------\n8 |\u265c|\u2b58|\u265d|\u2b58|\u2655|\u2b58|\u265a|\u265c|\n  -----------------\n7 |\u265f|\u265f|\u265f|\u2b58|\u265b|\u2b58|\u265f|\u265f|\n  -----------------\n6 |\u2b58|\u2b58|\u265e|\u2b58|\u2b58|\u2b58|\u2b58|\u265e|\n  -----------------\n5 |\u2b58|\u2b58|\u2b58|\u2b58|\u265f|\u2b58|\u2b58|\u2b58|\n  -----------------\n4 |\u2b58|\u2b58|\u2b58|\u2b58|\u2659|\u2b58|\u2b58|\u2b58|\n  -----------------\n3 |\u2b58|\u2b58|\u2b58|\u2b58|\u2b58|\u2b58|\u2b58|\u2b58|\n  -----------------\n2 |\u2659|\u2659|\u2659|\u2659|\u2b58|\u2659|\u2659|\u2659|\n  -----------------\n1 |\u2656|\u2b58|\u2657|\u2b58|\u2654|\u2b58|\u2656|\u2b58|\n  -----------------\n   a b c d e f g h",
+    "fen": "r1b1Q1kr/ppp1q1pp/2n4n/4p3/4P3/8/PPPP1PPP/R1B1K1R1 b Q - 3 14",
+    "legal_moves": [
+      "Qf8",
+      "Qxe8"
+    ],
+    "must_avoid_moves": [],
+    "rejected_moves": [
+      {
+        "attempt": "The position is the opening after 1. Nf3 Nf6. White has several options, but the most natural and strong move is to deve",
+        "reason": "Not legal for White",
+        "turn": "White",
+        "step": 3
+      },
+      {
+        "attempt": "The position is a standard opening after 1. Nf3 Nf6 2. Nc3 Nc6. White has several strong options, but the most natural a",
+        "reason": "Not legal for White",
+        "turn": "White",
+        "step": 6
+      },
+      {
+        "attempt": "The position is a standard opening after 1. Nf3 Nf6 2. Nc3 Nc6. White has several strong options, but the most natural a",
+        "reason": "Not legal for White",
+        "turn": "White",
+        "step": 17
+      },
+      {
+        "attempt": "The position is a critical point in the opening, and White has several strong options. The most natural move is to devel",
+        "reason": "Not legal for White",
+        "turn": "White",
+        "step": 18
+      },
+      {
+        "attempt": "The position is a critical point in the opening. White has several strong options, but the most natural move is to devel",
+        "reason": "Not legal for White",
+        "turn": "White",
+        "step": 19
+      }
+    ],
+    "move_number": 14,
+    "move_history": [
+      "Nf3",
+      "Nf6",
+      "Nc3",
+      "Nc6",
+      "Ng5",
+      "e6",
+      "Nd5",
+      "Be7",
+      "Nxe6",
+      "dxe6",
+      "Nxe7",
+      "Qxe7",
+      "Rg1",
+      "Ng8",
+      "e4",
+      "Nf6",
+      "Bc4",
+      "Ng8",
+      "Bb5",
+      "Nh6",
+      "Bc4",
+      "e5",
+      "Bxf7+",
+      "Kxf7",
+      "Qh5+",
+      "Kg8",
+      "Qe8+"
+    ],
+    "turn": "Black",
+    "is_check": true
+  },
+  "fen": "r1b1Q1kr/ppp1q1pp/2n4n/4p3/4P3/8/PPPP1PPP/R1B1K1R1 b Q - 3 14",
+  "info": {
+    "requested_move": "White is in a critical position after the opening. The queen is under pressure, and the king is exposed. A strong move would be to develop the queen to a more active square, while also preparing to castle or support the center. Among the legal moves, Qe8+ is a strong candidate as it attacks the king and forces Black to respond, potentially disrupting their position.\n\nMOVE: Qe8+",
+    "legal_move": "True",
+    "stockfish_cp_delta": "-414.0"
+  }
+}

@@ -1,0 +1,107 @@
+{
+  "step": 22,
+  "move": "Ke2",
+  "reward": -2.48,
+  "best_reward": 0.0,
+  "legal_move": true,
+  "observation": {
+    "board": "=== WHITE MOVED Ke2 ===\n>>> BLACK TO MOVE <<<\nMove: 9\nCheck: no\n\n!!! Last move REJECTED: Black is in check after White's move Bc4+. The king has limited options to escape. The best move is to move the king to  - Not legal for Black !!!\n\nWhite: Ra1, Bc1, Qd1, Rh1, Pa2, Pb2, Pc2, Pd2, Ke2, Pf2, Pg2, Ph2, Bc4, Pe4\nBlack: pe5, nc6, nh6, pa7, pb7, qc7, pd7, pg7, ph7, ra8, bc8, ke8, bf8, rh8\nHistory: 1. Nf3 Nh6 2. Ng5 Nc6 3. Nxf7 Kxf7 4. Nc3 Ng8 5. Nd5 Nh6 6. Nxc7 Qxc7 7. e4 e5 8. Bc4+ Ke8 9. Ke2\nLegal moves: Rg8, Be7, Bd6, Bc5, Bb4, Ba3, Kd8, Ke7, Rb8, Qd8, Qb8, Qd6, Qb6, Qa5, Ng8, Nf7, Nf5, Ng4, Nd8, Nb8, Ne7, Na5, Nd4+, Nb4, g6, d6, b6, a6, g5, d5, b5, a5\nPreviously rejected (do not repeat):\n  - White has a strong position after capturing the queen with 6...Qxc7, and the best move is to develop the knight to a str (Not legal for White)\n  - Black is in check after White's move Bc4+. The king has limited options to escape. The best move is to move the king to  (Not legal for Black)\n  - Black is in check after White's move Bc4+. The king has limited options to escape. The best move is to move the king to  (Not legal for Black)\n\nRESPONSE FORMAT: End your response with MOVE: <move> on its own line (e.g. MOVE: e4 or MOVE: Nf3).\nPick only from legal_moves. Do NOT repeat rejected moves.",
+    "board_visual": "  -----------------\n8 |\u265c|\u2b58|\u265d|\u2b58|\u265a|\u265d|\u2b58|\u265c|\n  -----------------\n7 |\u265f|\u265f|\u265b|\u265f|\u2b58|\u2b58|\u265f|\u265f|\n  -----------------\n6 |\u2b58|\u2b58|\u265e|\u2b58|\u2b58|\u2b58|\u2b58|\u265e|\n  -----------------\n5 |\u2b58|\u2b58|\u2b58|\u2b58|\u265f|\u2b58|\u2b58|\u2b58|\n  -----------------\n4 |\u2b58|\u2b58|\u2657|\u2b58|\u2659|\u2b58|\u2b58|\u2b58|\n  -----------------\n3 |\u2b58|\u2b58|\u2b58|\u2b58|\u2b58|\u2b58|\u2b58|\u2b58|\n  -----------------\n2 |\u2659|\u2659|\u2659|\u2659|\u2654|\u2659|\u2659|\u2659|\n  -----------------\n1 |\u2656|\u2b58|\u2657|\u2655|\u2b58|\u2b58|\u2b58|\u2656|\n  -----------------\n   a b c d e f g h",
+    "fen": "r1b1kb1r/ppqp2pp/2n4n/4p3/2B1P3/8/PPPPKPPP/R1BQ3R b - - 3 9",
+    "legal_moves": [
+      "Rg8",
+      "Be7",
+      "Bd6",
+      "Bc5",
+      "Bb4",
+      "Ba3",
+      "Kd8",
+      "Ke7",
+      "Rb8",
+      "Qd8",
+      "Qb8",
+      "Qd6",
+      "Qb6",
+      "Qa5",
+      "Ng8",
+      "Nf7",
+      "Nf5",
+      "Ng4",
+      "Nd8",
+      "Nb8",
+      "Ne7",
+      "Na5",
+      "Nd4+",
+      "Nb4",
+      "g6",
+      "d6",
+      "b6",
+      "a6",
+      "g5",
+      "d5",
+      "b5",
+      "a5"
+    ],
+    "must_avoid_moves": [],
+    "rejected_moves": [
+      {
+        "attempt": "White has a strong position after capturing the queen with 6...Qxc7. The best move is to develop the knight to a strong ",
+        "reason": "Not legal for White",
+        "turn": "White",
+        "step": 13
+      },
+      {
+        "attempt": "White has a strong position after capturing the queen with 6...Qxc7. The best move is to develop the knight to a strong ",
+        "reason": "Not legal for White",
+        "turn": "White",
+        "step": 14
+      },
+      {
+        "attempt": "White has a strong position after capturing the queen with 6...Qxc7, and the best move is to develop the knight to a str",
+        "reason": "Not legal for White",
+        "turn": "White",
+        "step": 17
+      },
+      {
+        "attempt": "Black is in check after White's move Bc4+. The king has limited options to escape. The best move is to move the king to ",
+        "reason": "Not legal for Black",
+        "turn": "Black",
+        "step": 19
+      },
+      {
+        "attempt": "Black is in check after White's move Bc4+. The king has limited options to escape. The best move is to move the king to ",
+        "reason": "Not legal for Black",
+        "turn": "Black",
+        "step": 20
+      }
+    ],
+    "move_number": 9,
+    "move_history": [
+      "Nf3",
+      "Nh6",
+      "Ng5",
+      "Nc6",
+      "Nxf7",
+      "Kxf7",
+      "Nc3",
+      "Ng8",
+      "Nd5",
+      "Nh6",
+      "Nxc7",
+      "Qxc7",
+      "e4",
+      "e5",
+      "Bc4+",
+      "Ke8",
+      "Ke2"
+    ],
+    "turn": "Black",
+    "is_check": false
+  },
+  "fen": "r1b1kb1r/ppqp2pp/2n4n/4p3/2B1P3/8/PPPPKPPP/R1BQ3R b - - 3 9",
+  "info": {
+    "requested_move": "White has a strong position with a rook on a1 and h1, a bishop on c4, and a queen on d1. The king is in the center, so moving it to a safer square is important. Ke2 is a logical choice to improve king safety and prepare for castling if needed. It also opens up the possibility of supporting the center or preparing for a kingside attack.\n\nMOVE: Ke2",
+    "legal_move": "True",
+    "stockfish_cp_delta": "-248.0"
+  }
+}

@@ -1,0 +1,6 @@
+{
+  "best_reward": 0.1,
+  "total_steps": 134,
+  "game_result": "Terminated after 5 consecutive illegal/failed moves. Last input: 'The e4 pawn is a key central pawn, but Qe5 is not legal. I need to select a move from the legal_moves list. A strong option is to play Qe7, which supports central control and prepares for further development. MOVE: Qe7'",
+  "num_moves": 134
+}

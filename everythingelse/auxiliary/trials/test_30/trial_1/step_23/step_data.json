@@ -1,0 +1,54 @@
+{
+  "step": 23,
+  "move": "Bxf7+",
+  "reward": -5.18,
+  "best_reward": 0.0,
+  "legal_move": true,
+  "observation": {
+    "board": "=== WHITE MOVED Bxf7+ ===\n>>> BLACK TO MOVE <<<\nMove: 12\nCheck: YES\n\nWhite: Ra1, Bc1, Qd1, Re1, Kg1, Nd2, Pf2, Pg2, Ph2, Pa3, Pc3, Pd3, Nf3, Pb4, Pe4, Bf7\nBlack: bg4, pe5, nh5, bb6, nc6, pd6, pa7, pb7, pc7, qd7, pg7, ph7, re8, rf8, kg8\nHistory (last 10 turns): 3. Bc4 Bc5 4. O-O Nf6 5. Re1 O-O 6. d3 d6 7. Nbd2 Bg4 8. c3 Qd7 9. a3 Rae8 10. b4 Bb6 11. Bd5 Nh5 12. Bxf7+\nLegal moves: Kh8, Kxf7, Rxf7, Qxf7\n\nRESPONSE FORMAT: End your response with MOVE: <move> on its own line (e.g. MOVE: e4 or MOVE: Nf3).\nPick only from legal_moves. Do NOT repeat rejected moves.",
+    "board_visual": "  -----------------\n8 |\u2b58|\u2b58|\u2b58|\u2b58|\u265c|\u265c|\u265a|\u2b58|\n  -----------------\n7 |\u265f|\u265f|\u265f|\u265b|\u2b58|\u2657|\u265f|\u265f|\n  -----------------\n6 |\u2b58|\u265d|\u265e|\u265f|\u2b58|\u2b58|\u2b58|\u2b58|\n  -----------------\n5 |\u2b58|\u2b58|\u2b58|\u2b58|\u265f|\u2b58|\u2b58|\u265e|\n  -----------------\n4 |\u2b58|\u2659|\u2b58|\u2b58|\u2659|\u2b58|\u265d|\u2b58|\n  -----------------\n3 |\u2659|\u2b58|\u2659|\u2659|\u2b58|\u2658|\u2b58|\u2b58|\n  -----------------\n2 |\u2b58|\u2b58|\u2b58|\u2658|\u2b58|\u2659|\u2659|\u2659|\n  -----------------\n1 |\u2656|\u2b58|\u2657|\u2655|\u2656|\u2b58|\u2654|\u2b58|\n  -----------------\n   a b c d e f g h",
+    "fen": "4rrk1/pppq1Bpp/1bnp4/4p2n/1P2P1b1/P1PP1N2/3N1PPP/R1BQR1K1 b - - 0 12",
+    "legal_moves": [
+      "Kh8",
+      "Kxf7",
+      "Rxf7",
+      "Qxf7"
+    ],
+    "must_avoid_moves": [],
+    "rejected_moves": [],
+    "move_number": 12,
+    "move_history": [
+      "e4",
+      "e5",
+      "Nf3",
+      "Nc6",
+      "Bc4",
+      "Bc5",
+      "O-O",
+      "Nf6",
+      "Re1",
+      "O-O",
+      "d3",
+      "d6",
+      "Nbd2",
+      "Bg4",
+      "c3",
+      "Qd7",
+      "a3",
+      "Rae8",
+      "b4",
+      "Bb6",
+      "Bd5",
+      "Nh5",
+      "Bxf7+"
+    ],
+    "turn": "Black",
+    "is_check": true
+  },
+  "fen": "4rrk1/pppq1Bpp/1bnp4/4p2n/1P2P1b1/P1PP1N2/3N1PPP/R1BQR1K1 b - - 0 12",
+  "info": {
+    "requested_move": "Bxf7+",
+    "legal_move": "True",
+    "stockfish_cp_delta": "-518.0"
+  }
+}

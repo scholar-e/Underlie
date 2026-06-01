@@ -1,0 +1,19 @@
+{
+  "termination_reason": "Episode closed with 2 unresolved illegal moves",
+  "last_raw_input": "White is in check, and the king has limited options to move. The best move is to move the king to g4, but it's not legal. The next best option is to move the king to e3, which avoids the check and keeps the king safe. MOVE: Ke3",
+  "parse_attempts": {},
+  "board_fen": "r3kr2/pp2b2p/3p4/6P1/4pK1P/8/PP6/R6R w - - 1 38",
+  "legal_moves": [
+    "Kg4",
+    "Kxe4",
+    "Kg3",
+    "Ke3"
+  ],
+  "consecutive_illegal": [
+    "White is in a check situation, and the king has limited options to move. The best move is to move the king to g4, which keeps it safe and avoids further threats from Black's pieces. MOVE: Kg4",
+    "White is in check, and the king has limited options to move. The best move is to move the king to g4, but it's not legal. The next best option is to move the king to e3, which avoids the check and keeps the king safe. MOVE: Ke3"
+  ],
+  "step": 100,
+  "move_number": 38,
+  "turn": "White"
+}

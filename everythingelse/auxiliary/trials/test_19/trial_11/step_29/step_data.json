@@ -1,0 +1,86 @@
+{
+  "step": 29,
+  "move": "Qf6+",
+  "reward": -3.4,
+  "best_reward": 0.0,
+  "legal_move": true,
+  "observation": {
+    "board": "=== WHITE MOVED Qf6+ ===\n>>> BLACK TO MOVE <<<\nMove: 12\nCheck: YES\n\n!!! Last move REJECTED: The position is critical, with White's queen on e5 and Black's knight on e5 under pressure. The best move is to capture  - Not legal for White !!!\n\nWhite: Ra1, Bc1, Ke1, Rh1, Pa2, Pb2, Pc2, Pd2, Pf2, Pg2, Ph2, Qf6\nBlack: nh6, pa7, pb7, pc7, pd7, be7, pg7, ph7, ra8, bc8, qd8, kf8, rh8\nHistory: 1. Nf3 Nh6 2. Ng5 Nc6 3. Nxf7 Kxf7 4. Nc3 Ng8 5. Nd5 Ne5 6. Nxe7 Bxe7 7. e4 Nh6 8. Bc4+ Nxc4 9. e5 Nxe5 10. Qh5+ Kg8 11. Qxe5 Kf8 12. Qf6+\nLegal moves: Kg8, Ke8, Bxf6, Nf7, gxf6\nPreviously rejected (do not repeat):\n  - The position is complex, but White has a strong knight on d5, and Black's knight on e5 is under pressure. The best move  (Not legal for White)\n  - White has a strong knight on d5, and Black's knight on e5 is under pressure. The best move is to capture the knight with (Not legal for White)\n  - The position is critical, with White's queen on e5 and Black's knight on e5 under pressure. The best move is to capture  (Not legal for White)\n\nRESPONSE FORMAT: End your response with MOVE: <move> on its own line (e.g. MOVE: e4 or MOVE: Nf3).\nPick only from legal_moves. Do NOT repeat rejected moves.",
+    "board_visual": "  -----------------\n8 |\u265c|\u2b58|\u265d|\u265b|\u2b58|\u265a|\u2b58|\u265c|\n  -----------------\n7 |\u265f|\u265f|\u265f|\u265f|\u265d|\u2b58|\u265f|\u265f|\n  -----------------\n6 |\u2b58|\u2b58|\u2b58|\u2b58|\u2b58|\u2655|\u2b58|\u265e|\n  -----------------\n5 |\u2b58|\u2b58|\u2b58|\u2b58|\u2b58|\u2b58|\u2b58|\u2b58|\n  -----------------\n4 |\u2b58|\u2b58|\u2b58|\u2b58|\u2b58|\u2b58|\u2b58|\u2b58|\n  -----------------\n3 |\u2b58|\u2b58|\u2b58|\u2b58|\u2b58|\u2b58|\u2b58|\u2b58|\n  -----------------\n2 |\u2659|\u2659|\u2659|\u2659|\u2b58|\u2659|\u2659|\u2659|\n  -----------------\n1 |\u2656|\u2b58|\u2657|\u2b58|\u2654|\u2b58|\u2b58|\u2656|\n  -----------------\n   a b c d e f g h",
+    "fen": "r1bq1k1r/ppppb1pp/5Q1n/8/8/8/PPPP1PPP/R1B1K2R b KQ - 2 12",
+    "legal_moves": [
+      "Kg8",
+      "Ke8",
+      "Bxf6",
+      "Nf7",
+      "gxf6"
+    ],
+    "must_avoid_moves": [],
+    "rejected_moves": [
+      {
+        "attempt": "White has a strong position with a knight on d5, and Black's knight on e5 is vulnerable. The best move is to capture the",
+        "reason": "Not legal for White",
+        "turn": "White",
+        "step": 12
+      },
+      {
+        "attempt": "White has a strong position with a knight on d5, and Black's knight on e5 is vulnerable. The best move is to capture the",
+        "reason": "Not legal for White",
+        "turn": "White",
+        "step": 19
+      },
+      {
+        "attempt": "The position is complex, but White has a strong knight on d5, and Black's knight on e5 is under pressure. The best move ",
+        "reason": "Not legal for White",
+        "turn": "White",
+        "step": 26
+      },
+      {
+        "attempt": "White has a strong knight on d5, and Black's knight on e5 is under pressure. The best move is to capture the knight with",
+        "reason": "Not legal for White",
+        "turn": "White",
+        "step": 27
+      },
+      {
+        "attempt": "The position is critical, with White's queen on e5 and Black's knight on e5 under pressure. The best move is to capture ",
+        "reason": "Not legal for White",
+        "turn": "White",
+        "step": 28
+      }
+    ],
+    "move_number": 12,
+    "move_history": [
+      "Nf3",
+      "Nh6",
+      "Ng5",
+      "Nc6",
+      "Nxf7",
+      "Kxf7",
+      "Nc3",
+      "Ng8",
+      "Nd5",
+      "Ne5",
+      "Nxe7",
+      "Bxe7",
+      "e4",
+      "Nh6",
+      "Bc4+",
+      "Nxc4",
+      "e5",
+      "Nxe5",
+      "Qh5+",
+      "Kg8",
+      "Qxe5",
+      "Kf8",
+      "Qf6+"
+    ],
+    "turn": "Black",
+    "is_check": true
+  },
+  "fen": "r1bq1k1r/ppppb1pp/5Q1n/8/8/8/PPPP1PPP/R1B1K2R b KQ - 2 12",
+  "info": {
+    "requested_move": "White's queen is on e5, and Black's knight is on e5, but capturing it directly is not legal. Instead, White can threaten the knight with a move like Qf6+, which puts pressure on Black's position and forces them to respond. This move is both legal and strong.\n\nMOVE: Qf6+",
+    "legal_move": "True",
+    "stockfish_cp_delta": "-340.0"
+  }
+}

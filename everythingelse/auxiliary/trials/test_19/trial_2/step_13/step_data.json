@@ -1,0 +1,77 @@
+{
+  "step": 13,
+  "move": "Bxh6",
+  "reward": 0.0,
+  "best_reward": 0.0,
+  "legal_move": true,
+  "observation": {
+    "board": "=== BLACK MOVED Bxh6 ===\n>>> WHITE TO MOVE <<<\nMove: 6\nCheck: no\n\n!!! Last move REJECTED: Black has a strong position with a knight on h6, which is attacking the white pawn on g5. A good move would be to push t - Not legal for Black !!!\n\nWhite: Ra1, Bc1, Qd1, Ke1, Bf1, Rh1, Pa2, Pb2, Pc2, Pd2, Pe2, Pf2, Pg2, Ph2, Nc3\nBlack: pe5, qf6, pg6, bh6, pa7, pb7, pc7, pd7, ph7, ra8, nb8, bc8, ke8, rh8\nHistory: 1. Nf3 Nh6 2. Nc3 e5 3. Ng5 Qf6 4. Nxf7 g6 5. Nxh6 Bxh6\nLegal moves: Nd5, Nb5, Ne4, Na4, Nb1, Rg1, Rb1, h3, g3, f3, e3, d3, b3, a3, h4, g4, f4, e4, d4, b4, a4\nPreviously rejected (do not repeat):\n  - Black has a strong position with a knight on h6, which is attacking the white pawn on g5. A good move would be to push t (Not legal for Black)\n  - Black has a strong position with a knight on h6, which is attacking the white pawn on g5. A good move would be to push t (Not legal for Black)\n  - Black has a strong position with a knight on h6, which is attacking the white pawn on g5. A good move would be to push t (Not legal for Black)\n\nRESPONSE FORMAT: End your response with MOVE: <move> on its own line (e.g. MOVE: e4 or MOVE: Nf3).\nPick only from legal_moves. Do NOT repeat rejected moves.",
+    "board_visual": "  -----------------\n8 |\u265c|\u265e|\u265d|\u2b58|\u265a|\u2b58|\u2b58|\u265c|\n  -----------------\n7 |\u265f|\u265f|\u265f|\u265f|\u2b58|\u2b58|\u2b58|\u265f|\n  -----------------\n6 |\u2b58|\u2b58|\u2b58|\u2b58|\u2b58|\u265b|\u265f|\u265d|\n  -----------------\n5 |\u2b58|\u2b58|\u2b58|\u2b58|\u265f|\u2b58|\u2b58|\u2b58|\n  -----------------\n4 |\u2b58|\u2b58|\u2b58|\u2b58|\u2b58|\u2b58|\u2b58|\u2b58|\n  -----------------\n3 |\u2b58|\u2b58|\u2658|\u2b58|\u2b58|\u2b58|\u2b58|\u2b58|\n  -----------------\n2 |\u2659|\u2659|\u2659|\u2659|\u2659|\u2659|\u2659|\u2659|\n  -----------------\n1 |\u2656|\u2b58|\u2657|\u2655|\u2654|\u2657|\u2b58|\u2656|\n  -----------------\n   a b c d e f g h",
+    "fen": "rnb1k2r/pppp3p/5qpb/4p3/8/2N5/PPPPPPPP/R1BQKB1R w KQkq - 0 6",
+    "legal_moves": [
+      "Nd5",
+      "Nb5",
+      "Ne4",
+      "Na4",
+      "Nb1",
+      "Rg1",
+      "Rb1",
+      "h3",
+      "g3",
+      "f3",
+      "e3",
+      "d3",
+      "b3",
+      "a3",
+      "h4",
+      "g4",
+      "f4",
+      "e4",
+      "d4",
+      "b4",
+      "a4"
+    ],
+    "must_avoid_moves": [],
+    "rejected_moves": [
+      {
+        "attempt": "Black has a strong position with a knight on h6, which is attacking the white pawn on g5. A good move would be to push t",
+        "reason": "Not legal for Black",
+        "turn": "Black",
+        "step": 4
+      },
+      {
+        "attempt": "Black has a strong position with a knight on h6, which is attacking the white pawn on g5. A good move would be to push t",
+        "reason": "Not legal for Black",
+        "turn": "Black",
+        "step": 7
+      },
+      {
+        "attempt": "Black has a strong position with a knight on h6, which is attacking the white pawn on g5. A good move would be to push t",
+        "reason": "Not legal for Black",
+        "turn": "Black",
+        "step": 8
+      }
+    ],
+    "move_number": 6,
+    "move_history": [
+      "Nf3",
+      "Nh6",
+      "Nc3",
+      "e5",
+      "Ng5",
+      "Qf6",
+      "Nxf7",
+      "g6",
+      "Nxh6",
+      "Bxh6"
+    ],
+    "turn": "White",
+    "is_check": false
+  },
+  "fen": "rnb1k2r/pppp3p/5qpb/4p3/8/2N5/PPPPPPPP/R1BQKB1R w KQkq - 0 6",
+  "info": {
+    "requested_move": "Black has a strong position with a knight on h6, which is attacking the white pawn on g5. A good move would be to push the pawn on e5 to d4, but that is not legal. Instead, capturing the knight on h6 with the bishop is a strong option to gain material and disrupt White's structure.\n\nMOVE: Bxh6",
+    "legal_move": "True",
+    "stockfish_cp_delta": "0.0"
+  }
+}

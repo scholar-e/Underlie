@@ -1,6 +1,0 @@
-{"filename":"data/HongMingPC-30960.data","offset":0,"shape":[20,3072],"dtype":"float32","#type":"MemmapArray","#key":"be_To be"}
-{"filename":"data/HongMingPC-30960.data","offset":245760,"shape":[20,3072],"dtype":"float32","#type":"MemmapArray","#key":"To_To"}
-{"filename":"data/HongMingPC-30960.data","offset":491520,"shape":[20,3072],"dtype":"float32","#type":"MemmapArray","#key":"or_To be or"}
-{"filename":"data/HongMingPC-30960.data","offset":737280,"shape":[20,3072],"dtype":"float32","#type":"MemmapArray","#key":"not_To be or not"}
-{"filename":"data/HongMingPC-30960.data","offset":983040,"shape":[20,3072],"dtype":"float32","#type":"MemmapArray","#key":"to_To be or not to"}
-{"filename":"data/HongMingPC-30960.data","offset":1228800,"shape":[20,3072],"dtype":"float32","#type":"MemmapArray","#key":"be._To be or not to be"}

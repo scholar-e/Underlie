@@ -1,0 +1,56 @@
+{
+  "step": 4,
+  "move": "Nc6",
+  "reward": -0.55,
+  "best_reward": 0.0,
+  "legal_move": true,
+  "observation": {
+    "board": "=== BLACK MOVED Nc6 ===\n>>> WHITE TO MOVE <<<\nMove: 3\nCheck: no\n\nWhite: Ra1, Nb1, Bc1, Qd1, Ke1, Bf1, Rh1, Pa2, Pb2, Pc2, Pd2, Pe2, Pf2, Pg2, Ph2, Ng5\nBlack: nc6, nh6, pa7, pb7, pc7, pd7, pe7, pf7, pg7, ph7, ra8, bc8, qd8, ke8, bf8, rh8\nHistory: 1. Nf3 Nh6 2. Ng5 Nc6\nLegal moves: Nxh7, Nxf7, Ne6, Ne4, Nh3, Nf3, Rg1, Nc3, Na3, h3, g3, f3, e3, d3, c3, b3, a3, h4, g4, f4, e4, d4, c4, b4, a4\n\nRESPONSE FORMAT: End your response with MOVE: <move> on its own line (e.g. MOVE: e4 or MOVE: Nf3).\nPick only from legal_moves. Do NOT repeat rejected moves.",
+    "board_visual": "  -----------------\n8 |\u265c|\u2b58|\u265d|\u265b|\u265a|\u265d|\u2b58|\u265c|\n  -----------------\n7 |\u265f|\u265f|\u265f|\u265f|\u265f|\u265f|\u265f|\u265f|\n  -----------------\n6 |\u2b58|\u2b58|\u265e|\u2b58|\u2b58|\u2b58|\u2b58|\u265e|\n  -----------------\n5 |\u2b58|\u2b58|\u2b58|\u2b58|\u2b58|\u2b58|\u2658|\u2b58|\n  -----------------\n4 |\u2b58|\u2b58|\u2b58|\u2b58|\u2b58|\u2b58|\u2b58|\u2b58|\n  -----------------\n3 |\u2b58|\u2b58|\u2b58|\u2b58|\u2b58|\u2b58|\u2b58|\u2b58|\n  -----------------\n2 |\u2659|\u2659|\u2659|\u2659|\u2659|\u2659|\u2659|\u2659|\n  -----------------\n1 |\u2656|\u2658|\u2657|\u2655|\u2654|\u2657|\u2b58|\u2656|\n  -----------------\n   a b c d e f g h",
+    "fen": "r1bqkb1r/pppppppp/2n4n/6N1/8/8/PPPPPPPP/RNBQKB1R w KQkq - 4 3",
+    "legal_moves": [
+      "Nxh7",
+      "Nxf7",
+      "Ne6",
+      "Ne4",
+      "Nh3",
+      "Nf3",
+      "Rg1",
+      "Nc3",
+      "Na3",
+      "h3",
+      "g3",
+      "f3",
+      "e3",
+      "d3",
+      "c3",
+      "b3",
+      "a3",
+      "h4",
+      "g4",
+      "f4",
+      "e4",
+      "d4",
+      "c4",
+      "b4",
+      "a4"
+    ],
+    "must_avoid_moves": [],
+    "rejected_moves": [],
+    "move_number": 3,
+    "move_history": [
+      "Nf3",
+      "Nh6",
+      "Ng5",
+      "Nc6"
+    ],
+    "turn": "White",
+    "is_check": false
+  },
+  "fen": "r1bqkb1r/pppppppp/2n4n/6N1/8/8/PPPPPPPP/RNBQKB1R w KQkq - 4 3",
+  "info": {
+    "requested_move": "Black has a number of strong options here. The knight on g5 is somewhat exposed, and Black can challenge it or develop pieces. Among the options, Nc6 is a solid move that develops the knight and puts pressure on the e5 square. It also prepares to support the center and possibly exchange the knight if White advances.\n\nMOVE: Nc6",
+    "legal_move": "True",
+    "stockfish_cp_delta": "55.0"
+  }
+}

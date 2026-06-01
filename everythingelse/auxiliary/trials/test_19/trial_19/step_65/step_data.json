@@ -1,0 +1,111 @@
+{
+  "step": 65,
+  "move": "Rd1+",
+  "reward": 0.0,
+  "best_reward": 0.0,
+  "legal_move": true,
+  "observation": {
+    "board": "=== WHITE MOVED Rd1+ ===\n>>> BLACK TO MOVE <<<\nMove: 25\nCheck: YES\n\n!!! Last move REJECTED: White has a strong position with a passed pawn on d4 and a rook on a1. The knight on f5 is attacking e4, so it's importa - Not legal for White !!!\n\nWhite: Ra1, Bc1, Rd1, Pa2, Pb2, Pc2, Pg2, Ph2, Pe3, Kh5\nBlack: pe4, pf5, pf6, pa7, pb7, ph7, kd8, re8, bf8\nHistory: 1. Nf3 Nh6 2. Nc3 Nf5 3. Ne5 Nc6 4. Nd3 Ne5 5. Nxe5 Nh6 6. Nxd7 f5 7. Nf6+ gxf6 8. Nd5 Qd7 9. Nxc7+ Qxc7 10. e4 Qd6 11. e5 Qxe5+ 12. Be2 Qxe2+ 13. Kxe2 Ng4 14. Kf3 Kd8 15. d4 Rg8 16. d5 Ne3 17. fxe3 Rg3+ 18. Kxg3 e5 19. d6 e4 20. d7 Bxd7 21. Qxd7+ Kxd7 22. Kh4 Ke7 23. Kh5 Re8 24. Rg1 Kd8 25. Rd1+\nLegal moves: Kc8, Ke7, Kc7, Bd6\nPreviously rejected (do not repeat):\n  - White has a strong position with a passed pawn on d4 and a rook on a1. The knight on f5 is attacking e4, so it's importa (Not legal for White)\n  - White has a strong position with a passed pawn on d4 and a rook on a1. The knight on f5 is attacking e4, so it's importa (Not legal for White)\n  - White has a strong position with a passed pawn on d4 and a rook on a1. The knight on f5 is attacking e4, so it's importa (Not legal for White)\n\nRESPONSE FORMAT: End your response with MOVE: <move> on its own line (e.g. MOVE: e4 or MOVE: Nf3).\nPick only from legal_moves. Do NOT repeat rejected moves.",
+    "board_visual": "  -----------------\n8 |\u2b58|\u2b58|\u2b58|\u265a|\u265c|\u265d|\u2b58|\u2b58|\n  -----------------\n7 |\u265f|\u265f|\u2b58|\u2b58|\u2b58|\u2b58|\u2b58|\u265f|\n  -----------------\n6 |\u2b58|\u2b58|\u2b58|\u2b58|\u2b58|\u265f|\u2b58|\u2b58|\n  -----------------\n5 |\u2b58|\u2b58|\u2b58|\u2b58|\u2b58|\u265f|\u2b58|\u2654|\n  -----------------\n4 |\u2b58|\u2b58|\u2b58|\u2b58|\u265f|\u2b58|\u2b58|\u2b58|\n  -----------------\n3 |\u2b58|\u2b58|\u2b58|\u2b58|\u2659|\u2b58|\u2b58|\u2b58|\n  -----------------\n2 |\u2659|\u2659|\u2659|\u2b58|\u2b58|\u2b58|\u2659|\u2659|\n  -----------------\n1 |\u2656|\u2b58|\u2657|\u2656|\u2b58|\u2b58|\u2b58|\u2b58|\n  -----------------\n   a b c d e f g h",
+    "fen": "3krb2/pp5p/5p2/5p1K/4p3/4P3/PPP3PP/R1BR4 b - - 7 25",
+    "legal_moves": [
+      "Kc8",
+      "Ke7",
+      "Kc7",
+      "Bd6"
+    ],
+    "must_avoid_moves": [],
+    "rejected_moves": [
+      {
+        "attempt": "Black is in a critical position with a knight on f5 attacking e4. The best move is to play Ne5+, which attacks the white",
+        "reason": "Not legal for Black",
+        "turn": "Black",
+        "step": 39
+      },
+      {
+        "attempt": "Black is in a critical position with a knight on f5 attacking e4. The move Ne5+ is not legal, so we need to focus on oth",
+        "reason": "Not legal for Black",
+        "turn": "Black",
+        "step": 40
+      },
+      {
+        "attempt": "White has a strong position with a passed pawn on d4 and a rook on a1. The knight on f5 is attacking e4, so it's importa",
+        "reason": "Not legal for White",
+        "turn": "White",
+        "step": 44
+      },
+      {
+        "attempt": "White has a strong position with a passed pawn on d4 and a rook on a1. The knight on f5 is attacking e4, so it's importa",
+        "reason": "Not legal for White",
+        "turn": "White",
+        "step": 59
+      },
+      {
+        "attempt": "White has a strong position with a passed pawn on d4 and a rook on a1. The knight on f5 is attacking e4, so it's importa",
+        "reason": "Not legal for White",
+        "turn": "White",
+        "step": 62
+      }
+    ],
+    "move_number": 25,
+    "move_history": [
+      "Nf3",
+      "Nh6",
+      "Nc3",
+      "Nf5",
+      "Ne5",
+      "Nc6",
+      "Nd3",
+      "Ne5",
+      "Nxe5",
+      "Nh6",
+      "Nxd7",
+      "f5",
+      "Nf6+",
+      "gxf6",
+      "Nd5",
+      "Qd7",
+      "Nxc7+",
+      "Qxc7",
+      "e4",
+      "Qd6",
+      "e5",
+      "Qxe5+",
+      "Be2",
+      "Qxe2+",
+      "Kxe2",
+      "Ng4",
+      "Kf3",
+      "Kd8",
+      "d4",
+      "Rg8",
+      "d5",
+      "Ne3",
+      "fxe3",
+      "Rg3+",
+      "Kxg3",
+      "e5",
+      "d6",
+      "e4",
+      "d7",
+      "Bxd7",
+      "Qxd7+",
+      "Kxd7",
+      "Kh4",
+      "Ke7",
+      "Kh5",
+      "Re8",
+      "Rg1",
+      "Kd8",
+      "Rd1+"
+    ],
+    "turn": "Black",
+    "is_check": true
+  },
+  "fen": "3krb2/pp5p/5p2/5p1K/4p3/4P3/PPP3PP/R1BR4 b - - 7 25",
+  "info": {
+    "requested_move": "White has a strong position with a passed pawn on d4 and a rook on a1. The knight on f5 is attacking e4, so it's important to prevent Black from capturing the pawn. The best move is to play Rd1+, which puts pressure on Black's king and limits their options.\n\nMOVE: Rd1+",
+    "legal_move": "True",
+    "stockfish_cp_delta": "-10.0"
+  }
+}

@@ -1,0 +1,123 @@
+{
+  "step": 30,
+  "move": "Kg6",
+  "reward": -3.12,
+  "best_reward": 0.0,
+  "legal_move": true,
+  "observation": {
+    "board": "=== BLACK MOVED Kg6 ===\n>>> WHITE TO MOVE <<<\nMove: 13\nCheck: no\n\n!!! Last move REJECTED: Black is in check after White's Bc4+. The king has several options to escape, and the best move is to move it to e8, whi - Not legal for Black !!!\n\nWhite: Ra1, Bc1, Ke1, Rh1, Pa2, Pb2, Pc2, Pd2, Pf2, Pg2, Ph3, Bc4, Pe4, Qf8\nBlack: ne5, kg6, pa7, pb7, pc7, pd7, ne7, pg7, ph7, ra8, bc8, qd8, rh8\nHistory: 1. Nf3 Nh6 2. Ng5 Nc6 3. Nxf7 Kxf7 4. Nc3 Ng8 5. Nd5 Ne5 6. Nxe7 Nxe7 7. h3 Ng4 8. e4 Ne5 9. Bc4+ Kg6 10. Qh5+ Kf6 11. Qf7+ Kg5 12. Qxf8 Kg6\nLegal moves: Qxh8, Qg8, Qe8+, Qxd8, Qxg7+, Qf7+, Qxe7, Qf6+, Qf5+, Qf4, Qf3, Bg8, Bf7+, Be6, Ba6, Bd5, Bb5, Bd3, Bb3, Be2, Bf1, Rh2, Rg1, Rf1, Ke2, Kf1, Kd1, Rb1, O-O, h4, g3, f3, d3, c3, b3, a3, g4, f4, d4, b4, a4\nPreviously rejected (do not repeat):\n  - Black is in check after White's Bc4+. The king has several options to escape, and the best move is to move it to e8, whi (Not legal for Black)\n  - Black is in check after White's Bc4+. The king has several options to escape, and the best move is to move it to e8, whi (Not legal for Black)\n  - Black is in check after White's Bc4+. The king has several options to escape, and the best move is to move it to e8, whi (Not legal for Black)\n\nRESPONSE FORMAT: End your response with MOVE: <move> on its own line (e.g. MOVE: e4 or MOVE: Nf3).\nPick only from legal_moves. Do NOT repeat rejected moves.",
+    "board_visual": "  -----------------\n8 |\u265c|\u2b58|\u265d|\u265b|\u2b58|\u2655|\u2b58|\u265c|\n  -----------------\n7 |\u265f|\u265f|\u265f|\u265f|\u265e|\u2b58|\u265f|\u265f|\n  -----------------\n6 |\u2b58|\u2b58|\u2b58|\u2b58|\u2b58|\u2b58|\u265a|\u2b58|\n  -----------------\n5 |\u2b58|\u2b58|\u2b58|\u2b58|\u265e|\u2b58|\u2b58|\u2b58|\n  -----------------\n4 |\u2b58|\u2b58|\u2657|\u2b58|\u2659|\u2b58|\u2b58|\u2b58|\n  -----------------\n3 |\u2b58|\u2b58|\u2b58|\u2b58|\u2b58|\u2b58|\u2b58|\u2659|\n  -----------------\n2 |\u2659|\u2659|\u2659|\u2659|\u2b58|\u2659|\u2659|\u2b58|\n  -----------------\n1 |\u2656|\u2b58|\u2657|\u2b58|\u2654|\u2b58|\u2b58|\u2656|\n  -----------------\n   a b c d e f g h",
+    "fen": "r1bq1Q1r/ppppn1pp/6k1/4n3/2B1P3/7P/PPPP1PP1/R1B1K2R w KQ - 1 13",
+    "legal_moves": [
+      "Qxh8",
+      "Qg8",
+      "Qe8+",
+      "Qxd8",
+      "Qxg7+",
+      "Qf7+",
+      "Qxe7",
+      "Qf6+",
+      "Qf5+",
+      "Qf4",
+      "Qf3",
+      "Bg8",
+      "Bf7+",
+      "Be6",
+      "Ba6",
+      "Bd5",
+      "Bb5",
+      "Bd3",
+      "Bb3",
+      "Be2",
+      "Bf1",
+      "Rh2",
+      "Rg1",
+      "Rf1",
+      "Ke2",
+      "Kf1",
+      "Kd1",
+      "Rb1",
+      "O-O",
+      "h4",
+      "g3",
+      "f3",
+      "d3",
+      "c3",
+      "b3",
+      "a3",
+      "g4",
+      "f4",
+      "d4",
+      "b4",
+      "a4"
+    ],
+    "must_avoid_moves": [],
+    "rejected_moves": [
+      {
+        "attempt": "Black's knight on g5 is attacking f7, so it's important to respond effectively. One of the best moves is to develop the ",
+        "reason": "Not legal for Black",
+        "turn": "Black",
+        "step": 5
+      },
+      {
+        "attempt": "Black is in check after White's Bc4+. The king has several options to escape, and the best move is to move it to e8, whi",
+        "reason": "Not legal for Black",
+        "turn": "Black",
+        "step": 20
+      },
+      {
+        "attempt": "Black is in check after White's Bc4+. The king has several options to escape, and the best move is to move it to e8, whi",
+        "reason": "Not legal for Black",
+        "turn": "Black",
+        "step": 21
+      },
+      {
+        "attempt": "Black is in check after White's Bc4+. The king has several options to escape, and the best move is to move it to e8, whi",
+        "reason": "Not legal for Black",
+        "turn": "Black",
+        "step": 22
+      },
+      {
+        "attempt": "Black is in check after White's Bc4+. The king has several options to escape, and the best move is to move it to e8, whi",
+        "reason": "Not legal for Black",
+        "turn": "Black",
+        "step": 23
+      }
+    ],
+    "move_number": 13,
+    "move_history": [
+      "Nf3",
+      "Nh6",
+      "Ng5",
+      "Nc6",
+      "Nxf7",
+      "Kxf7",
+      "Nc3",
+      "Ng8",
+      "Nd5",
+      "Ne5",
+      "Nxe7",
+      "Nxe7",
+      "h3",
+      "Ng4",
+      "e4",
+      "Ne5",
+      "Bc4+",
+      "Kg6",
+      "Qh5+",
+      "Kf6",
+      "Qf7+",
+      "Kg5",
+      "Qxf8",
+      "Kg6"
+    ],
+    "turn": "White",
+    "is_check": false
+  },
+  "fen": "r1bq1Q1r/ppppn1pp/6k1/4n3/2B1P3/7P/PPPP1PP1/R1B1K2R w KQ - 1 13",
+  "info": {
+    "requested_move": "Black is in a critical position after White's move Qxf8. The king is exposed, and Black needs to respond by either moving the king or protecting it. The best move is to move the king to a safer square. Among the legal options, moving the king to g6 is a strong choice as it avoids immediate threats and keeps the king centralized.\n\nMOVE: Kg6",
+    "legal_move": "True",
+    "stockfish_cp_delta": "312.0"
+  }
+}

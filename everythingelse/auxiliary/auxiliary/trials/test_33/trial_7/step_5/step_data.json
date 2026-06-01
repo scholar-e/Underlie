@@ -1,0 +1,92 @@
+{
+  "step": 5,
+  "move": "Bc4",
+  "reward": 0.0,
+  "best_reward": 0.0,
+  "legal_move": true,
+  "observation": {
+    "board": "=== WHITE MOVED Bc4 ===\n>>> BLACK TO MOVE <<<\nMove: 3\nCheck: no\n\nWhite: Ra1, Nb1, Bc1, Ke1, Ng1, Rh1, Pa2, Pb2, Pc2, Pd2, Pf2, Pg2, Ph2, Bc4, Pe4, Qh5\nBlack: pe5, nc6, pa7, pb7, pc7, pd7, pf7, pg7, ph7, ra8, bc8, qd8, ke8, bf8, ng8, rh8\nHistory: 1. e4 e5 2. Qh5 Nc6 3. Bc4\nLegal moves: Nge7, Nh6, Nf6, Be7, Bd6, Bc5, Bb4, Ba3, Ke7, Qe7, Qf6, Qg5, Qh4, Rb8, Nb8, Nce7, Na5, Nd4, Nb4, h6, g6, d6, b6, a6, g5, d5, b5, a5\nRecent moves:\n  1: e4 (legal)\n  2: e5 (legal)\n  3: Qh5 (legal)\n  4: Nc6 (legal)\n  5: Bc4 (legal)",
+    "board_visual": "  -----------------\n8 |\u265c|\u2b58|\u265d|\u265b|\u265a|\u265d|\u265e|\u265c|\n  -----------------\n7 |\u265f|\u265f|\u265f|\u265f|\u2b58|\u265f|\u265f|\u265f|\n  -----------------\n6 |\u2b58|\u2b58|\u265e|\u2b58|\u2b58|\u2b58|\u2b58|\u2b58|\n  -----------------\n5 |\u2b58|\u2b58|\u2b58|\u2b58|\u265f|\u2b58|\u2b58|\u2655|\n  -----------------\n4 |\u2b58|\u2b58|\u2657|\u2b58|\u2659|\u2b58|\u2b58|\u2b58|\n  -----------------\n3 |\u2b58|\u2b58|\u2b58|\u2b58|\u2b58|\u2b58|\u2b58|\u2b58|\n  -----------------\n2 |\u2659|\u2659|\u2659|\u2659|\u2b58|\u2659|\u2659|\u2659|\n  -----------------\n1 |\u2656|\u2658|\u2657|\u2b58|\u2654|\u2b58|\u2658|\u2656|\n  -----------------\n   a b c d e f g h",
+    "fen": "r1bqkbnr/pppp1ppp/2n5/4p2Q/2B1P3/8/PPPP1PPP/RNB1K1NR b KQkq - 3 3",
+    "legal_moves": [
+      "Nge7",
+      "Nh6",
+      "Nf6",
+      "Be7",
+      "Bd6",
+      "Bc5",
+      "Bb4",
+      "Ba3",
+      "Ke7",
+      "Qe7",
+      "Qf6",
+      "Qg5",
+      "Qh4",
+      "Rb8",
+      "Nb8",
+      "Nce7",
+      "Na5",
+      "Nd4",
+      "Nb4",
+      "h6",
+      "g6",
+      "d6",
+      "b6",
+      "a6",
+      "g5",
+      "d5",
+      "b5",
+      "a5"
+    ],
+    "must_avoid_moves": [],
+    "rejected_moves": [],
+    "action_history": [
+      {
+        "step": 1,
+        "action": "e4",
+        "legal": true,
+        "turn": "White"
+      },
+      {
+        "step": 2,
+        "action": "e5",
+        "legal": true,
+        "turn": "Black"
+      },
+      {
+        "step": 3,
+        "action": "Qh5",
+        "legal": true,
+        "turn": "White"
+      },
+      {
+        "step": 4,
+        "action": "Nc6",
+        "legal": true,
+        "turn": "Black"
+      },
+      {
+        "step": 5,
+        "action": "Bc4",
+        "legal": true,
+        "turn": "White"
+      }
+    ],
+    "move_number": 3,
+    "move_history": [
+      "e4",
+      "e5",
+      "Qh5",
+      "Nc6",
+      "Bc4"
+    ],
+    "turn": "Black",
+    "is_check": false
+  },
+  "fen": "r1bqkbnr/pppp1ppp/2n5/4p2Q/2B1P3/8/PPPP1PPP/RNB1K1NR b KQkq - 3 3",
+  "info": {
+    "requested_move": "MOVE: Bc4",
+    "legal_move": "True",
+    "stockfish_cp_delta": "-10.0"
+  }
+}

@@ -1,0 +1,113 @@
+{
+  "step": 64,
+  "move": "Bf5+",
+  "reward": 0.1,
+  "best_reward": 0.1,
+  "legal_move": true,
+  "observation": {
+    "board": "=== BLACK MOVED Bf5+ ===\n>>> WHITE TO MOVE <<<\nMove: 27\nCheck: YES\n\n!!! Last move REJECTED: White has a strong position with a knight on g5 and a bishop on c4, exerting pressure on Black's king. The best move is  - Not legal for White !!!\n\nWhite: Ra1, Bc1, Rg1, Pa2, Pb2, Pc2, Pd2, Pf2, Pg2, Ph2, Kd3\nBlack: bf5, pa7, pb7, pc7, pe7, kf7, bg7, ra8, nf8, rh8\nHistory: 1. Nf3 Nh6 2. Nc3 Nc6 3. Ng5 Nf5 4. Ne6 Nd6 5. Ne4 Ne5 6. Nf6+ gxf6 7. Ng7+ Bxg7 8. e4 Nf5 9. Qh5 Kf8 10. Qxf7+ Nxf7 11. e5 Nxe5 12. Bc4 Nd6 13. Rg1 Nf5 14. Bd5 Nd6 15. Bf7 f5 16. Bg8 Ndf7 17. Rh1 Nd6 18. Bxh7 Ndf7 19. Bg6 Nd6 20. Bxf5 Ndf7 21. Bxd7 Kg8 22. Be6 Ng6 23. Bxf7+ Kxf7 24. Rg1 Nf8 25. Ke2 Qd3+ 26. Kxd3 Bf5+\nLegal moves: Kc4, Ke3, Ke2\nPreviously rejected (do not repeat):\n  - Black is under pressure due to White's strong knight on g5 and bishop on c4. A good move is to develop the knight to a m (Not legal for Black)\n  - White has a strong position with a knight on g5 and a bishop on c4, exerting pressure on Black's king. The best move is  (Not legal for White)\n  - White has a strong position with a knight on g5 and a bishop on c4, exerting pressure on Black's king. The best move is  (Not legal for White)\n\nRESPONSE FORMAT: End your response with MOVE: <move> on its own line (e.g. MOVE: e4 or MOVE: Nf3).\nPick only from legal_moves. Do NOT repeat rejected moves.",
+    "board_visual": "  -----------------\n8 |\u265c|\u2b58|\u2b58|\u2b58|\u2b58|\u265e|\u2b58|\u265c|\n  -----------------\n7 |\u265f|\u265f|\u265f|\u2b58|\u265f|\u265a|\u265d|\u2b58|\n  -----------------\n6 |\u2b58|\u2b58|\u2b58|\u2b58|\u2b58|\u2b58|\u2b58|\u2b58|\n  -----------------\n5 |\u2b58|\u2b58|\u2b58|\u2b58|\u2b58|\u265d|\u2b58|\u2b58|\n  -----------------\n4 |\u2b58|\u2b58|\u2b58|\u2b58|\u2b58|\u2b58|\u2b58|\u2b58|\n  -----------------\n3 |\u2b58|\u2b58|\u2b58|\u2654|\u2b58|\u2b58|\u2b58|\u2b58|\n  -----------------\n2 |\u2659|\u2659|\u2659|\u2659|\u2b58|\u2659|\u2659|\u2659|\n  -----------------\n1 |\u2656|\u2b58|\u2657|\u2b58|\u2b58|\u2b58|\u2656|\u2b58|\n  -----------------\n   a b c d e f g h",
+    "fen": "r4n1r/ppp1pkb1/8/5b2/8/3K4/PPPP1PPP/R1B3R1 w - - 1 27",
+    "legal_moves": [
+      "Kc4",
+      "Ke3",
+      "Ke2"
+    ],
+    "must_avoid_moves": [],
+    "rejected_moves": [
+      {
+        "attempt": "Black is under pressure due to White's strong knight on g5 and bishop on c4. A good move is to develop the knight to a m",
+        "reason": "Not legal for Black",
+        "turn": "Black",
+        "step": 37
+      },
+      {
+        "attempt": "Black is under pressure due to White's strong knight on g5 and bishop on c4. A good move is to develop the knight to a m",
+        "reason": "Not legal for Black",
+        "turn": "Black",
+        "step": 52
+      },
+      {
+        "attempt": "Black is under pressure due to White's strong knight on g5 and bishop on c4. A good move is to develop the knight to a m",
+        "reason": "Not legal for Black",
+        "turn": "Black",
+        "step": 53
+      },
+      {
+        "attempt": "White has a strong position with a knight on g5 and a bishop on c4, exerting pressure on Black's king. The best move is ",
+        "reason": "Not legal for White",
+        "turn": "White",
+        "step": 57
+      },
+      {
+        "attempt": "White has a strong position with a knight on g5 and a bishop on c4, exerting pressure on Black's king. The best move is ",
+        "reason": "Not legal for White",
+        "turn": "White",
+        "step": 58
+      }
+    ],
+    "move_number": 27,
+    "move_history": [
+      "Nf3",
+      "Nh6",
+      "Nc3",
+      "Nc6",
+      "Ng5",
+      "Nf5",
+      "Ne6",
+      "Nd6",
+      "Ne4",
+      "Ne5",
+      "Nf6+",
+      "gxf6",
+      "Ng7+",
+      "Bxg7",
+      "e4",
+      "Nf5",
+      "Qh5",
+      "Kf8",
+      "Qxf7+",
+      "Nxf7",
+      "e5",
+      "Nxe5",
+      "Bc4",
+      "Nd6",
+      "Rg1",
+      "Nf5",
+      "Bd5",
+      "Nd6",
+      "Bf7",
+      "f5",
+      "Bg8",
+      "Ndf7",
+      "Rh1",
+      "Nd6",
+      "Bxh7",
+      "Ndf7",
+      "Bg6",
+      "Nd6",
+      "Bxf5",
+      "Ndf7",
+      "Bxd7",
+      "Kg8",
+      "Be6",
+      "Ng6",
+      "Bxf7+",
+      "Kxf7",
+      "Rg1",
+      "Nf8",
+      "Ke2",
+      "Qd3+",
+      "Kxd3",
+      "Bf5+"
+    ],
+    "turn": "White",
+    "is_check": true
+  },
+  "fen": "r4n1r/ppp1pkb1/8/5b2/8/3K4/PPPP1PPP/R1B3R1 w - - 1 27",
+  "info": {
+    "requested_move": "Black is under pressure, but there are several strong options to counter White's threats. The knight on g5 is a key attacker, so developing the bishop to a strong square or activating the rook could be good choices. Among the legal moves, **Bf5+** is a strong option that attacks the knight and forces White's king to move, potentially weakening White's position.\n\nMOVE: Bf5+",
+    "legal_move": "True",
+    "stockfish_cp_delta": "-56.0"
+  }
+}

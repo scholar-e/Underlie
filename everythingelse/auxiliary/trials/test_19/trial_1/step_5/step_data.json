@@ -1,0 +1,54 @@
+{
+  "step": 5,
+  "move": "Nxf7",
+  "reward": -4.03,
+  "best_reward": 0.0,
+  "legal_move": true,
+  "observation": {
+    "board": "=== WHITE MOVED Nxf7 ===\n>>> BLACK TO MOVE <<<\nMove: 3\nCheck: no\n\nWhite: Ra1, Nb1, Bc1, Qd1, Ke1, Bf1, Rh1, Pa2, Pb2, Pc2, Pd2, Pe2, Pf2, Pg2, Ph2, Nf7\nBlack: nc6, nh6, pa7, pb7, pc7, pd7, pe7, pg7, ph7, ra8, bc8, qd8, ke8, bf8, rh8\nHistory: 1. Nf3 Nh6 2. Ng5 Nc6 3. Nxf7\nLegal moves: Rg8, Kxf7, Rb8, Ng8, Nxf7, Nf5, Ng4, Nb8, Ne5, Na5, Nd4, Nb4, g6, e6, d6, b6, a6, g5, e5, d5, b5, a5\n\nRESPONSE FORMAT: End your response with MOVE: <move> on its own line (e.g. MOVE: e4 or MOVE: Nf3).\nPick only from legal_moves. Do NOT repeat rejected moves.",
+    "board_visual": "  -----------------\n8 |\u265c|\u2b58|\u265d|\u265b|\u265a|\u265d|\u2b58|\u265c|\n  -----------------\n7 |\u265f|\u265f|\u265f|\u265f|\u265f|\u2658|\u265f|\u265f|\n  -----------------\n6 |\u2b58|\u2b58|\u265e|\u2b58|\u2b58|\u2b58|\u2b58|\u265e|\n  -----------------\n5 |\u2b58|\u2b58|\u2b58|\u2b58|\u2b58|\u2b58|\u2b58|\u2b58|\n  -----------------\n4 |\u2b58|\u2b58|\u2b58|\u2b58|\u2b58|\u2b58|\u2b58|\u2b58|\n  -----------------\n3 |\u2b58|\u2b58|\u2b58|\u2b58|\u2b58|\u2b58|\u2b58|\u2b58|\n  -----------------\n2 |\u2659|\u2659|\u2659|\u2659|\u2659|\u2659|\u2659|\u2659|\n  -----------------\n1 |\u2656|\u2658|\u2657|\u2655|\u2654|\u2657|\u2b58|\u2656|\n  -----------------\n   a b c d e f g h",
+    "fen": "r1bqkb1r/pppppNpp/2n4n/8/8/8/PPPPPPPP/RNBQKB1R b KQkq - 0 3",
+    "legal_moves": [
+      "Rg8",
+      "Kxf7",
+      "Rb8",
+      "Ng8",
+      "Nxf7",
+      "Nf5",
+      "Ng4",
+      "Nb8",
+      "Ne5",
+      "Na5",
+      "Nd4",
+      "Nb4",
+      "g6",
+      "e6",
+      "d6",
+      "b6",
+      "a6",
+      "g5",
+      "e5",
+      "d5",
+      "b5",
+      "a5"
+    ],
+    "must_avoid_moves": [],
+    "rejected_moves": [],
+    "move_number": 3,
+    "move_history": [
+      "Nf3",
+      "Nh6",
+      "Ng5",
+      "Nc6",
+      "Nxf7"
+    ],
+    "turn": "Black",
+    "is_check": false
+  },
+  "fen": "r1bqkb1r/pppppNpp/2n4n/8/8/8/PPPPPPPP/RNBQKB1R b KQkq - 0 3",
+  "info": {
+    "requested_move": "The position is a critical moment in the opening. White has developed the knight to g5, attacking the f7 square, which is a weak point for Black. The best move is to continue the attack by capturing on f7, which opens up the diagonal for the queen and creates a strong initiative. This move also forces Black into a defensive position.\n\nMOVE: Nxf7",
+    "legal_move": "True",
+    "stockfish_cp_delta": "-403.0"
+  }
+}

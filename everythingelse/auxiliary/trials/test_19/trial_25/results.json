@@ -1,0 +1,6 @@
+{
+  "best_reward": 0.0,
+  "total_steps": 47,
+  "game_result": "Terminated after 5 consecutive illegal/failed moves. Last input: \"The position is complex, but White has a strong initiative. The knight on e7 is under pressure, and the king is in the center. A strong move would be to push the d-pawn forward to control the center and limit Black's options. This move also supports the e4 pawn and prepares for further central play.\\n\\nMOVE: d6\"",
+  "num_moves": 47
+}

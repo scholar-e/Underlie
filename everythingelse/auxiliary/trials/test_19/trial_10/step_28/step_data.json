@@ -1,0 +1,87 @@
+{
+  "step": 28,
+  "move": "Bxf7+",
+  "reward": -2.84,
+  "best_reward": 0.0,
+  "legal_move": true,
+  "observation": {
+    "board": "=== WHITE MOVED Bxf7+ ===\n>>> BLACK TO MOVE <<<\nMove: 12\nCheck: YES\n\n!!! Last move REJECTED: The position is a critical point in the opening. White has several strong options, but the most natural move is to devel - Not legal for White !!!\n\nWhite: Ra1, Bc1, Qd1, Ke1, Rg1, Pa2, Pb2, Pc2, Pd2, Pf2, Pg2, Ph2, Pe4, Bf7\nBlack: pe5, nc6, nh6, pa7, pb7, pc7, qe7, pg7, ph7, ra8, bc8, ke8, rh8\nHistory: 1. Nf3 Nf6 2. Nc3 Nc6 3. Ng5 e6 4. Nd5 Be7 5. Nxe6 dxe6 6. Nxe7 Qxe7 7. Rg1 Ng8 8. e4 Nf6 9. Bc4 Ng8 10. Bb5 Nh6 11. Bc4 e5 12. Bxf7+\nLegal moves: Kf8, Kd8, Kxf7, Kd7, Qxf7, Nxf7\nPreviously rejected (do not repeat):\n  - The position is a standard opening after 1. Nf3 Nf6 2. Nc3 Nc6. White has several strong options, but the most natural a (Not legal for White)\n  - The position is a critical point in the opening, and White has several strong options. The most natural move is to devel (Not legal for White)\n  - The position is a critical point in the opening. White has several strong options, but the most natural move is to devel (Not legal for White)\n\nRESPONSE FORMAT: End your response with MOVE: <move> on its own line (e.g. MOVE: e4 or MOVE: Nf3).\nPick only from legal_moves. Do NOT repeat rejected moves.",
+    "board_visual": "  -----------------\n8 |\u265c|\u2b58|\u265d|\u2b58|\u265a|\u2b58|\u2b58|\u265c|\n  -----------------\n7 |\u265f|\u265f|\u265f|\u2b58|\u265b|\u2657|\u265f|\u265f|\n  -----------------\n6 |\u2b58|\u2b58|\u265e|\u2b58|\u2b58|\u2b58|\u2b58|\u265e|\n  -----------------\n5 |\u2b58|\u2b58|\u2b58|\u2b58|\u265f|\u2b58|\u2b58|\u2b58|\n  -----------------\n4 |\u2b58|\u2b58|\u2b58|\u2b58|\u2659|\u2b58|\u2b58|\u2b58|\n  -----------------\n3 |\u2b58|\u2b58|\u2b58|\u2b58|\u2b58|\u2b58|\u2b58|\u2b58|\n  -----------------\n2 |\u2659|\u2659|\u2659|\u2659|\u2b58|\u2659|\u2659|\u2659|\n  -----------------\n1 |\u2656|\u2b58|\u2657|\u2655|\u2654|\u2b58|\u2656|\u2b58|\n  -----------------\n   a b c d e f g h",
+    "fen": "r1b1k2r/ppp1qBpp/2n4n/4p3/4P3/8/PPPP1PPP/R1BQK1R1 b Qkq - 0 12",
+    "legal_moves": [
+      "Kf8",
+      "Kd8",
+      "Kxf7",
+      "Kd7",
+      "Qxf7",
+      "Nxf7"
+    ],
+    "must_avoid_moves": [],
+    "rejected_moves": [
+      {
+        "attempt": "The position is the opening after 1. Nf3 Nf6. White has several options, but the most natural and strong move is to deve",
+        "reason": "Not legal for White",
+        "turn": "White",
+        "step": 3
+      },
+      {
+        "attempt": "The position is a standard opening after 1. Nf3 Nf6 2. Nc3 Nc6. White has several strong options, but the most natural a",
+        "reason": "Not legal for White",
+        "turn": "White",
+        "step": 6
+      },
+      {
+        "attempt": "The position is a standard opening after 1. Nf3 Nf6 2. Nc3 Nc6. White has several strong options, but the most natural a",
+        "reason": "Not legal for White",
+        "turn": "White",
+        "step": 17
+      },
+      {
+        "attempt": "The position is a critical point in the opening, and White has several strong options. The most natural move is to devel",
+        "reason": "Not legal for White",
+        "turn": "White",
+        "step": 18
+      },
+      {
+        "attempt": "The position is a critical point in the opening. White has several strong options, but the most natural move is to devel",
+        "reason": "Not legal for White",
+        "turn": "White",
+        "step": 19
+      }
+    ],
+    "move_number": 12,
+    "move_history": [
+      "Nf3",
+      "Nf6",
+      "Nc3",
+      "Nc6",
+      "Ng5",
+      "e6",
+      "Nd5",
+      "Be7",
+      "Nxe6",
+      "dxe6",
+      "Nxe7",
+      "Qxe7",
+      "Rg1",
+      "Ng8",
+      "e4",
+      "Nf6",
+      "Bc4",
+      "Ng8",
+      "Bb5",
+      "Nh6",
+      "Bc4",
+      "e5",
+      "Bxf7+"
+    ],
+    "turn": "Black",
+    "is_check": true
+  },
+  "fen": "r1b1k2r/ppp1qBpp/2n4n/4p3/4P3/8/PPPP1PPP/R1BQK1R1 b Qkq - 0 12",
+  "info": {
+    "requested_move": "The position is a critical point in the opening, and White has several strong options. The most natural move is to develop the light-squared bishop to a strong square. Bxf7+ is a strong move that attacks the black king and creates immediate threats.\n\nMOVE: Bxf7+",
+    "legal_move": "True",
+    "stockfish_cp_delta": "-284.0"
+  }
+}

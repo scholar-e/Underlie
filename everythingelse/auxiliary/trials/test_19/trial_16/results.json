@@ -1,0 +1,6 @@
+{
+  "best_reward": 0.0,
+  "total_steps": 20,
+  "game_result": "Terminated after 5 consecutive illegal/failed moves. Last input: 'The white king is exposed, and Black has a queen and rook that can exert pressure. The best move is to develop the light-squared bishop to a more active square, attacking the knight on c6 and supporting the center. This move improves piece activity and prepares for potential counterplay.\\n\\nMOVE: Bc4'",
+  "num_moves": 20
+}

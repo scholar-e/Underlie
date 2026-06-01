@@ -1,0 +1,6 @@
+{
+  "best_reward": 0.1,
+  "total_steps": 87,
+  "game_result": "Terminated after 5 consecutive illegal/failed moves. Last input: \"Black is in a critical position where the White king is in check from the Black e5 pawn. However, since it's Black's turn, the focus is on responding to the check and maintaining a strong position. The best move for Black is to capture the e5 pawn, which is attacking the White king. This move not only removes the threat but also gains material.\\n\\nMOVE: d5\"",
+  "num_moves": 87
+}
