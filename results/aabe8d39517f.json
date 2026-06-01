@@ -1,0 +1,29 @@
+{
+  "run_id": "aabe8d39517f",
+  "timestamp": "2026-06-01T11:37:50.607309+00:00",
+  "target": {
+    "title": "The Road Not Taken",
+    "author": "Robert Frost",
+    "text": "Two roads diverged in a yellow wood and sorry I could not travel both and be one traveler long I stood and looked down one as far as I could to where it bent in the undergrowth then took the other as just as fair and having perhaps the better claim because it was grassy and wanted wear though as for that the passing there had worn them really about the same."
+  },
+  "best_similarity": 0.5402120312054952,
+  "total_steps": 1,
+  "steps": [
+    {
+      "step": 1,
+      "poem": "The silent woods at midnight deep, where snow and shadow gently sleep. A quiet hush, a frozen stream, a moment held within a dream.",
+      "brain_similarity": 0.6781311631202698,
+      "length_ratio": 0.3333333333333333,
+      "reward": 0.5402120312054952,
+      "best_similarity": 0.5402120312054952,
+      "word_count": 24,
+      "metrics": {
+        "cosine_similarity": 0.6781311631202698,
+        "mse": 0.21625037491321564,
+        "mae": 0.290962278842926,
+        "correlation": 0.6413879981199665
+      },
+      "terminated": false
+    }
+  ]
+}

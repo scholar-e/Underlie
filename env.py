@@ -1,6 +1,6 @@
-"""Brain Activation Matching — agent composes a poem whose brain activation matches a target poem.
+"""Brain Activation Matching — agent composes a poem matching a target's brain activation.
 
-Calls back to your local GPU machine via BRAIN_API_URL for TRIBE v2 inference.
+Calls your GPU machine (BRAIN_API_URL) for TRIBE v2 inference.
 """
 
 from __future__ import annotations
@@ -8,21 +8,12 @@ from __future__ import annotations
 import json
 import os
 import re
-import uuid
 import urllib.error
 import urllib.request
-from datetime import datetime, timezone
-from typing import Any
 
 from bench_common.env_sdk.base import BaseEnv, StepResult
 
-AUX_DIR = os.path.normpath(
-    os.path.join(os.path.dirname(os.path.abspath(__file__)), "everythingelse/mesocosm/auxiliary")
-)
-RESULTS_DIR = os.path.join(AUX_DIR, "results")
-os.makedirs(RESULTS_DIR, exist_ok=True)
-
-DEFAULT_BRAIN_API = os.environ.get("BRAIN_API_URL", "https://headsman-zips-antacid.ngrok-free.dev")
+BRAIN_API = os.environ.get("BRAIN_API_URL", "https://headsman-zips-antacid.ngrok-free.dev")
 
 TARGET_POEMS = [
     {"title": "Stopping by Woods", "author": "Robert Frost",
@@ -52,167 +43,100 @@ TARGET_POEMS = [
 ]
 
 
-def _call_compare_sync(api_url: str, sentence_a: str, sentence_b: str, timeout: int = 300) -> dict:
-    body = json.dumps({"sentence_a": sentence_a, "sentence_b": sentence_b}).encode()
+def _compare(api_url: str, text_a: str, text_b: str, timeout: int = 120) -> dict:
+    body = json.dumps({"sentence_a": text_a, "sentence_b": text_b}).encode()
     req = urllib.request.Request(
         f"{api_url.rstrip('/')}/compare_sync",
-        data=body,
-        headers={"Content-Type": "application/json"},
+        data=body, headers={"Content-Type": "application/json"},
     )
     try:
-        resp = urllib.request.urlopen(req, timeout=timeout)
-        return json.loads(resp.read())
+        with urllib.request.urlopen(req, timeout=timeout) as resp:
+            return json.loads(resp.read())
     except urllib.error.HTTPError as e:
-        detail = e.read().decode()
-        raise RuntimeError(f"Brain API error ({e.code}): {detail[:300]}")
+        raise RuntimeError(f"Brain API error ({e.code}): {e.read().decode()[:200]}")
     except urllib.error.URLError as e:
-        raise RuntimeError(f"Cannot reach Brain API at {api_url}: {e.reason}")
+        raise RuntimeError(f"Cannot reach brain server at {api_url}: {e.reason}")
 
 
 class MyEnv(BaseEnv):
     MAX_STEPS = 20
 
     def __init__(self) -> None:
-        self._current_step: int = 0
-        self._target: dict | None = None
-        self._best_similarity: float = -1.0
-        self._brain_api_url: str = DEFAULT_BRAIN_API
-        self._run_id: str = ""
-        self._steps: list[dict] = []
+        self._step = 0
+        self._target = None
+        self._best = -1.0
+        self._api_url = BRAIN_API
 
-    def reset(self, seed: int | None = None, **params: Any) -> dict[str, Any]:
-        self._current_step = 0
-        self._best_similarity = -1.0
-        self._run_id = params.get("run_id") or uuid.uuid4().hex[:12]
-        self._steps = []
+    def reset(self, seed=None, **params):
+        self._step = 0
+        self._best = -1.0
 
-        api_url = params.get("brain_api_url") or self._brain_api_url
-        if not api_url:
-            raise RuntimeError(
-                "BRAIN_API_URL not set. Pass it as scenario_param or set the env var.\n"
-                "  On your GPU machine: python brain_server.py && ngrok http 8766"
-            )
-        self._brain_api_url = api_url
+        api = params.get("brain_api_url") or self._api_url
+        if not api:
+            raise RuntimeError("BRAIN_API_URL not set")
+        self._api_url = api
 
         import random as _random
-        rng = _random.Random(seed)
-        self._target = rng.choice(TARGET_POEMS)
+        self._target = _random.Random(seed).choice(TARGET_POEMS)
 
         return {
             "task": (
-                f"Compose a poem that produces a TRIBE v2 brain activation pattern "
-                f"as close as possible to this target poem:\n\n"
-                f"\"{self._target['text']}\"\n"
-                f"— {self._target['author']}\n\n"
-                "Your response should contain your poem on a line starting with POEM:.\n"
-                "You can write any length or style. The reward is the cosine similarity "
-                "of brain activation patterns between the target and your poem.\n"
-                "Higher similarity = better (max 1.0). Try to match the rhythm, "
-                "structure, and imagery to get closer brain activations."
+                f"Compose a poem whose brain activation pattern matches this target:\n\n"
+                f"\"{self._target['text']}\"\n— {self._target['author']}\n\n"
+                "Start your response with POEM: on its own line."
             ),
             "target_poem": self._target["text"],
             "target_author": self._target["author"],
             "target_title": self._target["title"],
-            "step": self._current_step,
+            "step": self._step,
             "max_steps": self.MAX_STEPS,
-            "best_similarity": self._best_similarity,
+            "best_similarity": self._best,
         }
 
-    def step(self, action: Any) -> StepResult:
+    def step(self, action):
         if self._target is None:
-            raise RuntimeError("Call reset() before step()")
+            raise RuntimeError("Call reset() first")
 
-        self._current_step += 1
-        step_num = self._current_step
+        self._step += 1
+        raw = str(action).strip()
 
-        raw_input = str(action).strip()
-
-        poem = raw_input
-        poem_match = re.search(r"(?:^|\n)\s*POEM:\s*(.+)", raw_input, re.IGNORECASE | re.DOTALL)
-        if poem_match:
-            poem = poem_match.group(1).strip()
+        poem = raw
+        m = re.search(r"(?:^|\n)\s*POEM:\s*(.+)", raw, re.IGNORECASE | re.DOTALL)
+        if m:
+            poem = m.group(1).strip()
 
         if not poem:
             return StepResult(
-                observation={
-                    "error": "Empty poem. Provide a non-empty poem.",
-                    "step": step_num, "max_steps": self.MAX_STEPS,
-                    "best_similarity": self._best_similarity,
-                },
+                observation={"error": "Empty poem", "step": self._step, "max_steps": self.MAX_STEPS, "best_similarity": self._best},
                 reward=-0.5, terminated=False, truncated=False,
                 info={"error": "Empty poem"},
             )
 
         try:
-            metrics = _call_compare_sync(self._brain_api_url, self._target["text"], poem)
-        except Exception as exc:
+            metrics = _compare(self._api_url, self._target["text"], poem)
+        except Exception as e:
             return StepResult(
-                observation={
-                    "error": f"Brain API call failed: {exc}",
-                    "step": step_num, "max_steps": self.MAX_STEPS,
-                    "best_similarity": self._best_similarity,
-                },
+                observation={"error": str(e), "step": self._step, "max_steps": self.MAX_STEPS, "best_similarity": self._best},
                 reward=-0.5, terminated=False, truncated=False,
-                info={"error": str(exc)},
+                info={"error": str(e)},
             )
 
-        reward = float(metrics.get("cosine_similarity", 0))
-        self._best_similarity = max(self._best_similarity, reward)
-        terminated = reward >= 0.95 or self._current_step >= self.MAX_STEPS
-
-        feedback = (
-            f"Brain similarity: {reward:.4f} (best: {self._best_similarity:.4f})\n"
-            f"Segments: {metrics.get('n_segments_a', '?')} (target) vs {metrics.get('n_segments_b', '?')} (yours)"
-        )
-
-        step_data = {
-            "step": step_num,
-            "poem": poem,
-            "reward": reward,
-            "best_similarity": self._best_similarity,
-            "metrics": {
-                "cosine_similarity": metrics.get("cosine_similarity"),
-                "mse": metrics.get("mse"),
-                "mae": metrics.get("mae"),
-                "correlation": metrics.get("correlation"),
-            },
-            "terminated": terminated,
-        }
-        self._steps.append(step_data)
+        sim = float(metrics.get("cosine_similarity", 0))
+        self._best = max(self._best, sim)
+        done = sim >= 0.95 or self._step >= self.MAX_STEPS
 
         return StepResult(
             observation={
-                "metrics": step_data["metrics"],
-                "reward": reward,
-                "best_similarity": self._best_similarity,
-                "step": step_num, "max_steps": self.MAX_STEPS,
-                "feedback": feedback,
-            },
-            reward=reward,
-            terminated=terminated,
-            truncated=False,
-            info={
-                "cosine_similarity": metrics.get("cosine_similarity"),
-                "mse": metrics.get("mse"),
+                "cosine_similarity": sim, "mse": metrics.get("mse"),
                 "correlation": metrics.get("correlation"),
-                "best_similarity": self._best_similarity,
+                "best_similarity": self._best,
+                "step": self._step, "max_steps": self.MAX_STEPS,
             },
+            reward=sim,
+            terminated=done,
+            truncated=False,
+            info={"cosine_similarity": sim, "best_similarity": self._best, "mse": metrics.get("mse")},
         )
 
-    def close(self) -> None:
-        if not self._steps:
-            return
-        record = {
-            "run_id": self._run_id,
-            "timestamp": datetime.now(timezone.utc).isoformat(),
-            "target": self._target,
-            "best_similarity": self._best_similarity,
-            "total_steps": self._current_step,
-            "steps": self._steps,
-        }
-        path = os.path.join(RESULTS_DIR, f"{self._run_id}.json")
-        with open(path, "w") as f:
-            json.dump(record, f, indent=2)
-
-    def __del__(self) -> None:
+    def close(self):
         pass
