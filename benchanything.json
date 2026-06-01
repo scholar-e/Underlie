@@ -19,11 +19,11 @@
       "description": "Compose a poem. Format: POEM: <your poem here>. You may include reasoning before or after."
     },
 
-      "reward": {
-        "type": "scalar",
-        "range": { "low": 0.0, "high": 1.0 },
-        "description": "0.6 × brain activation cosine similarity + 0.4 × length ratio (min(target_words, poem_words) / max(target_words, poem_words)). Higher is better."
-      },
+    "reward": {
+      "type": "scalar",
+      "range": { "low": -1.0, "high": 1.0 },
+      "description": "Cosine similarity between the target poem's and the agent's poem TRIBE v2 brain activation patterns. Higher is better (max 1.0)."
+    },
 
     "episode": {
       "max_steps": 20,

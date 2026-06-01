@@ -73,6 +73,7 @@ class MyEnv(BaseEnv):
     def __init__(self) -> None:
         self._current_step: int = 0
         self._target: dict | None = None
+        self._target_word_count: int = 0
         self._best_similarity: float = -1.0
         self._brain_api_url: str = DEFAULT_BRAIN_API
         self._run_id: str = ""
@@ -95,22 +96,23 @@ class MyEnv(BaseEnv):
         import random as _random
         rng = _random.Random(seed)
         self._target = rng.choice(TARGET_POEMS)
+        self._target_word_count = len(self._target["text"].split())
 
         return {
             "task": (
-                f"Compose a poem that produces a TRIBE v2 brain activation pattern "
-                f"as close as possible to this target poem:\n\n"
+                f"Compose a poem (roughly {self._target_word_count} words) whose TRIBE v2 "
+                f"brain activation pattern matches this target poem:\n\n"
                 f"\"{self._target['text']}\"\n"
                 f"— {self._target['author']}\n\n"
                 "Your response should contain your poem on a line starting with POEM:.\n"
-                "You can write any length or style. The reward is the cosine similarity "
-                "of brain activation patterns between the target and your poem.\n"
-                "Higher similarity = better (max 1.0). Try to match the rhythm, "
-                "structure, and imagery to get closer brain activations."
+                "The reward rewards BOTH brain similarity and length matching. "
+                "Write something original — don't just copy the target. "
+                "Try different imagery and structure to get closer activations."
             ),
             "target_poem": self._target["text"],
             "target_author": self._target["author"],
             "target_title": self._target["title"],
+            "target_words": self._target_word_count,
             "step": self._current_step,
             "max_steps": self.MAX_STEPS,
             "best_similarity": self._best_similarity,
@@ -154,20 +156,29 @@ class MyEnv(BaseEnv):
                 info={"error": str(exc)},
             )
 
-        reward = float(metrics.get("cosine_similarity", 0))
+        brain_sim = float(metrics.get("cosine_similarity", 0))
+
+        poem_word_count = len(poem.split())
+        target_wc = self._target_word_count
+        length_ratio = min(target_wc, poem_word_count) / max(target_wc, poem_word_count) if max(target_wc, poem_word_count) > 0 else 0.0
+
+        reward = 0.6 * brain_sim + 0.4 * length_ratio
         self._best_similarity = max(self._best_similarity, reward)
         terminated = reward >= 0.95 or self._current_step >= self.MAX_STEPS
 
         feedback = (
-            f"Brain similarity: {reward:.4f} (best: {self._best_similarity:.4f})\n"
-            f"Segments: {metrics.get('n_segments_a', '?')} (target) vs {metrics.get('n_segments_b', '?')} (yours)"
+            f"Reward: {reward:.4f}  (brain={brain_sim:.4f} × 0.6 + length={length_ratio:.4f} × 0.4)\n"
+            f"Target words: {target_wc}  Your words: {poem_word_count}"
         )
 
         step_data = {
             "step": step_num,
             "poem": poem,
+            "brain_similarity": brain_sim,
+            "length_ratio": length_ratio,
             "reward": reward,
             "best_similarity": self._best_similarity,
+            "word_count": poem_word_count,
             "metrics": {
                 "cosine_similarity": metrics.get("cosine_similarity"),
                 "mse": metrics.get("mse"),
@@ -181,8 +192,12 @@ class MyEnv(BaseEnv):
         return StepResult(
             observation={
                 "metrics": step_data["metrics"],
+                "brain_similarity": brain_sim,
+                "length_ratio": length_ratio,
                 "reward": reward,
                 "best_similarity": self._best_similarity,
+                "word_count": poem_word_count,
+                "target_words": target_wc,
                 "step": step_num, "max_steps": self.MAX_STEPS,
                 "feedback": feedback,
             },
@@ -190,10 +205,13 @@ class MyEnv(BaseEnv):
             terminated=terminated,
             truncated=False,
             info={
-                "cosine_similarity": metrics.get("cosine_similarity"),
+                "brain_similarity": brain_sim,
+                "length_ratio": length_ratio,
+                "reward": reward,
                 "mse": metrics.get("mse"),
-                "correlation": metrics.get("correlation"),
                 "best_similarity": self._best_similarity,
+                "word_count": poem_word_count,
+                "target_words": target_wc,
             },
         )
 

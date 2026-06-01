@@ -1,4 +1,4 @@
-"""Brain Activation Matching — agent matches a poem's brain activation with a short sentence.
+"""Brain Activation Matching — agent composes a poem whose brain activation matches a target poem.
 
 Calls back to your local GPU machine via BRAIN_API_URL for TRIBE v2 inference.
 """
@@ -24,7 +24,7 @@ os.makedirs(RESULTS_DIR, exist_ok=True)
 
 DEFAULT_BRAIN_API = os.environ.get("BRAIN_API_URL", "https://headsman-zips-antacid.ngrok-free.dev")
 
-POEMS = [
+TARGET_POEMS = [
     {"title": "Stopping by Woods", "author": "Robert Frost",
      "text": "Whose woods these are I think I know. His house is in the village though; He will not see me stopping here To watch his woods fill up with snow."},
     {"title": "Fog", "author": "Carl Sandburg",
@@ -37,6 +37,18 @@ POEMS = [
      "text": "Tyger Tyger burning bright in the forests of the night what immortal hand or eye could frame thy fearful symmetry?"},
     {"title": "Still I Rise", "author": "Maya Angelou",
      "text": "You may write me down in history with your bitter twisted lies you may trod me in the very dirt but still like dust Ill rise."},
+    {"title": "A Dream Within a Dream", "author": "Edgar Allan Poe",
+     "text": "Take this kiss upon the brow and in parting from you now thus much let me avow you are not wrong who deem that my days have been a dream yet if hope has flown away in a night or in a day in a vision or in none is it therefore the less gone all that we see or seem is but a dream within a dream."},
+    {"title": "Do Not Go Gentle", "author": "Dylan Thomas",
+     "text": "Do not go gentle into that good night old age should burn and rave at close of day rage rage against the dying of the light though wise men at their end know dark is right because their words had forked no lightning they do not go gentle into that good night."},
+    {"title": "Shall I Compare Thee", "author": "William Shakespeare",
+     "text": "Shall I compare thee to a summers day thou art more lovely and more temperate rough winds do shake the darling buds of may and summers lease hath all too short a date sometime too hot the eye of heaven shines and often is his gold complexion dimmed and every fair from fair sometime declines by chance or natures changing course untrimmed but thy eternal summer shall not fade."},
+    {"title": "Harlem", "author": "Langston Hughes",
+     "text": "What happens to a dream deferred does it dry up like a raisin in the sun or fester like a sore and then run does it stink like rotten meat or crust and sugar over like a syrupy sweet maybe it just sags like a heavy load or does it explode."},
+    {"title": "The Road Not Taken", "author": "Robert Frost",
+     "text": "Two roads diverged in a yellow wood and sorry I could not travel both and be one traveler long I stood and looked down one as far as I could to where it bent in the undergrowth then took the other as just as fair and having perhaps the better claim because it was grassy and wanted wear though as for that the passing there had worn them really about the same."},
+    {"title": "Invictus", "author": "William Ernest Henley",
+     "text": "Out of the night that covers me black as the pit from pole to pole I thank whatever gods may be for my unconquerable soul in the fell clutch of circumstance I have not winced nor cried aloud under the bludgeonings of chance my head is bloody but unbowed beyond this place of wrath and tears looms but the horror of the shade and yet the menace of the years finds and shall find me unafraid it matters not how strait the gate how charged with punishments the scroll I am the master of my fate I am the captain of my soul."},
 ]
 
 
@@ -59,11 +71,10 @@ def _call_compare_sync(api_url: str, sentence_a: str, sentence_b: str, timeout: 
 
 class MyEnv(BaseEnv):
     MAX_STEPS = 20
-    MAX_SENTENCE_WORDS = 15
 
     def __init__(self) -> None:
         self._current_step: int = 0
-        self._poem: dict | None = None
+        self._target: dict | None = None
         self._best_similarity: float = -1.0
         self._brain_api_url: str = DEFAULT_BRAIN_API
         self._run_id: str = ""
@@ -85,31 +96,30 @@ class MyEnv(BaseEnv):
 
         import random as _random
         rng = _random.Random(seed)
-        self._poem = rng.choice(POEMS)
+        self._target = rng.choice(TARGET_POEMS)
 
         return {
             "task": (
-                f"Write a short sentence (max {self.MAX_SENTENCE_WORDS} words) that captures "
-                f"the same emotional impact as this poem:\n\n"
-                f"\"{self._poem['text']}\"\n"
-                f"— {self._poem['author']}\n\n"
-                "Your response should contain your sentence on a line starting with SENTENCE:.\n"
-                "Example: SENTENCE: Quiet mist settles over everything.\n\n"
-                "The reward is the cosine similarity of brain activation patterns "
-                "between the poem and your sentence. Higher is better (max 1.0). "
-                "Keep it under 15 words."
+                f"Compose a poem that produces a TRIBE v2 brain activation pattern "
+                f"as close as possible to this target poem:\n\n"
+                f"\"{self._target['text']}\"\n"
+                f"— {self._target['author']}\n\n"
+                "Your response should contain your poem on a line starting with POEM:.\n"
+                "You can write any length or style. The reward is the cosine similarity "
+                "of brain activation patterns between the target and your poem.\n"
+                "Higher similarity = better (max 1.0). Try to match the rhythm, "
+                "structure, and imagery to get closer brain activations."
             ),
-            "poem": self._poem["text"],
-            "poem_author": self._poem["author"],
-            "poem_title": self._poem["title"],
+            "target_poem": self._target["text"],
+            "target_author": self._target["author"],
+            "target_title": self._target["title"],
             "step": self._current_step,
             "max_steps": self.MAX_STEPS,
-            "max_sentence_words": self.MAX_SENTENCE_WORDS,
             "best_similarity": self._best_similarity,
         }
 
     def step(self, action: Any) -> StepResult:
-        if self._poem is None:
+        if self._target is None:
             raise RuntimeError("Call reset() before step()")
 
         self._current_step += 1
@@ -117,25 +127,24 @@ class MyEnv(BaseEnv):
 
         raw_input = str(action).strip()
 
-        sentence = raw_input
-        sentence_match = re.search(r"(?:^|\n)\s*SENTENCE:\s*(.+)", raw_input, re.IGNORECASE)
-        if sentence_match:
-            sentence = sentence_match.group(1).strip()
+        poem = raw_input
+        poem_match = re.search(r"(?:^|\n)\s*POEM:\s*(.+)", raw_input, re.IGNORECASE | re.DOTALL)
+        if poem_match:
+            poem = poem_match.group(1).strip()
 
-        if not sentence:
+        if not poem:
             return StepResult(
                 observation={
-                    "error": "Empty sentence. Provide a non-empty sentence.",
+                    "error": "Empty poem. Provide a non-empty poem.",
                     "step": step_num, "max_steps": self.MAX_STEPS,
                     "best_similarity": self._best_similarity,
                 },
                 reward=-0.5, terminated=False, truncated=False,
-                info={"error": "Empty sentence"},
+                info={"error": "Empty poem"},
             )
 
-        word_count = len(sentence.split())
         try:
-            metrics = _call_compare_sync(self._brain_api_url, self._poem["text"], sentence)
+            metrics = _call_compare_sync(self._brain_api_url, self._target["text"], poem)
         except Exception as exc:
             return StepResult(
                 observation={
@@ -151,22 +160,14 @@ class MyEnv(BaseEnv):
         self._best_similarity = max(self._best_similarity, reward)
         terminated = reward >= 0.95 or self._current_step >= self.MAX_STEPS
 
-        em_a = metrics.get("emotion_a", {})
-        em_b = metrics.get("emotion_b", {})
-        poem_emotions = ", ".join(f"{k}={v:.2f}" for k, v in sorted(em_a.items(), key=lambda x: -x[1])[:3])
-        sent_emotions = ", ".join(f"{k}={v:.2f}" for k, v in sorted(em_b.items(), key=lambda x: -x[1])[:3])
-
         feedback = (
             f"Brain similarity: {reward:.4f} (best: {self._best_similarity:.4f})\n"
-            f"Your words: {word_count}/{self.MAX_SENTENCE_WORDS}\n"
-            f"Poem emotions: {poem_emotions}\n"
-            f"Your emotions: {sent_emotions}"
+            f"Segments: {metrics.get('n_segments_a', '?')} (target) vs {metrics.get('n_segments_b', '?')} (yours)"
         )
 
         step_data = {
             "step": step_num,
-            "sentence": sentence,
-            "word_count": word_count,
+            "poem": poem,
             "reward": reward,
             "best_similarity": self._best_similarity,
             "metrics": {
@@ -175,8 +176,6 @@ class MyEnv(BaseEnv):
                 "mae": metrics.get("mae"),
                 "correlation": metrics.get("correlation"),
             },
-            "emotion_poem": em_a,
-            "emotion_sentence": em_b,
             "terminated": terminated,
         }
         self._steps.append(step_data)
@@ -184,12 +183,8 @@ class MyEnv(BaseEnv):
         return StepResult(
             observation={
                 "metrics": step_data["metrics"],
-                "emotion_poem": em_a,
-                "emotion_sentence": em_b,
                 "reward": reward,
                 "best_similarity": self._best_similarity,
-                "word_count": word_count,
-                "max_words": self.MAX_SENTENCE_WORDS,
                 "step": step_num, "max_steps": self.MAX_STEPS,
                 "feedback": feedback,
             },
@@ -201,7 +196,6 @@ class MyEnv(BaseEnv):
                 "mse": metrics.get("mse"),
                 "correlation": metrics.get("correlation"),
                 "best_similarity": self._best_similarity,
-                "word_count": word_count,
             },
         )
 
@@ -211,7 +205,7 @@ class MyEnv(BaseEnv):
         record = {
             "run_id": self._run_id,
             "timestamp": datetime.now(timezone.utc).isoformat(),
-            "poem": self._poem,
+            "target": self._target,
             "best_similarity": self._best_similarity,
             "total_steps": self._current_step,
             "steps": self._steps,
