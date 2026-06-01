@@ -1,6 +1,0 @@
-{
-  "best_reward": 0.1,
-  "total_steps": 75,
-  "game_result": "Terminated after 5 consecutive illegal/failed moves. Last input: 'The position is critical, with White having a strong king on e5 and a variety of attacking options. The d-pawn is advanced to d6, and Black\\'s king is on h6. A strong move would be to push the d-pawn to d5, which supports the king and pressures Black\\'s position. However, this move was previously rejected as \"not legal for White,\" which seems to be a mistake. Since the move is legal, it\\'s worth considering again. Alternatively, advancing the h-pawn to h4 could also be a good option to open lines and pressure Black\\'s king.\\n\\nMOVE: d5'",
-  "num_moves": 75
-}

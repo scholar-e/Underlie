@@ -1,0 +1,884 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Brain Activation Matching — Local UI</title>
+<link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+
+<header>
+  <h1>Brain Activation Matching</h1>
+  <span class="subtitle">Local Testing UI</span>
+</header>
+
+<nav class="tab-nav" id="tabNav">
+  <button class="tab-btn active" data-tab="compare">0. Compare</button>
+  <button class="tab-btn" data-tab="config">1. Config</button>
+  <button class="tab-btn" data-tab="monitor">2. Monitor</button>
+  <button class="tab-btn" data-tab="results">3. Results</button>
+  <button class="tab-btn" data-tab="tests">4. Tests</button>
+</nav>
+
+<!-- ════════════ Tab 0: Direct Compare ════════════ -->
+<section id="tab-compare" class="tab-content active">
+
+  <h2>Direct Text Comparison</h2>
+
+  <div class="card">
+    <h3>Brain API URL</h3>
+    <div class="form-row" style="grid-column:1/-1">
+      <input type="text" id="cmpBrainApiUrl" placeholder="http://127.0.0.1:8766" value="http://127.0.0.1:8766">
+    </div>
+    <div class="form-row-inline" style="margin-top:8px">
+      <button id="cmpCheckHealthBtn" class="primary" style="font-size:12px">Check Health</button>
+      <span id="cmpHealthStatus" class="text-muted"></span>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>Text A</h3>
+    <textarea id="cmpTextA" rows="3" placeholder="Enter first text…" style="width:100%;font-family:inherit;font-size:13px;padding:8px;border:1px solid #dde0e6;border-radius:6px;resize:vertical"></textarea>
+  </div>
+
+  <div class="card">
+    <h3>Text B</h3>
+    <textarea id="cmpTextB" rows="3" placeholder="Enter second text…" style="width:100%;font-family:inherit;font-size:13px;padding:8px;border:1px solid #dde0e6;border-radius:6px;resize:vertical"></textarea>
+  </div>
+
+  <div class="card">
+    <div class="flex-row">
+      <button id="cmpCompareBtn" class="success">Compare</button>
+      <span id="cmpStatus" class="text-muted"></span>
+      <button id="cmpSwapBtn" style="font-size:12px">↔ Swap A↔B</button>
+    </div>
+    <div id="cmpProgressWrap" class="hidden" style="margin-top:12px">
+      <div class="progress-bar"><div class="progress-fill" id="cmpProgressFill"></div></div>
+      <div class="progress-label" id="cmpProgressLabel">Starting…</div>
+    </div>
+  </div>
+
+  <div id="cmpResults" class="hidden">
+    <div class="card">
+      <h3>Similarity Metrics</h3>
+      <div class="metrics-grid" id="cmpMetricsGrid"></div>
+    </div>
+    <div class="card">
+      <h3>Brain Activation Maps</h3>
+      <div class="brain-grid" id="cmpBrainGrid"></div>
+    </div>
+
+  </div>
+
+  <div class="card">
+    <div class="flex-row">
+      <h3 style="margin:0">Comparison History</h3>
+      <button id="cmpClearHistoryBtn" style="font-size:12px;color:#ff6b6b">Clear</button>
+    </div>
+    <div id="cmpHistoryEmpty" class="text-muted" style="margin-top:8px">No comparisons yet.</div>
+    <div id="cmpHistoryWrap" class="hidden" style="margin-top:8px">
+      <div style="overflow-x:auto">
+        <table>
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Text A</th>
+              <th>Text B</th>
+              <th>Cos Sim</th>
+              <th>Correlation</th>
+            </tr>
+          </thead>
+          <tbody id="cmpHistoryBody"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+</section>
+
+<!-- ════════════ Tab 1: Config ════════════ -->
+<section id="tab-config" class="tab-content">
+
+  <h2>Run Configuration</h2>
+
+  <div class="card">
+    <h3>Parameters</h3>
+    <div class="config-grid">
+      <div class="form-row">
+        <label>Model</label>
+        <input type="text" id="cfgModel" value="deepseek/deepseek-reasoner">
+      </div>
+      <div class="form-row">
+        <label>Episodes</label>
+        <input type="number" id="cfgEpisodes" min="1" max="20" value="1">
+      </div>
+      <div class="form-row">
+        <label>Max Steps</label>
+        <input type="range" id="cfgMaxSteps" min="1" max="50" step="1" value="20">
+        <div class="range-label"><span id="cfgMaxStepsVal">20</span><span>steps per episode</span></div>
+      </div>
+      <div class="form-row" style="grid-column:1/-1">
+        <label>Brain API URL (ngrok)</label>
+        <input type="text" id="cfgBrainApiUrl" placeholder="https://xxx.ngrok-free.dev">
+        <span class="text-muted">Your local brain_server.py exposed via ngrok</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>Run Mode</h3>
+    <div class="form-row-inline mb-8">
+      <label style="font-weight:normal;display:flex;align-items:center;gap:4px">
+        <input type="radio" name="mode" value="local" checked> Local
+      </label>
+      <label style="font-weight:normal;display:flex;align-items:center;gap:4px">
+        <input type="radio" name="mode" value="platform"> Platform (Submit to Mesocosm)
+      </label>
+    </div>
+    <div id="platformFields" class="hidden config-grid">
+      <div class="form-row">
+        <label>Env Name</label>
+        <input type="text" id="cfgEnvName" value="Brain Activation Matching">
+      </div>
+      <div class="form-row">
+        <label>GitHub URL</label>
+        <input type="text" id="cfgGithubUrl" placeholder="https://github.com/your-org/your-env">
+      </div>
+      <div class="form-row" style="grid-column:1/-1">
+        <label>Description</label>
+        <input type="text" id="cfgEnvDescription" value="Agent submits sentences to match a target brain activation map computed by TRIBE v2.">
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>Generate Command</h3>
+    <button id="genCmdBtn" class="primary">Generate Command</button>
+    <div id="cmdOutput" class="mt-8 hidden">
+      <div class="code-block">
+        <button class="copy-btn" id="copyCmdBtn">Copy</button>
+        <pre id="cmdText"></pre>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="flex-row">
+      <button id="saveConfigBtn" class="success">Save Configuration</button>
+      <span id="saveStatus" class="text-muted"></span>
+    </div>
+  </div>
+
+</section>
+
+<!-- ════════════ Tab 2: Monitor ════════════ -->
+<section id="tab-monitor" class="tab-content">
+
+  <h2>Run Monitor</h2>
+
+  <div class="card">
+    <h3>Adapter (env server)</h3>
+    <div class="process-panel">
+      <span class="status-dot dead" id="adapterDot"></span>
+      <span id="adapterStatus">Stopped</span>
+      <span id="adapterPortInfo" class="text-muted"></span>
+      <button id="startAdapterBtn" class="success">Start</button>
+      <button id="stopAdapterBtn" class="danger">Stop</button>
+    </div>
+    <div class="log-area" id="adapterLog">Adapter not running.</div>
+  </div>
+
+  <div class="card">
+    <h3>Mesocosm (benchmark runner)</h3>
+    <div class="process-panel">
+      <span class="status-dot dead" id="mesocosmDot"></span>
+      <span id="mesocosmStatus">Stopped</span>
+      <span id="mesocosmMode" class="text-muted"></span>
+      <button id="startMesocosmBtn" class="primary">Run</button>
+      <button id="stopMesocosmBtn" class="danger">Stop</button>
+    </div>
+    <div class="log-area" id="mesocosmLog">Not started.</div>
+  </div>
+
+  <div id="monitorComplete" class="hidden">
+    <div class="alert success">
+      Run completed! <a href="#" id="gotoResults">View full Results →</a>
+    </div>
+    <div class="card" id="monitorSummary">
+      <h3>Trial Scores</h3>
+      <div id="monitorSummaryBody"></div>
+    </div>
+  </div>
+
+</section>
+
+<!-- ════════════ Tab 3: Results ════════════ -->
+<section id="tab-results" class="tab-content">
+
+  <h2>Saved Runs</h2>
+
+  <div id="resultsEmpty" class="alert info">No saved runs yet. Run the benchmark — results are saved automatically.</div>
+
+  <div id="resultsTableWrap" class="hidden">
+    <div style="overflow-x:auto">
+      <table>
+        <thead>
+          <tr>
+              <th>Time</th>
+              <th>Run</th>
+              <th>Poem</th>
+              <th>Best Similarity</th>
+              <th>Steps</th>
+          </tr>
+        </thead>
+        <tbody id="resultsBody"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Run detail -->
+  <div id="runDetail" class="hidden">
+    <div class="flex-row mt-16 mb-8">
+      <button id="closeDetailBtn">← Back to list</button>
+      <h3 id="runDetailTitle" style="margin:0"></h3>
+    </div>
+    <div id="runDetailBody"></div>
+  </div>
+
+</section>
+
+<!-- ════════════ Tab 4: Tests ════════════ -->
+<section id="tab-tests" class="tab-content">
+
+  <h2>Integration Tests</h2>
+
+  <div class="card">
+    <div class="flex-row">
+      <button id="runTestsBtn" class="primary">Run Tests</button>
+      <span id="testsRunning" class="hidden"><span class="spinner"></span> Running…</span>
+    </div>
+  </div>
+
+  <div id="testsEmpty" class="alert info">No test results yet. Click "Run Tests" to run the integration test suite (if available).</div>
+
+  <div id="testsTableWrap" class="hidden">
+    <div style="overflow-x:auto">
+      <table>
+        <thead>
+          <tr>
+            <th>Run</th>
+            <th>Timestamp</th>
+            <th>Passed</th>
+            <th>Failed</th>
+            <th>Total</th>
+          </tr>
+        </thead>
+        <tbody id="testsBody"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <div id="testDetail" class="hidden">
+    <div class="flex-row mt-16 mb-8">
+      <button id="closeTestDetailBtn">← Back to list</button>
+      <h3 id="testDetailTitle" style="margin:0"></h3>
+    </div>
+    <div id="testDetailBody"></div>
+  </div>
+
+</section>
+
+<script>
+// ══════════════════════════════════════════════════
+// Tab navigation
+// ══════════════════════════════════════════════════
+const tabs = document.querySelectorAll('.tab-btn');
+tabs.forEach(btn => {
+  btn.addEventListener('click', () => {
+    tabs.forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    document.querySelectorAll('.tab-content').forEach(tc => tc.classList.remove('active'));
+    document.getElementById('tab-' + btn.dataset.tab).classList.add('active');
+    if (btn.dataset.tab === 'monitor') pollLogs();
+    if (btn.dataset.tab === 'results') loadResults();
+    if (btn.dataset.tab === 'tests') loadTests();
+  });
+});
+
+// ══════════════════════════════════════════════════
+// API helper
+// ══════════════════════════════════════════════════
+async function api(method, path, body) {
+  let url = path;
+  const opts = { method, headers: { 'Content-Type': 'application/json' } };
+  if (body !== undefined) {
+    if (method === 'GET') {
+      url += '?' + new URLSearchParams(body).toString();
+    } else {
+      opts.body = JSON.stringify(body);
+    }
+  }
+  const res = await fetch(url, opts);
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({ detail: res.statusText }));
+    throw new Error(err.detail || res.statusText);
+  }
+  return res.json();
+}
+
+function getVal(id) { return document.getElementById(id).value; }
+function setVal(id, v) { document.getElementById(id).value = v; }
+function setText(id, t) { document.getElementById(id).textContent = t; }
+function show(id) { document.getElementById(id).classList.remove('hidden'); }
+function hide(id) { document.getElementById(id).classList.add('hidden'); }
+
+// ══════════════════════════════════════════════════
+// Tab 0: Direct Compare
+// ══════════════════════════════════════════════════
+let _compareHistory = [];
+
+function saveCompareResult(textA, textB, result) {
+  _compareHistory.unshift({
+    id: Date.now(),
+    timestamp: new Date().toLocaleString(),
+    text_a: textA,
+    text_b: textB,
+    cosine_similarity: result.cosine_similarity,
+    correlation: result.correlation,
+    mse: result.mse,
+    mae: result.mae,
+  });
+  renderCompareHistory();
+}
+
+function renderCompareHistory() {
+  const empty = document.getElementById('cmpHistoryEmpty');
+  const wrap = document.getElementById('cmpHistoryWrap');
+  const body = document.getElementById('cmpHistoryBody');
+  if (!_compareHistory.length) {
+    empty.classList.remove('hidden');
+    wrap.classList.add('hidden');
+    return;
+  }
+  empty.classList.add('hidden');
+  wrap.classList.remove('hidden');
+  body.innerHTML = _compareHistory.map((r, i) =>
+    `<tr class="clickable" data-idx="${i}">
+      <td>${i + 1}</td>
+      <td style="max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${esc(r.text_a)}</td>
+      <td style="max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${esc(r.text_b)}</td>
+      <td style="font-weight:600">${r.cosine_similarity != null ? r.cosine_similarity.toFixed(4) : '—'}</td>
+      <td>${r.correlation != null ? r.correlation.toFixed(4) : '—'}</td>
+    </tr>`
+  ).join('');
+  body.querySelectorAll('tr').forEach(tr => {
+    tr.addEventListener('click', () => {
+      const r = _compareHistory[parseInt(tr.dataset.idx)];
+      document.getElementById('cmpTextA').value = r.text_a;
+      document.getElementById('cmpTextB').value = r.text_b;
+    });
+  });
+}
+
+document.getElementById('cmpClearHistoryBtn').addEventListener('click', () => {
+  _compareHistory = [];
+  renderCompareHistory();
+});
+document.getElementById('cmpCheckHealthBtn').addEventListener('click', async () => {
+  const url = getVal('cmpBrainApiUrl');
+  const status = document.getElementById('cmpHealthStatus');
+  status.textContent = 'Checking…';
+  try {
+    const resp = await fetch(url + '/health');
+    const data = await resp.json();
+    status.textContent = `OK — ${data.text_model || '?'} (loaded=${data.model_loaded})`;
+    status.style.color = '#166534';
+  } catch (e) {
+    status.textContent = `FAIL: ${e.message}`;
+    status.style.color = '#c62828';
+  }
+});
+
+document.getElementById('cmpSwapBtn').addEventListener('click', () => {
+  const a = document.getElementById('cmpTextA');
+  const b = document.getElementById('cmpTextB');
+  [a.value, b.value] = [b.value, a.value];
+});
+
+document.getElementById('cmpCompareBtn').addEventListener('click', async () => {
+  const url = getVal('cmpBrainApiUrl');
+  const textA = document.getElementById('cmpTextA').value.trim();
+  const textB = document.getElementById('cmpTextB').value.trim();
+  const status = document.getElementById('cmpStatus');
+  const progressWrap = document.getElementById('cmpProgressWrap');
+  const progressFill = document.getElementById('cmpProgressFill');
+  const progressLabel = document.getElementById('cmpProgressLabel');
+
+  if (!textA || !textB) {
+    status.textContent = 'Both texts are required';
+    status.style.color = '#c62828';
+    return;
+  }
+
+  hide('cmpResults');
+  show('cmpProgressWrap');
+  progressFill.style.width = '0%';
+  progressLabel.textContent = 'Starting…';
+  status.textContent = '';
+
+  try {
+    const started = await api('POST', '/api/compare-async', {
+      url, sentence_a: textA, sentence_b: textB,
+    });
+    const jobId = started.job_id;
+    progressLabel.textContent = 'Job submitted, waiting…';
+    progressFill.style.width = '5%';
+
+    let data = null;
+    for (let attempt = 0; attempt < 600; attempt++) {
+      await new Promise(r => setTimeout(r, 2000));
+      const st = await api('POST', '/api/compare-status', {url, job_id: jobId});
+      const pct = Math.min(5 + attempt * 0.15, 90);
+      progressFill.style.width = pct + '%';
+      progressLabel.textContent = st.progress || 'Processing…';
+      if (st.status === 'done') {
+        data = st.result;
+        progressFill.style.width = '100%';
+        progressLabel.textContent = 'Complete!';
+        break;
+      }
+      if (st.status === 'error') {
+        throw new Error(st.error || 'Unknown error');
+      }
+    }
+    if (!data) throw new Error('Timed out waiting for comparison');
+
+    await new Promise(r => setTimeout(r, 500));
+    hide('cmpProgressWrap');
+    show('cmpResults');
+    status.textContent = 'Done';
+    status.style.color = '#166534';
+    saveCompareResult(textA, textB, data);
+
+    // Brain images
+    const imgBase = url.replace(/\/+$/, '');
+    document.getElementById('cmpBrainGrid').innerHTML = `
+      <div class="brain-img-wrap">
+        <img src="${imgBase}/visualize/${jobId}?sentence=a" alt="Brain A" loading="lazy">
+        <div class="brain-img-label">Text A brain activation</div>
+      </div>
+      <div class="brain-img-wrap">
+        <img src="${imgBase}/visualize/${jobId}?sentence=b" alt="Brain B" loading="lazy">
+        <div class="brain-img-label">Text B brain activation</div>
+      </div>`;
+
+    const metrics = [
+      {label:'Cosine Similarity', value: data.cosine_similarity, high:0.9},
+      {label:'Correlation', value: data.correlation, high:0.8},
+      {label:'MSE', value: data.mse, high:0.01, lowerBetter: true},
+      {label:'MAE', value: data.mae, high:0.05, lowerBetter: true},
+    ];
+    document.getElementById('cmpMetricsGrid').innerHTML = metrics.map(m => {
+      const good = m.lowerBetter ? m.value <= m.high : m.value >= m.high;
+      return `<div class="metric">
+        <div class="metric-label">${m.label}</div>
+        <div class="metric-value ${good ? 'green' : ''}">${typeof m.value === 'number' ? m.value.toFixed(6) : m.value}</div>
+      </div>`;
+    }).join('');
+
+
+  } catch (e) {
+    hide('cmpProgressWrap');
+    status.textContent = `Error: ${e.message}`;
+    status.style.color = '#c62828';
+  }
+});
+
+// ══════════════════════════════════════════════════
+// Tab 1: Config
+// ══════════════════════════════════════════════════
+async function refreshConfig() {
+  const cfg = await api('GET', '/api/config');
+  setVal('cfgModel', cfg.model);
+  setVal('cfgEpisodes', cfg.episodes);
+  setVal('cfgMaxSteps', cfg.max_steps);
+  setText('cfgMaxStepsVal', cfg.max_steps);
+  setVal('cfgBrainApiUrl', cfg.brain_api_url || '');
+
+  document.querySelector(`input[name="mode"][value="${cfg.mode || 'local'}"]`).checked = true;
+  setVal('cfgEnvName', cfg.env_name || '');
+  setVal('cfgGithubUrl', cfg.github_url || '');
+  setVal('cfgEnvDescription', cfg.env_description || '');
+  togglePlatformFields();
+}
+
+function togglePlatformFields() {
+  const mode = document.querySelector('input[name="mode"]:checked').value;
+  document.getElementById('platformFields').classList.toggle('hidden', mode !== 'platform');
+}
+
+document.querySelectorAll('input[name="mode"]').forEach(el => {
+  el.addEventListener('change', togglePlatformFields);
+});
+
+document.getElementById('cfgMaxSteps').addEventListener('input', () => {
+  setText('cfgMaxStepsVal', document.getElementById('cfgMaxSteps').value);
+});
+
+document.getElementById('genCmdBtn').addEventListener('click', async () => {
+  const data = readConfigForm();
+  const res = await api('POST', '/api/runs/generate-command', data);
+  setText('cmdText', res.command);
+  show('cmdOutput');
+});
+
+document.getElementById('copyCmdBtn').addEventListener('click', () => {
+  const text = document.getElementById('cmdText').textContent;
+  navigator.clipboard.writeText(text).then(() => {
+    document.getElementById('copyCmdBtn').textContent = 'Copied!';
+    setTimeout(() => { document.getElementById('copyCmdBtn').textContent = 'Copy'; }, 2000);
+  });
+});
+
+document.getElementById('saveConfigBtn').addEventListener('click', async () => {
+  const data = readConfigForm();
+  await api('PUT', '/api/config', data);
+  const status = document.getElementById('saveStatus');
+  status.textContent = 'Saved to run_config.json ✓';
+  setTimeout(() => { status.textContent = ''; }, 3000);
+  refreshConfig();
+});
+
+function readConfigForm() {
+  return {
+    model: getVal('cfgModel'),
+    episodes: parseInt(getVal('cfgEpisodes')) || 1,
+    max_steps: parseInt(getVal('cfgMaxSteps')),
+    brain_api_url: getVal('cfgBrainApiUrl').trim(),
+    mode: document.querySelector('input[name="mode"]:checked').value,
+    env_name: getVal('cfgEnvName').trim(),
+    github_url: getVal('cfgGithubUrl').trim(),
+    env_description: getVal('cfgEnvDescription').trim(),
+  };
+}
+
+// ══════════════════════════════════════════════════
+// Tab 2: Monitor
+// ══════════════════════════════════════════════════
+let logPollTimer = null;
+let lastAdapterLogLen = 0;
+let lastMesocosmLogLen = 0;
+
+async function syncConfigBeforeRun() {
+  const data = readConfigForm();
+  await api('PUT', '/api/config', data);
+}
+
+document.getElementById('startAdapterBtn').addEventListener('click', async () => {
+  const btn = document.getElementById('startAdapterBtn');
+  btn.disabled = true;
+  try {
+    await syncConfigBeforeRun();
+    const res = await api('POST', '/api/runs/adapter/start');
+    setText('adapterPortInfo', 'Port: ' + res.port);
+    pollLogs();
+  } catch (e) {
+    alert('Failed to start adapter: ' + e.message);
+  }
+  btn.disabled = false;
+});
+
+document.getElementById('stopAdapterBtn').addEventListener('click', async () => {
+  try {
+    await api('POST', '/api/runs/adapter/stop');
+    pollLogs();
+  } catch (e) {
+    alert('Failed to stop adapter: ' + e.message);
+  }
+});
+
+document.getElementById('startMesocosmBtn').addEventListener('click', async () => {
+  const btn = document.getElementById('startMesocosmBtn');
+  btn.disabled = true;
+  try {
+    await syncConfigBeforeRun();
+    const cfg = await api('GET', '/api/config');
+    if (cfg.mode === 'platform') {
+      const res = await api('POST', '/api/runs/mesocosm/start');
+      if (res.command) {
+        setText('cmdText', res.command);
+        show('cmdOutput');
+        document.getElementById('mesocosmLog').textContent =
+          'Commands generated. Copy and run them in your terminal.';
+      }
+      btn.disabled = false;
+      return;
+    }
+    await api('POST', '/api/runs/mesocosm/start');
+    pollLogs();
+  } catch (e) {
+    alert('Failed to start: ' + e.message);
+  }
+  btn.disabled = false;
+});
+
+document.getElementById('stopMesocosmBtn').addEventListener('click', async () => {
+  await api('POST', '/api/runs/mesocosm/stop');
+  pollLogs();
+});
+
+document.getElementById('gotoResults').addEventListener('click', e => {
+  e.preventDefault();
+  document.querySelector('[data-tab="results"]').click();
+});
+
+async function pollLogs() {
+  if (logPollTimer) clearTimeout(logPollTimer);
+  const status = await api('GET', '/api/runs/status');
+  const logs = await api('GET', '/api/runs/logs', { n: 200 });
+
+  updateProcessUI('adapter', status.adapter, logs.adapter, status.adapter_port);
+  updateProcessUI('mesocosm', status.mesocosm, logs.mesocosm);
+
+  const modeEl = document.getElementById('mesocosmMode');
+  const startBtn = document.getElementById('startMesocosmBtn');
+  if (!status.mesocosm) {
+    const cfg = await api('GET', '/api/config');
+    const isPlatform = cfg.mode === 'platform';
+    modeEl.textContent = isPlatform ? '[platform — submit env]' : '[local]';
+    startBtn.textContent = isPlatform ? 'Generate Platform Commands' : 'Run Locally';
+    if (isPlatform) {
+      document.getElementById('mesocosmLog').textContent =
+        'Click "Generate Platform Commands" to get the submit command for your terminal.';
+    }
+  }
+
+  if (!status.mesocosm && status.adapter && lastMesocosmLogLen > 0 && logs.mesocosm.length > 0) {
+    show('monitorComplete');
+    showTrialSummary();
+  } else {
+    hide('monitorComplete');
+  }
+
+  lastAdapterLogLen = logs.adapter.length;
+  lastMesocosmLogLen = logs.mesocosm.length;
+
+  if (status.adapter || status.mesocosm) {
+    logPollTimer = setTimeout(pollLogs, 1500);
+  }
+}
+
+async function showTrialSummary() {
+  const results = await api('GET', '/api/results');
+  const body = document.getElementById('monitorSummaryBody');
+  if (!results.length) {
+    body.innerHTML = '<div class="text-muted">No saved results yet.</div>';
+    return;
+  }
+  const lines = results.map((r, i) => {
+    const s = r.best_similarity != null ? r.best_similarity.toFixed(4) : '—';
+    return `<div class="flex-row mb-8">
+      <span style="min-width:80px;font-weight:600">#${i + 1}</span>
+      <span class="text-muted" style="flex:1">${esc(r.poem_title)} — ${esc(r.poem_author)}</span>
+      <span style="font-weight:600">${s}</span>
+    </div>`;
+  }).join('');
+  body.innerHTML = lines;
+}
+
+function updateProcessUI(name, alive, logLines, port) {
+  const dot = document.getElementById(name + 'Dot');
+  const statusEl = document.getElementById(name + 'Status');
+  const logEl = document.getElementById(name + 'Log');
+
+  dot.className = 'status-dot ' + (alive ? 'alive' : 'dead');
+  statusEl.textContent = alive ? 'Running' : 'Stopped';
+  statusEl.style.color = alive ? '#2ec4b6' : '#888';
+
+  if (alive) {
+    logEl.textContent = logLines.length ? logLines.join('\n') : 'Starting…';
+    logEl.scrollTop = logEl.scrollHeight;
+  } else if (logLines.length) {
+    logEl.textContent = logLines.join('\n') + '\n\n[Process stopped]';
+    logEl.scrollTop = logEl.scrollHeight;
+  }
+
+  if (name === 'adapter' && port) {
+    setText('adapterPortInfo', 'Port: ' + port);
+  }
+}
+
+// ══════════════════════════════════════════════════
+// Tab 3: Results
+// ══════════════════════════════════════════════════
+async function loadResults() {
+  const results = await api('GET', '/api/results');
+  const empty = document.getElementById('resultsEmpty');
+  const wrap = document.getElementById('resultsTableWrap');
+  const body = document.getElementById('resultsBody');
+
+  if (!results.length) {
+    empty.classList.remove('hidden');
+    wrap.classList.add('hidden');
+    return;
+  }
+
+  empty.classList.add('hidden');
+  wrap.classList.remove('hidden');
+  hide('runDetail');
+
+  body.innerHTML = results.map(r => `
+    <tr class="clickable" data-id="${esc(r.id)}">
+      <td style="white-space:nowrap">${esc(r.timestamp)}</td>
+      <td>${esc(r.id)}</td>
+      <td><em>${esc(r.poem_title)}</em> — ${esc(r.poem_author)}</td>
+      <td><strong>${r.best_similarity != null ? r.best_similarity.toFixed(4) : '—'}</strong></td>
+      <td>${r.total_steps ?? '—'}</td>
+    </tr>
+  `).join('');
+
+  body.querySelectorAll('tr').forEach(tr => {
+    tr.addEventListener('click', () => showRunDetail(tr.dataset.id));
+  });
+}
+
+async function showRunDetail(runId) {
+  hide('resultsTableWrap');
+  show('runDetail');
+  const data = await api('GET', `/api/results/${runId}`);
+  setText('runDetailTitle', `${runId}`);
+
+  const poem = data.target || data.poem || {};
+  const best = data.best_similarity;
+  const steps = data.steps || [];
+
+  let html = `<div class="card">
+    <h3>Target Poem</h3>
+    <p style="font-size:14px;color:#1a1a2e;font-style:italic">"${esc(poem.text || '')}"</p>
+    <p style="margin-top:4px;color:#888;font-size:12px">— ${esc(poem.author || '')}</p>
+    ${best != null ? `<p style="margin-top:8px;font-weight:600">Best Similarity: ${best.toFixed(4)}</p>` : ''}
+  </div>`;
+
+  steps.forEach(s => {
+    const metrics = s.metrics || {};
+    html += `<div class="step-card">
+      <div class="step-header">
+        <strong>Step ${s.step}</strong>
+        <div class="flex-row">
+          <span>Reward: <strong>${s.reward != null ? s.reward.toFixed(4) : '—'}</strong></span>
+          <span>Best: <strong>${s.best_similarity != null ? s.best_similarity.toFixed(4) : '—'}</strong></span>
+        </div>
+      </div>
+      <div style="margin-bottom:8px">
+        <span class="info-label">Poem:</span>
+        <span class="info-value">${esc(s.poem || '')}</span>
+      </div>
+      <div class="metrics-grid">
+        <div class="metric">
+          <div class="metric-label">MSE</div>
+          <div class="metric-value ${metrics.mse != null && metrics.mse < 0.01 ? 'green' : ''}">${metrics.mse != null ? metrics.mse.toFixed(6) : '—'}</div>
+        </div>
+        <div class="metric">
+          <div class="metric-label">MAE</div>
+          <div class="metric-value ${metrics.mae != null && metrics.mae < 0.05 ? 'green' : ''}">${metrics.mae != null ? metrics.mae.toFixed(6) : '—'}</div>
+        </div>
+        <div class="metric">
+          <div class="metric-label">Correlation</div>
+          <div class="metric-value ${metrics.correlation != null && metrics.correlation > 0.8 ? 'green' : ''}">${metrics.correlation != null ? metrics.correlation.toFixed(4) : '—'}</div>
+        </div>
+        <div class="metric">
+          <div class="metric-label">Cosine Sim</div>
+          <div class="metric-value ${metrics.cosine_similarity != null && metrics.cosine_similarity > 0.9 ? 'green' : ''}">${metrics.cosine_similarity != null ? metrics.cosine_similarity.toFixed(4) : '—'}</div>
+        </div>
+      </div>
+    </div>`;
+  });
+
+  if (!steps.length) html += '<div class="alert info">No step data.</div>';
+  document.getElementById('runDetailBody').innerHTML = html;
+}
+
+document.getElementById('closeDetailBtn').addEventListener('click', () => {
+  hide('runDetail');
+  show('resultsTableWrap');
+});
+
+// ══════════════════════════════════════════════════
+// Tab 4: Tests (placeholder)
+// ══════════════════════════════════════════════════
+async function loadTests() {
+  const r = await api('GET', '/api/tests');
+  const empty = document.getElementById('testsEmpty');
+  const wrap = document.getElementById('testsTableWrap');
+  const body = document.getElementById('testsBody');
+  hide('testDetail');
+
+  if (!r.length) {
+    empty.classList.remove('hidden');
+    wrap.classList.add('hidden');
+    return;
+  }
+  empty.classList.add('hidden');
+  wrap.classList.remove('hidden');
+
+  body.innerHTML = r.map(t => {
+    const cls = t.failed > 0 ? 'style="color:#c62828"' : '';
+    return `<tr class="clickable" data-id="${esc(t.id)}">
+      <td>${esc(t.id)}</td>
+      <td>${esc(t.timestamp)}</td>
+      <td style="color:#166534">${t.passed}</td>
+      <td ${cls}>${t.failed}</td>
+      <td>${t.total}</td>
+    </tr>`;
+  }).join('');
+
+  body.querySelectorAll('tr').forEach(tr => {
+    tr.addEventListener('click', () => showTestDetail(tr.dataset.id));
+  });
+}
+
+async function showTestDetail(id) {
+  hide('testsTableWrap');
+  show('testDetail');
+  setText('testDetailTitle', id);
+  document.getElementById('testDetailBody').innerHTML = '<div class="alert info">No test details available.</div>';
+}
+
+document.getElementById('closeTestDetailBtn').addEventListener('click', () => {
+  hide('testDetail');
+  show('testsTableWrap');
+});
+
+document.getElementById('runTestsBtn').addEventListener('click', async () => {
+  const btn = document.getElementById('runTestsBtn');
+  const spin = document.getElementById('testsRunning');
+  btn.disabled = true;
+  spin.classList.remove('hidden');
+  try {
+    const res = await api('POST', '/api/tests/run');
+    alert(res.output || 'Tests completed.');
+  } catch (e) {
+    alert('Tests failed: ' + e.message);
+  }
+  btn.disabled = false;
+  spin.classList.add('hidden');
+});
+
+// ══════════════════════════════════════════════════
+// Utility
+// ══════════════════════════════════════════════════
+function esc(s) {
+  const div = document.createElement('div');
+  div.textContent = s;
+  return div.innerHTML;
+}
+
+// ══════════════════════════════════════════════════
+// Init
+// ══════════════════════════════════════════════════
+refreshConfig();
+</script>
+
+</body>
+</html>

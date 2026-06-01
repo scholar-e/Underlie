@@ -1,6 +1,0 @@
-{
-  "best_reward": 0.0,
-  "total_steps": 96,
-  "game_result": "Terminated after 5 consecutive illegal/failed moves. Last input: 'White has a strong central pawn on e4 and a well-developed setup. A good move is to continue developing pieces and maintaining pressure. Among the legal moves, Bg5 is a strong candidate as it develops the bishop and puts pressure on the black king. MOVE: Bg5'",
-  "num_moves": 96
-}

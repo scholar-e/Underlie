@@ -1,6 +1,0 @@
-{
-  "best_reward": 0.1,
-  "total_steps": 138,
-  "game_result": "Terminated after 5 consecutive illegal/failed moves. Last input: 'The white king is exposed, and Black has a strong position with a rook on b1 and a bishop on g7. While Rf8 and Rg8 were previously rejected, other strong options remain. Rb8 is a solid move that supports the rook and prepares for further pressure on the kingside. MOVE: Rb8'",
-  "num_moves": 138
-}

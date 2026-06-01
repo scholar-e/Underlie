@@ -2,7 +2,7 @@ infra:
   cluster: null
   conda_env: null
   cpus_per_task: null
-  folder: D:\ProgrammingProjects\Sweccathon2026\Underlie\everythingelse\tribev2\cache
+  folder: /home/elinzi/Coding/under2/Underlie/everythingelse/tribev2/cache
   gpus_per_node: null
   job_name: null
   keep_in_ram: false

@@ -1,0 +1,10 @@
+text	start	duration	sequence_id	sentence
+The	0.111	0.10099999999999999	0	 The quick brown fox jumps over the lazy dog.
+quick	0.272	0.242	0	 The quick brown fox jumps over the lazy dog.
+brown	0.574	0.30200000000000005	0	 The quick brown fox jumps over the lazy dog.
+fox	0.976	0.3820000000000001	0	 The quick brown fox jumps over the lazy dog.
+jumps	1.459	0.3019999999999998	0	 The quick brown fox jumps over the lazy dog.
+over	1.861	0.1609999999999998	0	 The quick brown fox jumps over the lazy dog.
+the	2.082	0.10099999999999998	0	 The quick brown fox jumps over the lazy dog.
+lazy	2.203	0.3820000000000001	0	 The quick brown fox jumps over the lazy dog.
+dog.	2.626	0.3620000000000001	0	 The quick brown fox jumps over the lazy dog.

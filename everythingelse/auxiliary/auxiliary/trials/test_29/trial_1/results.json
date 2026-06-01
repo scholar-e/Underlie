@@ -1,6 +1,0 @@
-{
-  "best_reward": 0.0,
-  "total_steps": 6,
-  "game_result": "Terminated after 5 consecutive illegal/failed moves. Last input: 'MOVE: e4'",
-  "num_moves": 6
-}

@@ -1,0 +1,8 @@
+text	start	duration	sequence_id	sentence
+I	0.151	0.08100000000000002	0	 I love pizza on a summer evening.
+love	0.292	0.24000000000000005	0	 I love pizza on a summer evening.
+pizza	0.593	0.24	0	 I love pizza on a summer evening.
+on	0.934	0.12	0	 I love pizza on a summer evening.
+a	1.114	0.05999999999999983	0	 I love pizza on a summer evening.
+summer	1.214	0.34099999999999997	0	 I love pizza on a summer evening.
+evening.	1.615	0.42199999999999993	0	 I love pizza on a summer evening.

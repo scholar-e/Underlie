@@ -1,0 +1,8 @@
+  0%|          | 0/5 [00:00<?, ?it/s]
+Computing word embeddings:   0%|          | 0/2 [00:00<?, ?it/s][AWarning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+
+
+Loading weights:   0%|          | 0/338 [00:00<?, ?it/s][A[ALoading weights: 100%|██████████| 338/338 [00:00<00:00, 34415.43it/s]
+ 20%|██        | 1/5 [00:02<00:08,  2.12s/it]
+Computing word embeddings:  50%|█████     | 1/2 [00:02<00:02,  2.12s/it][A100%|██████████| 5/5 [00:02<00:00,  2.27it/s]
+Computing word embeddings: 100%|██████████| 2/2 [00:02<00:00,  1.10s/it]

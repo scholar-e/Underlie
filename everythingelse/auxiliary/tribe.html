@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>TRIBE v2 — Brain Activity Viewer</title>
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  background: #0f0f1a; color: #ddd; line-height: 1.5;
+  min-height: 100vh;
+}
+header {
+  background: linear-gradient(135deg, #1a1a3e, #16213e);
+  padding: 20px 24px; border-bottom: 1px solid #2a2a4a;
+}
+header h1 { font-size: 20px; font-weight: 600; color: #fff; }
+header .sub { font-size: 13px; color: #8888aa; }
+main {
+  max-width: 1100px; margin: 24px auto; padding: 0 24px;
+  display: flex; flex-direction: column; gap: 20px;
+}
+.panel {
+  background: #16213e; border-radius: 10px; padding: 20px;
+  border: 1px solid #2a2a4a;
+}
+.panel h3 { font-size: 12px; color: #666; text-transform: uppercase; letter-spacing: .8px; margin-bottom: 12px; }
+
+.input-group { display: flex; gap: 12px; flex-wrap: wrap; align-items: flex-end; }
+.input-group label { font-size: 13px; color: #888; display: block; margin-bottom: 4px; }
+.input-group input {
+  font-family: inherit; font-size: 14px; padding: 8px 12px;
+  border-radius: 6px; border: 1px solid #2a2a4a; background: #1a1a3e;
+  color: #ddd; width: 280px; transition: border-color .12s;
+}
+.input-group input:focus { outline: none; border-color: #4361ee; }
+.btn {
+  font-family: inherit; font-size: 14px; padding: 8px 20px;
+  border-radius: 6px; border: 1px solid #4361ee; background: #4361ee;
+  color: #fff; cursor: pointer; transition: all .12s;
+  font-weight: 500;
+}
+.btn:hover { background: #3651d4; }
+.btn:disabled { opacity: .4; cursor: not-allowed; }
+
+.results { display: flex; flex-direction: column; gap: 16px; }
+.metrics {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 12px;
+}
+.metric {
+  background: #1a1a3e; border-radius: 8px; padding: 12px; text-align: center;
+  border: 1px solid #2a2a4a;
+}
+.metric .val { font-size: 22px; font-weight: 600; color: #4ecdc4; }
+.metric .lbl { font-size: 11px; color: #666; margin-top: 2px; }
+
+.brain-images { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.brain-images .brain-card {
+  background: #1a1a3e; border-radius: 8px; padding: 12px;
+  border: 1px solid #2a2a4a;
+}
+.brain-images .brain-card h4 { font-size: 13px; color: #aaa; margin-bottom: 8px; text-align: center; }
+.brain-images .brain-card img { width: 100%; border-radius: 4px; }
+
+.status {
+  font-size: 13px; color: #8888aa; padding: 12px 0;
+  display: flex; align-items: center; gap: 10px;
+}
+.spinner {
+  width: 16px; height: 16px; border: 2px solid #2a2a4a;
+  border-top-color: #4361ee; border-radius: 50%; display: inline-block;
+  animation: spin .8s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+@media (max-width: 700px) {
+  .brain-images { grid-template-columns: 1fr; }
+  .input-group input { width: 100%; }
+}
+</style>
+</head>
+<body>
+<header>
+  <h1>TRIBE v2 — Brain Activity Viewer</h1>
+  <div class="sub">Deep multimodal brain encoding — compare brain responses to sentences</div>
+</header>
+<main>
+  <div class="panel">
+    <h3>Compare sentences</h3>
+    <div class="input-group">
+      <div>
+        <label for="sentenceA">Sentence A</label>
+        <input id="sentenceA" type="text" value="The quick brown fox jumps over the lazy dog." placeholder="Enter first sentence">
+      </div>
+      <div>
+        <label for="sentenceB">Sentence B</label>
+        <input id="sentenceB" type="text" value="A journey of a thousand miles begins with a single step." placeholder="Enter second sentence">
+      </div>
+      <button class="btn" id="runBtn">Run</button>
+    </div>
+  </div>
+
+  <div id="status" class="status" style="display:none"></div>
+
+  <div id="results" class="results" style="display:none">
+    <div class="panel">
+      <h3>Similarity metrics</h3>
+      <div class="metrics" id="metrics"></div>
+    </div>
+    <div class="panel">
+      <h3>Brain surface predictions</h3>
+      <div class="brain-images">
+        <div class="brain-card">
+          <h4 id="labelA">Sentence A</h4>
+          <img id="imageA" src="" alt="Brain activity for sentence A">
+        </div>
+        <div class="brain-card">
+          <h4 id="labelB">Sentence B</h4>
+          <img id="imageB" src="" alt="Brain activity for sentence B">
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="error" class="panel" style="display:none;border-color:#6b2a2a;background:#1e1515">
+    <h3 style="color:#ff6b6b">Error</h3>
+    <p id="errorMsg" style="font-size:14px;color:#cc8888"></p>
+  </div>
+</main>
+
+<script>
+const STATUS_POLL_MS = 2000;
+
+const sentenceA = document.getElementById('sentenceA');
+const sentenceB = document.getElementById('sentenceB');
+const runBtn = document.getElementById('runBtn');
+const statusEl = document.getElementById('status');
+const resultsEl = document.getElementById('results');
+const errorEl = document.getElementById('error');
+const errorMsg = document.getElementById('errorMsg');
+const metricsEl = document.getElementById('metrics');
+const labelA = document.getElementById('labelA');
+const labelB = document.getElementById('labelB');
+const imageA = document.getElementById('imageA');
+const imageB = document.getElementById('imageB');
+
+runBtn.addEventListener('click', run);
+
+async function run() {
+  const a = sentenceA.value.trim();
+  const b = sentenceB.value.trim();
+  if (!a || !b) { showError('Both sentences must be non-empty.'); return; }
+
+  runBtn.disabled = true;
+  hideError();
+  resultsEl.style.display = 'none';
+    showStatus('Submitting job...');
+
+  try {
+    const resp = await fetch('/compare', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ sentence_a: a, sentence_b: b }),
+    });
+    if (!resp.ok) throw new Error(`API error: ${resp.status}`);
+    const { job_id } = await resp.json();
+
+    let lastProgress = '';
+    while (true) {
+      await new Promise(r => setTimeout(r, STATUS_POLL_MS));
+      const statusResp = await fetch(`/status/${job_id}`);
+      if (!statusResp.ok) throw new Error(`Status error: ${statusResp.status}`);
+      const data = await statusResp.json();
+
+      if (data.progress && data.progress !== lastProgress) {
+        lastProgress = data.progress;
+        showStatus(data.progress);
+      }
+
+      if (data.status === 'done') {
+        displayResults(a, b, job_id, data.result);
+        return;
+      } else if (data.status === 'error') {
+        throw new Error(data.error || 'Unknown error');
+      }
+    }
+  } catch (err) {
+    showError(err.message);
+  } finally {
+    runBtn.disabled = false;
+    hideStatus();
+  }
+}
+
+function displayResults(a, b, jobId, r) {
+  metricsEl.innerHTML = `
+    <div class="metric"><div class="val">${r.mse.toFixed(4)}</div><div class="lbl">MSE</div></div>
+    <div class="metric"><div class="val">${r.mae.toFixed(4)}</div><div class="lbl">MAE</div></div>
+    <div class="metric"><div class="val">${r.correlation.toFixed(4)}</div><div class="lbl">Correlation</div></div>
+    <div class="metric"><div class="val">${r.cosine_similarity.toFixed(4)}</div><div class="lbl">Cosine similarity</div></div>
+    <div class="metric"><div class="val">${r.n_segments_a}</div><div class="lbl">Segments A</div></div>
+    <div class="metric"><div class="val">${r.n_segments_b}</div><div class="lbl">Segments B</div></div>
+    <div class="metric"><div class="val">${r.n_segments_compared}</div><div class="lbl">Compared</div></div>
+  `;
+  labelA.textContent = `A: "${a}"`;
+  labelB.textContent = `B: "${b}"`;
+  imageA.src = `/visualize/${jobId}?sentence=a`;
+  imageB.src = `/visualize/${jobId}?sentence=b`;
+  resultsEl.style.display = 'flex';
+}
+
+function showStatus(msg) {
+  statusEl.style.display = 'flex';
+  statusEl.innerHTML = `<span class="spinner"></span> ${msg}`;
+}
+
+function hideStatus() { statusEl.style.display = 'none'; }
+
+function showError(msg) {
+  errorEl.style.display = 'block';
+  errorMsg.textContent = msg;
+}
+
+function hideError() { errorEl.style.display = 'none'; }
+</script>
+</body>
+</html>

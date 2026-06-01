@@ -1,6 +1,0 @@
-{
-  "best_reward": 0.0,
-  "total_steps": 95,
-  "game_result": "Terminated after 5 consecutive illegal/failed moves. Last input: \"White has a strong position with a passed pawn on e5 and a well-developed army. The king is on e3, and Black's pieces are scattered. The best move is to advance the e-pawn and create a decisive threat.  \\nMOVE: e4\"",
-  "num_moves": 95
-}

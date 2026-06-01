@@ -1,6 +1,0 @@
-{
-  "best_reward": 0.0,
-  "total_steps": 73,
-  "game_result": "Terminated after 5 consecutive illegal/failed moves. Last input: \"The white king is in a vulnerable position, and the black knight on f5 is attacking e4. To improve the position, moving the king to g3 is a safer option that avoids immediate threats and keeps the king out of harm's way. MOVE: Kg3\"",
-  "num_moves": 73
-}

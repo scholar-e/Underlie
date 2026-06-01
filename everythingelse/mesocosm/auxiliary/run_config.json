@@ -1,0 +1,13 @@
+{
+  "model": "ollama/hf.co/unsloth/Qwen3-30B-A3B-GGUF:UD-Q4_K_XL",
+  "episodes": 1,
+  "max_steps": 20,
+  "temperature": 0.6,
+  "max_tokens": 4096,
+  "system_prompt": "\"Write a short sentence (\u226415 words) that captures the same emotional impact as the given poem. Start your sentence with SENTENCE: on its own line.\"",
+  "brain_api_url": "",
+  "mode": "local",
+  "env_name": "Brain Activation Matching",
+  "github_url": "",
+  "env_description": "Agent writes a short sentence matching the emotional impact of a poem, scored by cosine similarity of TRIBE v2 brain activation maps."
+}

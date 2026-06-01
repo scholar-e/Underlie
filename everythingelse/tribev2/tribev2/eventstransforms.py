@@ -13,7 +13,6 @@ import warnings
 from pathlib import Path
 
 import exca
-import numpy as np
 import neuralset.events.etypes as ev
 import pandas as pd
 import torch
@@ -91,36 +90,14 @@ class ExtractWordsFromAudio(EventsTransform):
 
     language: str = "english"
     overwrite: bool = False
-    _whisperx_model = None
-    _whisperx_model_key = None
-    _align_model = None
-    _align_metadata = None
-    _align_model_key = None
-
-    @staticmethod
-    def _get_whisperx_model(language: str, device: str, compute_type: str):
-        key = (language, device, compute_type)
-        if ExtractWordsFromAudio._whisperx_model_key != key:
-            import whisperx
-            ExtractWordsFromAudio._whisperx_model = whisperx.load_model(
-                "tiny", device=device, compute_type=compute_type, language=language
-            )
-            ExtractWordsFromAudio._whisperx_model_key = key
-        return ExtractWordsFromAudio._whisperx_model
-
-    @staticmethod
-    def _get_align_model(language_code: str, device: str):
-        key = (language_code, device)
-        if ExtractWordsFromAudio._align_model_key != key:
-            import whisperx
-            ExtractWordsFromAudio._align_model, ExtractWordsFromAudio._align_metadata = (
-                whisperx.load_align_model(language_code=language_code, device=device)
-            )
-            ExtractWordsFromAudio._align_model_key = key
-        return ExtractWordsFromAudio._align_model, ExtractWordsFromAudio._align_metadata
 
     @staticmethod
     def _get_transcript_from_audio(wav_filename: Path, language: str) -> pd.DataFrame:
+        import json
+        import os
+        import subprocess
+        import tempfile
+
         language_codes = dict(
             english="en", french="fr", spanish="es", dutch="nl", chinese="zh"
         )
@@ -129,27 +106,34 @@ class ExtractWordsFromAudio(EventsTransform):
 
         device = "cuda" if torch.cuda.is_available() else "cpu"
         compute_type = "float16" if device == "cuda" else "int8"
-        lang_code = language_codes[language]
 
-        import whisperx, soundfile as sf
+        with tempfile.TemporaryDirectory() as output_dir:
+            logger.info("Running whisperx via uvx...")
+            cmd = [
+                "uvx",
+                "whisperx",
+                str(wav_filename),
+                "--model",
+                "tiny",
+                "--language",
+                language_codes[language],
+                "--device",
+                device,
+                "--compute_type",
+                compute_type,
+                "--output_dir",
+                output_dir,
+                "--output_format",
+                "json",
+            ]
+            cmd = [c for c in cmd if c]  # remove empty args
+            env = {k: v for k, v in os.environ.items() if k != "MPLBACKEND"}
+            result = subprocess.run(cmd, capture_output=True, text=True, env=env)
+            if result.returncode != 0:
+                raise RuntimeError(f"whisperx failed:\n{result.stderr}")
 
-        audio, sr = sf.read(str(wav_filename))
-        audio = audio.astype(np.float32)
-
-        asr_model = ExtractWordsFromAudio._get_whisperx_model(
-            lang_code, device, compute_type
-        )
-        logger.info("Transcribing audio with whisperx...")
-        result = asr_model.transcribe(audio)
-
-        align_model, align_metadata = ExtractWordsFromAudio._get_align_model(
-            lang_code, device
-        )
-        logger.info("Aligning words with whisperx...")
-        result = whisperx.align(
-            result["segments"], align_model, align_metadata, audio, device
-        )
-        transcript = result
+            json_path = Path(output_dir) / f"{wav_filename.stem}.json"
+            transcript = json.loads(json_path.read_text())
 
         words = []
         for i, segment in enumerate(transcript["segments"]):

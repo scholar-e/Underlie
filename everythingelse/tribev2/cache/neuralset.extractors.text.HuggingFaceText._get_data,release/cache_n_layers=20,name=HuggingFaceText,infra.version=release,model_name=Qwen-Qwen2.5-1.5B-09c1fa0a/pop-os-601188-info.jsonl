@@ -1,0 +1,5 @@
+{"filename":"data/pop-os-601188.data","offset":0,"shape":[20,1536],"dtype":"float32","#type":"MemmapArray","#key":"Hey,_Hey,"}
+{"filename":"data/pop-os-601188.data","offset":122880,"shape":[20,1536],"dtype":"float32","#type":"MemmapArray","#key":"hey,_Hey, hey,"}
+{"filename":"data/pop-os-601188.data","offset":245760,"shape":[20,1536],"dtype":"float32","#type":"MemmapArray","#key":"hey_Hey, hey, hey, hey, hey"}
+{"filename":"data/pop-os-601188.data","offset":368640,"shape":[20,1536],"dtype":"float32","#type":"MemmapArray","#key":"hey,_Hey, hey, hey,"}
+{"filename":"data/pop-os-601188.data","offset":491520,"shape":[20,1536],"dtype":"float32","#type":"MemmapArray","#key":"hey,_Hey, hey, hey, hey,"}

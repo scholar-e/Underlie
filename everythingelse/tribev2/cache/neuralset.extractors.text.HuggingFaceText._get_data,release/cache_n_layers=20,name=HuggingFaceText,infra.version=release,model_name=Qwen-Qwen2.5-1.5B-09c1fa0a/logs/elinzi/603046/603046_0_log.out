@@ -1,0 +1,4 @@
+submitit INFO (2026-06-01 03:14:02,607) - Starting with JobEnvironment(job_id=603046, hostname=pop-os, local_rank=0(1), node=0(1), global_rank=0(1))
+submitit INFO (2026-06-01 03:14:02,607) - Loading pickle: /home/elinzi/Coding/under2/Underlie/everythingelse/tribev2/cache/neuralset.extractors.text.HuggingFaceText._get_data,release/cache_n_layers=20,name=HuggingFaceText,infra.version=release,model_name=Qwen-Qwen2.5-1.5B-09c1fa0a/logs/elinzi/603046/603046_submitted.pkl
+submitit INFO (2026-06-01 03:14:06,867) - Job completed successfully
+submitit INFO (2026-06-01 03:14:06,867) - Exiting after successful completion

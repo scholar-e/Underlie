@@ -1,4 +1,4 @@
-auxiliary/data/
+everythingelse/auxiliary/data/
 auxiliary/trials/
 auxiliary/test_results/
 auxiliary/run_config.json
@@ -22,3 +22,8 @@ auxiliary/stockfish/src/nn-c288c895ea92.nnue
 auxiliary/stockfish/src/.depend
 auxiliary/stockfish/stockfish-windows-*.exe
 auxiliary/stockfish/src/sf.dltest
+
+# Large model caches / artifacts
+everythingelse/mesocosm/auxiliary/model_cache/
+
+__pycache__/

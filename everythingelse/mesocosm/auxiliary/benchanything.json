@@ -1,0 +1,50 @@
+{
+  "id": "brain-activation-match",
+  "adapter": "adapter.py",
+  "name": "Brain Activation Matching",
+  "description": "Agent composes a poem whose TRIBE v2 brain activation pattern matches a target poem.",
+
+  "binding_vow": {
+    "version": "1.0.0",
+    "tier": "tier1",
+    "description": "Agent receives a target poem and must compose a new poem whose brain activation (via TRIBE v2 + Phi-3-mini) closely matches the target's. Reward = cosine similarity of brain activation vectors.",
+
+    "observation_space": {
+      "type": "json",
+      "description": "{ \"task\": str, \"target_poem\": str, \"target_author\": str, \"target_title\": str, \"step\": int, \"max_steps\": int, \"best_similarity\": float }"
+    },
+
+    "action_space": {
+      "type": "text",
+      "description": "Compose a poem. Format: POEM: <your poem here>. You may include reasoning before or after."
+    },
+
+      "reward": {
+        "type": "scalar",
+        "range": { "low": 0.0, "high": 1.0 },
+        "description": "0.6 × brain activation cosine similarity + 0.4 × length ratio (min(target_words, poem_words) / max(target_words, poem_words)). Higher is better."
+      },
+
+    "episode": {
+      "max_steps": 20,
+      "deterministic_reset": true,
+      "supports_seed": true,
+      "parallel_episodes": 1,
+      "observability": "full"
+    },
+
+    "techniques": []
+  },
+
+  "scoring": {
+    "primary_metric": "mean_episode_reward",
+    "higher_is_better": true,
+    "metrics": [
+      {
+        "name": "mean_episode_reward",
+        "type": "episode_reward",
+        "aggregation": "mean"
+      }
+    ]
+  }
+}

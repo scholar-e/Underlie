@@ -1,6 +1,0 @@
-{
-  "best_reward": 0.0,
-  "total_steps": 53,
-  "game_result": "Terminated after 5 consecutive illegal/failed moves. Last input: 'Black has a strong knight on e5, but the move d5 is not legal. I need to select a move from the legal_moves list. A good option is to develop the queen or rook to a more active position. MOVE: Qd7'",
-  "num_moves": 53
-}

@@ -1,0 +1,5 @@
+{"filename":"data/pop-os-561620.data","offset":0,"shape":[20,1536],"dtype":"float32","#type":"MemmapArray","#key":"pizza_I love pizza"}
+{"filename":"data/pop-os-561620.data","offset":122880,"shape":[20,1536],"dtype":"float32","#type":"MemmapArray","#key":"evening._I love pizza on a summer evening"}
+{"filename":"data/pop-os-561620.data","offset":245760,"shape":[20,1536],"dtype":"float32","#type":"MemmapArray","#key":"summer_I love pizza on a summer"}
+{"filename":"data/pop-os-561620.data","offset":368640,"shape":[20,1536],"dtype":"float32","#type":"MemmapArray","#key":"on_I love pizza on"}
+{"filename":"data/pop-os-561620.data","offset":491520,"shape":[20,1536],"dtype":"float32","#type":"MemmapArray","#key":"a_I love pizza on a"}

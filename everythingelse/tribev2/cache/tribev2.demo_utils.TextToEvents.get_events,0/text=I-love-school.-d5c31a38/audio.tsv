@@ -1,0 +1,4 @@
+text	start	duration	sequence_id	sentence
+I	0.132	0.08099999999999999	0	 I love school.
+love	0.314	0.24200000000000005	0	 I love school.
+school.	0.617	0.42399999999999993	0	 I love school.

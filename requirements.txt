@@ -1,2 +1,6 @@
 chess
 stockfish
+bench_common
+fastapi
+uvicorn
+pydantic
