@@ -131,7 +131,38 @@ class ExtractWordsFromAudio(EventsTransform):
         compute_type = "float16" if device == "cuda" else "int8"
         lang_code = language_codes[language]
 
+<<<<<<< HEAD
         import whisperx, soundfile as sf
+=======
+        with tempfile.TemporaryDirectory() as output_dir:
+            logger.info("Running whisperx via uvx...")
+            cmd = [
+                "uvx",
+                "whisperx",
+                str(wav_filename),
+                "--model",
+                "large-v3",
+                "--language",
+                language_codes[language],
+                "--device",
+                device,
+                "--compute_type",
+                compute_type,
+                "--batch_size",
+                "16",
+                "--align_model",
+                "WAV2VEC2_ASR_LARGE_LV60K_960H" if language == "english" else "",
+                "--output_dir",
+                output_dir,
+                "--output_format",
+                "json",
+            ]
+            cmd = [c for c in cmd if c]  # remove empty args
+            env = {k: v for k, v in os.environ.items() if k != "MPLBACKEND"}
+            result = subprocess.run(cmd, capture_output=True, text=True, env=env)
+            if result.returncode != 0:
+                raise RuntimeError(f"whisperx failed:\n{result.stderr}")
+>>>>>>> parent of d2e82e7 (holy shit its 100x faster)
 
         audio, sr = sf.read(str(wav_filename))
         audio = audio.astype(np.float32)
