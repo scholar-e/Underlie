@@ -16,7 +16,7 @@ auxiliary/auxiliary/trials
 # Stockfish compiled binary and large assets
 
 # Stockfish build artifacts
-everythingelse/auxiliary/stockfish/src/stockfish
+auxiliary/stockfish/src/stockfish
 auxiliary/stockfish/src/*.o
 auxiliary/stockfish/src/nn-c288c895ea92.nnue
 auxiliary/stockfish/src/.depend
