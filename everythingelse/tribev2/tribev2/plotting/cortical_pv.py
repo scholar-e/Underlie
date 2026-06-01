@@ -4,8 +4,10 @@
 # This source code is licensed under the license found in the
 # LICENSE file in the root directory of this source tree.
 
+import shutil
 import tempfile
 import typing as tp
+from pathlib import Path
 
 import matplotlib.pyplot as plt
 import numpy as np
@@ -157,8 +159,11 @@ class PlotBrainPyvista(BasePlotBrain):
                     annotated_rois,
                     **(annotated_rois_kwargs or {}),
                 )
-            with tempfile.NamedTemporaryFile(suffix=".png") as tmp:
-                img = pl.screenshot(tmp.name, return_img=True)
+            tmpdir = tempfile.mkdtemp()
+            tmppath = Path(tmpdir) / "_brain.png"
+            img = pl.screenshot(str(tmppath), return_img=True)
+            import shutil
+            shutil.rmtree(tmpdir, ignore_errors=True)
             img = tight_crop(img, w_pad=self.w_pad, h_pad=self.h_pad)
             pl.clear()
             ax.axis("off")
@@ -268,10 +273,12 @@ class PlotBrainPyvista(BasePlotBrain):
 
             vec, up = VIEW_DICT[view]
             pl.view_vector(vec, viewup=up)
-            with tempfile.NamedTemporaryFile(suffix=".png") as tmp:
-                img = pl.screenshot(
-                    tmp.name, return_img=True, transparent_background=True
-                )
+            tmpdir = tempfile.mkdtemp()
+            tmppath = Path(tmpdir) / "_brain.png"
+            img = pl.screenshot(
+                str(tmppath), return_img=True, transparent_background=True
+            )
+            shutil.rmtree(tmpdir, ignore_errors=True)
             img = tight_crop(img, w_pad=self.w_pad, h_pad=self.h_pad)
             pl.clear()
             ax.axis("off")
