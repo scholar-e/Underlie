@@ -83,6 +83,10 @@ main {
 }
 .history-box .hl-move { color: #dda; font-weight: 600; }
 .history-box .num { color: #555; }
+.pgn-box {
+  font-family: "SF Mono", "Fira Code", monospace; font-size: 12px; line-height: 1.7;
+  max-height: 100px; overflow-y: auto; color: #999; word-break: break-all;
+}
 
 .reasoning-box {
   font-size: 13px; line-height: 1.7; color: #bbb;
@@ -246,6 +250,11 @@ function render() {
         <div class="history-box">${histHtml||'—'}</div>
       </div>
 
+      <div class="panel">
+        <h3>PGN <button id="copyPgnBtn" style="font-family:inherit;font-size:10px;padding:2px 8px;border-radius:4px;border:1px solid #2a2a4a;background:#1a1a3e;color:#888;cursor:pointer;float:right">📋 Copy</button></h3>
+        <div class="pgn-box" id="pgnBox">${buildPgn(allMoves) || '—'}</div>
+      </div>
+
       <div class="panel" style="flex:1">
         <h3>Model reasoning <span style="font-weight:400;text-transform:none;color:#666">${model.split('/').pop()}</span></h3>
         <div class="reasoning-box">${reasoning ? `<span class="step-tag">Step ${s.step}</span>\n${escHtml(reasoning)}` : '<span style="color:#555">No reasoning recorded</span>'}</div>
@@ -270,6 +279,7 @@ function render() {
   document.getElementById('endBtn')?.addEventListener('click',()=>{curStep=steps.length-1;render();});
   document.getElementById('epSelect')?.addEventListener('change',e=>{curEp=parseInt(e.target.value);curStep=0;render();});
   document.getElementById('loadArea')?.addEventListener('click',()=>document.getElementById('fileInput')?.click());
+  document.getElementById('copyPgnBtn')?.addEventListener('click', copyPgn);
   document.getElementById('fileInput')?.addEventListener('change', async e => {
     const file = e.target.files?.[0];
     if (!file) return;
@@ -281,6 +291,29 @@ function render() {
     }
     e.target.value = '';
   });
+}
+
+function buildPgn(moves) {
+  if (!moves || !moves.length) return '';
+  const pairs = [];
+  for (let i = 0; i < moves.length; i += 2) {
+    const n = Math.floor(i / 2) + 1;
+    const w = moves[i] || '...';
+    const b = moves[i + 1] || '';
+    pairs.push(n + '. ' + w + (b ? ' ' + b : ''));
+  }
+  return pairs.join(' ');
+}
+
+function copyPgn() {
+  const box = document.getElementById('pgnBox');
+  if (!box) return;
+  const text = box.textContent || box.innerText;
+  if (!text || text === '—') return;
+  navigator.clipboard.writeText(text).then(() => {
+    const btn = document.getElementById('copyPgnBtn');
+    if (btn) { btn.textContent = '✅ Copied!'; setTimeout(() => { btn.textContent = '📋 Copy'; }, 2000); }
+  }).catch(() => {});
 }
 
 function escHtml(s) {

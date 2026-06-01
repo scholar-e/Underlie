@@ -3,6 +3,7 @@ from __future__ import annotations
 import chess
 import json
 import os
+import random
 import re
 import subprocess
 import sys
@@ -33,7 +34,7 @@ def _get_test_number() -> int:
 
 
 class MyEnv(BaseEnv):
-    MAX_CONSECUTIVE_ILLEGAL = 5
+    MAX_CONSECUTIVE_ILLEGAL = 8
     MOVE_PATTERN = re.compile(
         r"O-O-O|0-0-0|"
         r"O-O|0-0|"
@@ -194,53 +195,53 @@ class MyEnv(BaseEnv):
             lines.append("Check: YES")
         else:
             lines.append("Check: no")
+
         lines.append("")
 
-        if self._all_rejected_moves:
-            last = self._all_rejected_moves[-1]
-            lines.append(f"!!! Last move REJECTED: {last['attempt']} - {last['reason']} !!!")
+        lines.append("")
+
+        n_illegal = len(self.current_consecutive_illegal_moves)
+
+        if n_illegal >= 4:
+            lines.append(f"CRITICAL — next illegal move ends the game.")
+            lines.append(f"Your response must contain ONLY: MOVE: <one from legal_moves>")
+            lines.append(f"TOKEN: {random.randint(10000, 99999)}")
+        elif n_illegal >= 2:
+            lines.append(f"WARNING — {n_illegal} consecutive illegal moves ({self.MAX_CONSECUTIVE_ILLEGAL} max)")
+            lines.append(f"TOKEN: {random.randint(10000, 99999)}")
+        elif self._all_rejected_moves:
+            lines.append(f"Last move rejected — pick from legal moves.")
+
+        lines.append("")
+
+        if n_illegal >= 4:
+            lines.append(f"FEN: {self.board.fen()}")
+            lines.append(f"Legal: {', '.join(legal_moves)}")
+            lines.append(f"MOVE NOW:")
+        elif n_illegal >= 2:
+            lines.append(f"FEN: {self.board.fen()}")
+            lines.append(f"Legal moves: {', '.join(legal_moves)}")
+            lines.append(f"Send MOVE: <move>")
+        else:
+            lines.append(f"White: {self._pieces_summary(self.board, chess.WHITE)}")
+            lines.append(f"Black: {self._pieces_summary(self.board, chess.BLACK)}")
+
+            if self.board.move_stack:
+                temp_board2 = chess.Board()
+                history_parts = []
+                for i, move in enumerate(self.board.move_stack):
+                    san = temp_board2.san(move)
+                    temp_board2.push(move)
+                    if i % 2 == 0:
+                        history_parts.append(f"{i//2 + 1}. {san}")
+                    else:
+                        history_parts[-1] += f" {san}"
+                last_10_turns = " ".join(history_parts[-10:])
+                lines.append(f"History (last 10 turns): {last_10_turns}")
+
+            lines.append(f"Legal moves: {', '.join(legal_moves)}")
             lines.append("")
-
-        if self.current_consecutive_illegal_moves:
-            counts = {}
-            for m in self.current_consecutive_illegal_moves:
-                counts[m] = counts.get(m, 0) + 1
-            for m, c in counts.items():
-                if c >= 2:
-                    lines.append(f"!!! You suggested '{m}' {c} times in a row and it was rejected each time !!!")
-                    lines.append(f"!!! '{m}' is NOT in legal_moves. Pick something from legal_moves. !!!")
-                    lines.append("")
-            n = len(self.current_consecutive_illegal_moves)
-            if n >= 3:
-                lines.append(f"!!! CRITICAL: {n} consecutive illegal moves! If you make {self.MAX_CONSECUTIVE_ILLEGAL - n} more, the game ends !!!")
-                lines.append("!!! You are stuck in a loop. Read the legal_moves list carefully and pick ANY move from it. !!!")
-
-        lines.append(f"White: {self._pieces_summary(self.board, chess.WHITE)}")
-        lines.append(f"Black: {self._pieces_summary(self.board, chess.BLACK)}")
-
-        if self.board.move_stack:
-            temp_board2 = chess.Board()
-            history_parts = []
-            for i, move in enumerate(self.board.move_stack):
-                san = temp_board2.san(move)
-                temp_board2.push(move)
-                if i % 2 == 0:
-                    history_parts.append(f"{i//2 + 1}. {san}")
-                else:
-                    history_parts[-1] += f" {san}"
-            lines.append(f"History: {' '.join(history_parts)}")
-
-        lines.append(f"Legal moves: {', '.join(legal_moves)}")
-
-        if self._all_rejected_moves:
-            recent = self._all_rejected_moves[-3:]
-            lines.append("Previously rejected (do not repeat):")
-            for r in recent:
-                lines.append(f"  - {r['attempt']} ({r['reason']})")
-
-        lines.append("")
-        lines.append("RESPONSE FORMAT: End your response with MOVE: <move> on its own line (e.g. MOVE: e4 or MOVE: Nf3).")
-        lines.append("Pick only from legal_moves. Do NOT repeat rejected moves.")
+            lines.append("RESPONSE FORMAT: End with MOVE: <move> on its own line. Example: MOVE: e4.")
 
         text_board_string = "\n".join(lines)
 

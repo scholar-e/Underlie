@@ -86,16 +86,16 @@ def test_illegal_move():
 
 
 def test_consecutive_illegal_terminates():
-    print("\n=== Consecutive illegal moves (max 5) ===")
+    print("\n=== Consecutive illegal moves (max 8) ===")
     env = MyEnv()
     env.reset()
 
-    for i in range(4):
+    for i in range(7):
         result = env.step("Qe99")
         check(f"illegal #{i+1} not terminated", result.terminated is False, f"at step {i+1}")
 
     result = env.step("Qe99")
-    check("5th illegal terminates", result.truncated is True, "should be truncated after 5 illegals")
+    check("8th illegal terminates", result.truncated is True, "should be truncated after 8 illegals")
 
     env.close()
 
@@ -185,7 +185,7 @@ def test_observation_after_legal_move():
 
     check("must_avoid_moves is empty after legal", obs.get("must_avoid_moves") == [])
     check("fen changed from start", obs.get("fen") != chess.STARTING_FEN)
-    check("board text contains history", "History:" in obs.get("board", ""))
+    check("board text contains history", "History" in obs.get("board", ""))
     check("legal_moves still populated", len(obs.get("legal_moves", [])) > 0)
 
     env.close()
