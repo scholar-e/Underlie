@@ -1,0 +1,10 @@
+  0%|          | 0/9 [00:00<?, ?it/s]
+Computing word embeddings:   0%|          | 0/3 [00:00<?, ?it/s][AWarning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+Xet Storage is enabled for this repo, but the 'hf_xet' package is not installed. Falling back to regular HTTP download. For better performance, install the package with: `pip install huggingface_hub[hf_xet]` or `pip install hf_xet`
+
+
+Loading weights:   0%|          | 0/338 [00:00<?, ?it/s][A[ALoading weights: 100%|██████████| 338/338 [00:00<00:00, 37665.05it/s]
+ 11%|█         | 1/9 [00:29<03:58, 29.80s/it]
+Computing word embeddings:  33%|███▎      | 1/3 [00:29<00:59, 29.80s/it][A100%|██████████| 9/9 [00:29<00:00,  2.42s/it]100%|██████████| 9/9 [00:29<00:00,  3.33s/it]
+
+Computing word embeddings: 100%|██████████| 3/3 [00:29<00:00,  7.79s/it][AComputing word embeddings: 100%|██████████| 3/3 [00:29<00:00,  9.99s/it]

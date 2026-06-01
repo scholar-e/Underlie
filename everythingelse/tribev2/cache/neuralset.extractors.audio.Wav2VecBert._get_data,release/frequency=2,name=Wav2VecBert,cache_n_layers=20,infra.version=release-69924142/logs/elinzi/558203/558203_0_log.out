@@ -1,0 +1,4 @@
+submitit INFO (2026-06-01 01:14:23,950) - Starting with JobEnvironment(job_id=558203, hostname=pop-os, local_rank=0(1), node=0(1), global_rank=0(1))
+submitit INFO (2026-06-01 01:14:23,950) - Loading pickle: /home/elinzi/Coding/under2/Underlie/everythingelse/tribev2/cache/neuralset.extractors.audio.Wav2VecBert._get_data,release/frequency=2,name=Wav2VecBert,cache_n_layers=20,infra.version=release-69924142/logs/elinzi/558203/558203_submitted.pkl
+submitit INFO (2026-06-01 01:14:27,171) - Job completed successfully
+submitit INFO (2026-06-01 01:14:27,171) - Exiting after successful completion

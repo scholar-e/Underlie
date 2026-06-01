@@ -47,7 +47,7 @@ VALID_SUFFIXES: dict[str, set[str]] = {
 }
 
 
-pathlib.PosixPath = pathlib.WindowsPath
+# pathlib.PosixPath = pathlib.WindowsPath
 
 def download_file(url: str, path: str | Path) -> Path:
     """Download a file from *url* and save it to *path*.

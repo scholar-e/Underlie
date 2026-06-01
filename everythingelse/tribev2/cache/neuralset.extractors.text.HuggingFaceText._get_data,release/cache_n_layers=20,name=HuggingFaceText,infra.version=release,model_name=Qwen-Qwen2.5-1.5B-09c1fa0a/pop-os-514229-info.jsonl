@@ -1,0 +1,9 @@
+{"filename":"data/pop-os-514229.data","offset":0,"shape":[20,1536],"dtype":"float32","#type":"MemmapArray","#key":"jumps_The quick brown fox jumps"}
+{"filename":"data/pop-os-514229.data","offset":122880,"shape":[20,1536],"dtype":"float32","#type":"MemmapArray","#key":"brown_The quick brown"}
+{"filename":"data/pop-os-514229.data","offset":245760,"shape":[20,1536],"dtype":"float32","#type":"MemmapArray","#key":"the_The quick brown fox jumps over the"}
+{"filename":"data/pop-os-514229.data","offset":368640,"shape":[20,1536],"dtype":"float32","#type":"MemmapArray","#key":"quick_The quick"}
+{"filename":"data/pop-os-514229.data","offset":491520,"shape":[20,1536],"dtype":"float32","#type":"MemmapArray","#key":"The_The"}
+{"filename":"data/pop-os-514229.data","offset":614400,"shape":[20,1536],"dtype":"float32","#type":"MemmapArray","#key":"over_The quick brown fox jumps over"}
+{"filename":"data/pop-os-514229.data","offset":737280,"shape":[20,1536],"dtype":"float32","#type":"MemmapArray","#key":"lazy_The quick brown fox jumps over the lazy"}
+{"filename":"data/pop-os-514229.data","offset":860160,"shape":[20,1536],"dtype":"float32","#type":"MemmapArray","#key":"dog._The quick brown fox jumps over the lazy dog"}
+{"filename":"data/pop-os-514229.data","offset":983040,"shape":[20,1536],"dtype":"float32","#type":"MemmapArray","#key":"fox_The quick brown fox"}

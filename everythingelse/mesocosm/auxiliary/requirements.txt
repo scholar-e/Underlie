@@ -1,0 +1,8 @@
+# Runtime deps for env.py (runs on Mesocosm cloud, NO GPU needed).
+# It makes HTTP calls to your local brain_server.py via BRAIN_API_URL.
+#
+# The brain_server.py (your machine) needs additional deps:
+#   pip install transformers torch torchvision matplotlib numpy
+#
+# bench_common / swecc-mesocosm is NOT listed here — the sandbox
+# already provides fastapi, uvicorn, httpx, pydantic for adapter.py.

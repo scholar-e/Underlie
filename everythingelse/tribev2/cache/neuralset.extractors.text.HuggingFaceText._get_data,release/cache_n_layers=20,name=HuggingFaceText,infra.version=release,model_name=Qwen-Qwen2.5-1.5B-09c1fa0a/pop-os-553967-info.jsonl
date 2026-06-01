@@ -1,0 +1,5 @@
+{"filename":"data/pop-os-553967.data","offset":0,"shape":[20,1536],"dtype":"float32","#type":"MemmapArray","#key":"mushroom_One mushroom"}
+{"filename":"data/pop-os-553967.data","offset":122880,"shape":[20,1536],"dtype":"float32","#type":"MemmapArray","#key":"a_One mushroom in a"}
+{"filename":"data/pop-os-553967.data","offset":245760,"shape":[20,1536],"dtype":"float32","#type":"MemmapArray","#key":"pot._One mushroom in a pot"}
+{"filename":"data/pop-os-553967.data","offset":368640,"shape":[20,1536],"dtype":"float32","#type":"MemmapArray","#key":"One_One"}
+{"filename":"data/pop-os-553967.data","offset":491520,"shape":[20,1536],"dtype":"float32","#type":"MemmapArray","#key":"in_One mushroom in"}

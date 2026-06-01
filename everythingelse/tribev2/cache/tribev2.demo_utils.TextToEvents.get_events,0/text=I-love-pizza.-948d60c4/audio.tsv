@@ -1,0 +1,4 @@
+text	start	duration	sequence_id	sentence
+I	0.152	0.08100000000000002	0	 I love pizza.
+love	0.274	0.22299999999999998	0	 I love pizza.
+pizza.	0.577	0.405	0	 I love pizza.

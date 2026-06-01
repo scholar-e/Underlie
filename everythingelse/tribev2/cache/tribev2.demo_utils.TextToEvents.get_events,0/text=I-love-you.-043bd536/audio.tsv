@@ -1,0 +1,4 @@
+text	start	duration	sequence_id	sentence
+I	0.132	0.14100000000000001	0	 I love you.
+love	0.313	0.182	0	 I love you.
+you.	0.535	0.20199999999999996	0	 I love you.

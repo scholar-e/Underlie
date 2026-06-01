@@ -1,0 +1,32 @@
+{
+  "id": "cmp_20260601_103731_371969",
+  "timestamp": "2026-06-01T10:37:31.371989+00:00",
+  "sentence_a": "HELP HELP HELP HELP HELP",
+  "sentence_b": "i love you so much",
+  "brain_api_url": "http://127.0.0.1:8766",
+  "result": {
+    "cosine_similarity": 0.9135088920593262,
+    "mse": 0.019141793251037598,
+    "mae": 0.09472757577896118,
+    "correlation": 0.8969991029435037,
+    "n_segments_a": 3,
+    "n_segments_b": 2,
+    "n_segments_compared": 2,
+    "emotion_a": {
+      "joy": 0.7439,
+      "fear": 0.1196,
+      "sadness": 0.0899,
+      "love": 0.0251,
+      "anger": 0.0185,
+      "surprise": 0.0029
+    },
+    "emotion_b": {
+      "love": 0.7589,
+      "joy": 0.2355,
+      "sadness": 0.0027,
+      "anger": 0.0015,
+      "surprise": 0.0008,
+      "fear": 0.0006
+    }
+  }
+}

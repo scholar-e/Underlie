@@ -1,0 +1,9 @@
+text	start	duration	sequence_id	sentence
+I	0.151	0.061	0	 I love my life.
+love	0.292	0.22100000000000003	0	 I love my life.
+my	0.593	0.16000000000000003	0	 I love my life.
+life.	0.834	0.29999999999999993	0	 I love my life.
+Life	1.636	0.22100000000000009	1	Life is so happy.
+is	1.957	0.05999999999999983	1	Life is so happy.
+so	2.097	0.20100000000000007	1	Life is so happy.
+happy.	2.338	0.4009999999999998	1	Life is so happy.

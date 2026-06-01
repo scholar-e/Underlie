@@ -1,0 +1,2 @@
+{"filename":"data/pop-os-522086.data","offset":0,"shape":[20,1536],"dtype":"float32","#type":"MemmapArray","#key":"Hello_Hello"}
+{"filename":"data/pop-os-522086.data","offset":122880,"shape":[20,1536],"dtype":"float32","#type":"MemmapArray","#key":"world!_Hello world!"}
