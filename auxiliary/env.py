@@ -210,6 +210,10 @@ class MyEnv(BaseEnv):
                     lines.append(f"!!! You suggested '{m}' {c} times in a row and it was rejected each time !!!")
                     lines.append(f"!!! '{m}' is NOT in legal_moves. Pick something from legal_moves. !!!")
                     lines.append("")
+            n = len(self.current_consecutive_illegal_moves)
+            if n >= 3:
+                lines.append(f"!!! CRITICAL: {n} consecutive illegal moves! If you make {self.MAX_CONSECUTIVE_ILLEGAL - n} more, the game ends !!!")
+                lines.append("!!! You are stuck in a loop. Read the legal_moves list carefully and pick ANY move from it. !!!")
 
         lines.append(f"White: {self._pieces_summary(self.board, chess.WHITE)}")
         lines.append(f"Black: {self._pieces_summary(self.board, chess.BLACK)}")

@@ -120,7 +120,12 @@ main {
 </head>
 <body>
 <header>
-  <h1>♚ Chess Player — BenchAnything</h1>
+  <div style="display:flex;align-items:center;gap:16px;flex-wrap:wrap">
+    <h1>♚ Chess Player</h1>
+    <select id="runSelect" style="font-family:inherit;font-size:12px;padding:4px 8px;border-radius:5px;border:1px solid #2a2a4a;background:#1a1a3e;color:#aaa;max-width:320px">
+      <option value="">— Select run —</option>
+    </select>
+  </div>
   <div class="sub" id="subtitle">Loading...</div>
   <div class="run-meta" id="runMeta"></div>
 </header>
@@ -135,6 +140,7 @@ const FILES = ['a','b','c','d','e','f','g','h'];
 const RANKS = ['8','7','6','5','4','3','2','1'];
 
 let replay = null, episodes = [], curEp = 0, curStep = 0;
+let runIndex = [];
 
 function fenToBoard(f) {
   const pos = f.split(' ')[0], ranks = pos.split('/'), board = [];
@@ -309,7 +315,54 @@ function loadReplayData(data) {
   return true;
 }
 
+async function loadRun(file) {
+  try {
+    const r = await fetch('data/runs/' + file);
+    if (!r.ok) throw new Error('HTTP ' + r.status);
+    const data = await r.json();
+    loadReplayData(data);
+  } catch(e) {
+    document.getElementById('main').innerHTML = '<div style="padding:40px;text-align:center;color:#666"><h2>Failed to load run</h2><p>' + escHtml(e.message) + '</p></div>';
+  }
+}
+
+function populateRunSelect(selectedId) {
+  const sel = document.getElementById('runSelect');
+  sel.innerHTML = '<option value="">— Select run —</option>';
+  for (const r of runIndex) {
+    const opt = document.createElement('option');
+    opt.value = r.id;
+    opt.textContent = r.label + (r.model ? ' (' + r.model.split('/').pop() + ')' : '');
+    if (r.id === selectedId) opt.selected = true;
+    sel.appendChild(opt);
+  }
+  sel.onchange = () => {
+    const id = sel.value;
+    if (!id) return;
+    document.getElementById('subtitle').textContent = 'Loading...';
+    document.getElementById('runMeta').innerHTML = '';
+    const entry = runIndex.find(e => e.id === id);
+    if (entry) loadRun(entry.file);
+  };
+}
+
 async function init() {
+  let selectedId = null;
+  try {
+    const idxResp = await fetch('data/runs/index.json');
+    if (idxResp.ok) {
+      runIndex = await idxResp.json();
+      if (runIndex.length) {
+        selectedId = runIndex[0].id;
+        populateRunSelect(selectedId);
+        document.getElementById('subtitle').textContent = 'Select a run above';
+        await loadRun(runIndex[0].file);
+        return;
+      }
+    }
+  } catch(e) {}
+
+  // Fallback: try legacy replay.json
   for (const p of ['data/replay.json','replay.json','../showcase/data/replay.json']){
     try {
       const r = await fetch(p);
@@ -317,7 +370,7 @@ async function init() {
     } catch(e) {}
   }
   if (!replay) {
-    document.getElementById('main').innerHTML = '<div style="padding:40px;text-align:center;color:#666"><h2>No replay data</h2><p>Run <code>mesocosm run export RUN_ID -o showcase/data/replay.json</code></p><p style="margin-top:12px">Or drag a replay JSON file below.</p></div>';
+    document.getElementById('main').innerHTML = '<div style="padding:40px;text-align:center;color:#666"><h2>No replay data</h2><p>Place replay files in <code>data/runs/</code> and add them to <code>data/runs/index.json</code>, or export with:</p><p style="margin-top:12px"><code>mesocosm run export RUN_ID -o showcase/data/runs/name.json</code></p><p style="margin-top:12px">Then add an entry to <code>data/runs/index.json</code>.</p></div>';
     return;
   }
   loadReplayData(replay);
