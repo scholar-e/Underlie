@@ -5,9 +5,11 @@
 # LICENSE file in the root directory of this source tree.
 
 import copy
+import shutil
 import tempfile
 import typing as tp
 from functools import lru_cache
+from pathlib import Path
 
 import matplotlib.pyplot as plt
 import nibabel as nib
@@ -282,8 +284,10 @@ def plot_subcortical(
     light.set_headlight()
     plotter.add_light(light)
 
-    with tempfile.NamedTemporaryFile(suffix=".png") as tmp:
-        img = plotter.screenshot(tmp.name, return_img=True)
+    tmpdir = tempfile.mkdtemp()
+    tmppath = Path(tmpdir) / "_subcortical.png"
+    img = plotter.screenshot(str(tmppath), return_img=True)
+    shutil.rmtree(tmpdir, ignore_errors=True)
     img = tight_crop(img)
     ax.imshow(img)
     ax.axis("off")

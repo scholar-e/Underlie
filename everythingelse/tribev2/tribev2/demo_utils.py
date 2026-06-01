@@ -115,10 +115,13 @@ class TextToEvents(pydantic.BaseModel):
     @infra.apply()
     def get_events(self) -> pd.DataFrame:
         from gtts import gTTS
-        from langdetect import detect
+        try:
+            from langdetect import detect
+            lang = detect(self.text) or "en"
+        except Exception:
+            lang = "en"
 
         audio_path = Path(self.infra.uid_folder(create=True)) / "audio.mp3"
-        lang = detect(self.text)
         tts = gTTS(self.text, lang=lang)
         tts.save(str(audio_path))
         logger.info(f"Wrote TTS audio to {audio_path}")
